@@ -41,7 +41,7 @@ namespace mir {
     using Size = std::size_t;
     using Real = float;
     using Bool = bool;
-    using String = std::string;
+    using String = FixedString<256>;
     using Color = sf::Color;
 
     using RenderTex = sf::RenderTexture;
@@ -114,5 +114,8 @@ namespace mir {
     template <typename T, typename... Args>
     static inline void FireAndForget(T&& func, Args&&... args){
         std::thread(std::forward<T>(func), std::forward<Args>(args)...).detach();
+    }
+}
+(args)...).detach();
     }
 }

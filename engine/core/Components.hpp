@@ -8,15 +8,21 @@
 #include "../util/Timer.hpp"
 #include "../util/Types.hpp"
 
-namespace mir{
-    namespace transform{
+namespace mir
+{
+    namespace transform
+    {
         static inline Array<Point2<Real>, MAX_ENTITIES> Positions;
         static inline Array<Point2<Real>, MAX_ENTITIES> Velocities;
         static inline Array<Point2<Real>, MAX_ENTITIES> Scales;
         static inline Array<Real, MAX_ENTITIES> Rotations;
 
-        static inline void Delete(const ID id) {
-            if(!entity::IsAvailables[id]) return;
+        static inline void Delete(const ID id) 
+        {
+            if (!entity::IsAvailables[id]) 
+            {
+                return;
+            }
 
             Positions[id] = Point2<Real>(0, 0);
             Velocities[id] = Point2<Real>(0, 0);
@@ -26,8 +32,12 @@ namespace mir{
             entity::IsAvailables[id] = true;
         }
 
-        static inline void Clear(){
-            for(ID id = 1; id < MAX_ENTITIES; ++id) Delete(id);
+        static inline void Clear()
+        {
+            for(ID id = 1; id < MAX_ENTITIES; ++id) 
+            {
+                Delete(id);   
+            }
         }
     }
 
@@ -40,8 +50,12 @@ namespace mir{
         static inline Array<Bool, MAX_ENTITIES> IsGhosts;
         static inline Array<Bool, MAX_ENTITIES> InAirFlags;
 
-        static inline void Delete(const ID id) {
-            if(!entity::IsAvailables[id]) return;
+        static inline void Delete(const ID id) 
+        {
+            if(!entity::IsAvailables[id]) 
+            {
+                return;   
+            }
 
             Bounds[id] = Point2<Real>(0, 0);
             Masses[id] = 0;
@@ -51,13 +65,19 @@ namespace mir{
             entity::IsAvailables[id] = true;
         }
 
-        static inline void Clear(){
-            for(ID id = 1; id < MAX_ENTITIES; ++id) Delete(id);
+        static inline void Clear()
+        {
+            for(ID id = 1; id < MAX_ENTITIES; ++id) 
+            {
+                Delete(id);   
+            }
         }
     }
 
-    namespace sprite{
-        enum class Type{
+    namespace sprite
+    {
+        enum class Type
+        {
             None,
             Rectangle,
             Circle,
@@ -79,8 +99,12 @@ namespace mir{
         static inline Array<Bool, MAX_ENTITIES> ShouldFlipXs;
         static inline Array<Bool, MAX_ENTITIES> ShouldFlipYs;
 
-        static inline void Delete(const ID id) {
-            if(!entity::IsAvailables[id]) return;
+        static inline void Delete(const ID id)
+        {
+            if(!entity::IsAvailables[id])
+            {
+                return;   
+            }
 
             Colors[id] = Color(0, 0, 0);
             Sizes[id] = Point2<Real>(0, 0);
@@ -93,12 +117,17 @@ namespace mir{
             entity::IsAvailables[id] = true;
         }
 
-        static inline void Clear(){
-            for(ID id = 1; id < MAX_ENTITIES; ++id) Delete(id);
+        static inline void Clear()
+        {
+            for(ID id = 1; id < MAX_ENTITIES; ++id)
+            {
+                Delete(id);
+            } 
         }
     }
 
-    namespace animation{
+    namespace animation
+    {
         static constexpr Uint MAX_STATE = 0x08;
         static constexpr Uint MAX_FRAME = 0xFF;
 
@@ -112,8 +141,12 @@ namespace mir{
         static inline Array<Bool, MAX_ENTITIES> IsPlayings;
         static inline Array<Bool, MAX_ENTITIES> IsLoopings;
 
-        static inline void Delete(const ID id) {
-            if(!entity::IsAvailables[id]) return;
+        static inline void Delete(const ID id) 
+        {
+            if(!entity::IsAvailables[id])
+            {
+                return;  
+            } 
 
             FrameSets[id] = Set();
             ElapsedTimes[id] = 0;
@@ -126,12 +159,17 @@ namespace mir{
             entity::IsAvailables[id] = true;
         }
 
-        static inline void Clear(){
-            for(ID id = 1; id < MAX_ENTITIES; ++id) Delete(id);
+        static inline void Clear()
+        {
+            for(ID id = 1; id < MAX_ENTITIES; ++id)
+            {
+                Delete(id);   
+            }
         }
     }
 
-    namespace particle{
+    namespace particle
+    {
         static inline Array<List<Point2<Real>>, MAX_ENTITIES> Positions;
         static inline Array<List<Point2<Real>>, MAX_ENTITIES> Velocities;
         static inline Array<List<Color>, MAX_ENTITIES> CurrentColors;

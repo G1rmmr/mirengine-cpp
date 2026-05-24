@@ -16,5 +16,11 @@ out
 *.dat
 *.log
 
+# Temp Guides and SDL Config
+CMakeLists_sdl.txt
+NINJA_GUIDE.md
+ARCHITECTURE_GUIDE.md
+FUTURE_ROADMAP.md
+
 cmake-guide.md
 GEMINI.md
