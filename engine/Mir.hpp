@@ -13,10 +13,14 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "core/Components.hpp"
 #include "core/Entity.hpp"
 #include "core/Manager.hpp"
-#include "core/Systems.hpp"
+#include "component/Collider.hpp"
+#include "component/Rigidbody.hpp"
+#include "component/Sprite.hpp"
+#include "component/Transform.hpp"
+#include "system/Collision.hpp"
+#include "system/Movement.hpp"
 
 #include "handle/Event.hpp"
 #include "handle/Input.hpp"

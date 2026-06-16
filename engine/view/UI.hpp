@@ -22,7 +22,7 @@ namespace mir{
             if(!font::Sources[tag]) return;
 
             font::Texts[tag]->setFillColor(color);
-            font::Texts[tag]->setString(content);
+            font::Texts[tag]->setString(content.c_str());
             font::Texts[tag]->setCharacterSize(size);
 
             const Rect<Real> bounds = font::Texts[tag]->getLocalBounds();

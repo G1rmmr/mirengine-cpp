@@ -1,32 +1,19 @@
 #pragma once
 
-#include "../util/Debugger.hpp"
-#include "../util/Types.hpp"
+#include <container/Pool.hpp>
+#include <cstdint>
 
-namespace mir{
-    using ID = Uint;
+namespace mir {
+    struct Id : public PoolHandle {
+        constexpr Id() noexcept : PoolHandle {static_cast<std::size_t>(-1), 0 } {}
+        constexpr Id(const PoolHandle& handle) noexcept : PoolHandle(handle) {}
+        constexpr Id(std::size_t idx, std::size_t gen) noexcept : PoolHandle{ idx, gen } {}
 
-    static constexpr ID MAX_ENTITIES = 0xFFFF;
-
-    namespace entity{
-        static inline Array<Bool, MAX_ENTITIES> IsAvailables;
-
-        static inline ID Create(){
-            for(ID id = 1; id < MAX_ENTITIES; ++id){
-                if(!IsAvailables[id]){
-                    IsAvailables[id] = true;
-                    return id;
-                }
-            }
-
-            debug::Log("Entity Overflow!");
-            return 0; // Overflow entity
+        constexpr operator std::size_t() const noexcept {
+            return Index;
         }
+    };
 
-        static inline void Clear(){
-            for(ID id = 1; id < MAX_ENTITIES; ++id){
-                IsAvailables[id] = false;
-            }
-        }
-    }
+    constexpr Id INVALID_ID{};
+    constexpr std::uint16_t MAX_ID = UINT16_MAX;
 }

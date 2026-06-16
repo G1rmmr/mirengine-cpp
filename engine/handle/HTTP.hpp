@@ -40,12 +40,12 @@ namespace mir{
 
                 for(const auto& [key, val] : params){
                     if(!isFirst) stream << "&";
-                    stream << key << "=" << val;
+                    stream << key.c_str() << "=" << val.c_str();
                     isFirst = false;
                 }
 
                 params.clear();
-                return stream.str();
+                return String(stream.str());
             }
         }
 
@@ -53,28 +53,24 @@ namespace mir{
             ActivatedRequsts++;
 
             FireAndForget([type, params, set](){
-                HTTP http(set.Host, set.Port);
+                HTTP http(set.Host.c_str(), set.Port);
                 HTTP::Request request;
 
                 const String query = BuildQuery(params);
 
-                switch(type){
-                case Type::Get:
-                    request = {
-                        set.EndPoint + (query.empty() ? "" : "?" + query),
-                        HTTP::Request::Method::Get
-                    };
-                    break;
-                case Type::Post:
-                    request = {
-                        set.EndPoint,
-                        HTTP::Request::Method::Post,
-                        query
-                    };
+                request.setMethod(type == Type::Get ? HTTP::Request::Method::Get : HTTP::Request::Method::Post);
+                
+                if (type == Type::Get) {
+                    String uri = set.EndPoint;
+                    if (!query.empty()) {
+                        uri += "?";
+                        uri += query;
+                    }
+                    request.setUri(uri.c_str());
+                } else {
+                    request.setUri(set.EndPoint.c_str());
+                    request.setBody(query.c_str());
                     request.setField("Content-Type", "application/x-www-form-urlencoded");
-                    break;
-
-                default: break;
                 }
 
                 HTTP::Response response = http.sendRequest(request);

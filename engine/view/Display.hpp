@@ -115,21 +115,21 @@ namespace mir{
             switch(mode){
             case VideoMode::Borderless:
                 video = sf::VideoMode::getDesktopMode();
-                Window = new sf::RenderWindow(video, title, sf::Style::None);
+                Window = new sf::RenderWindow(video, title.c_str(), sf::Style::None, sf::State::Windowed);
                 Window->setPosition({0, 0});
                 break;
 
             case VideoMode::Fullscreen:
-                Window = new sf::RenderWindow(video, title, sf::State::Fullscreen);
+                Window = new sf::RenderWindow(video, title.c_str(), sf::State::Fullscreen);
                 break;
 
             case VideoMode::Desktop:
                 video = sf::VideoMode::getDesktopMode();
-                Window = new sf::RenderWindow(video, title, sf::Style::Default);
+                Window = new sf::RenderWindow(video, title.c_str(), sf::State::Windowed);
                 break;
 
             default:
-                Window = new sf::RenderWindow(video, title, sf::Style::Default);
+                Window = new sf::RenderWindow(video, title.c_str(), sf::State::Windowed);
                 break;
             }
         }
@@ -222,7 +222,7 @@ namespace mir{
                         for(Bool available : entity::IsAvailables)
                             if(available) count++;
 
-                        debug::Text->setString("[Toggle - F1] Entities: " + ToString(count));
+                        debug::Text->setString((String("[Toggle - F1] Entities: ") + ToString(count)).c_str());
                         debug::Text->setPosition({10.f, 10.f});
 
                         Window->draw(*debug::Text);
@@ -265,7 +265,7 @@ namespace mir{
                     Window->setView(Window->getDefaultView());
 
                     const Real fps = mir::profile::CurrentFPS;
-                    profile::Text->setString("[Toggle - F2] FPS: " + ToString(TypeCast<Int>(fps)));
+                    profile::Text->setString((String("[Toggle - F2] FPS: ") + ToString(TypeCast<Int>(fps))).c_str());
                     profile::Text->setPosition({10.f, 40.f});
 
                     Window->draw(*profile::Text);
