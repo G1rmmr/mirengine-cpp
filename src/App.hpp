@@ -53,18 +53,18 @@ namespace app {
 
     inline void ProcessInput(){
         PROFILE_SCOPE("Input"){
-            mir::input::Process();
+            mir::window::ProcessEvents();
 
-            if(mir::input::IsPressed(mir::event::type::Key::Escape)){
+            if(mir::input::IsJustPressed(mir::Key::Escape)){
                 network::PostScore(player::NAME, player::Score);
                 network::GetTopPlayers();
 
                 mir::scene::Load("Menu");
             }
-            if(mir::input::IsPressed(mir::event::type::Key::F1))
+            if(mir::input::IsJustPressed(mir::Key::F1))
                 mir::debug::ToggleDebug();
 
-            if(mir::input::IsPressed(mir::event::type::Key::F2))
+            if(mir::input::IsJustPressed(mir::Key::F2))
                 mir::profile::ToggleProfile();
         }
     }

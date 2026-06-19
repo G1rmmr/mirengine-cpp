@@ -15,7 +15,7 @@ namespace mir {
 		static constexpr void Remove(const Id id) noexcept {
 			storage.Remove(id);
 		}
-		
+
 		static constexpr void Set(const Id id, const Type& data) noexcept {
 			Payload payload{id, data};
 			mir::core::Manager::Instance().AddComponent<Payload>(&apply, payload, &Remove);

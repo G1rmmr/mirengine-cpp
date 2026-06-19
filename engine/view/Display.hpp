@@ -17,12 +17,13 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowEnums.hpp>
 
-#include "../core/Components.hpp"
+#include "../core/Component.hpp"
 #include "../core/Entity.hpp"
 #include "../core/Manager.hpp"
 #include "../util/Debugger.hpp"
 #include "../util/Profiler.hpp"
 #include "../util/Types.hpp"
+#include "../handle/Input.hpp"
 
 namespace mir{
     inline HandledWindow* Window = nullptr;
@@ -43,6 +44,104 @@ namespace mir{
     };
 
     namespace window{
+        inline Key MapKey(sf::Keyboard::Key sfKey) {
+            switch (sfKey) {
+                case sf::Keyboard::Key::Escape:   return Key::Escape;
+                case sf::Keyboard::Key::Space:    return Key::Space;
+                case sf::Keyboard::Key::Enter:    return Key::Enter;
+                case sf::Keyboard::Key::Up:       return Key::Up;
+                case sf::Keyboard::Key::Left:     return Key::Left;
+                case sf::Keyboard::Key::Down:     return Key::Down;
+                case sf::Keyboard::Key::Right:    return Key::Right;
+                case sf::Keyboard::Key::Tab:      return Key::Tab;
+                case sf::Keyboard::Key::LShift:   return Key::Lshift;
+                case sf::Keyboard::Key::LControl: return Key::Lctrl;
+                case sf::Keyboard::Key::LAlt:     return Key::Lalt;
+                case sf::Keyboard::Key::RShift:   return Key::Rshift;
+                case sf::Keyboard::Key::RControl: return Key::Rctrl;
+                case sf::Keyboard::Key::RAlt:     return Key::Ralt;
+                
+                case sf::Keyboard::Key::A: return Key::A;
+                case sf::Keyboard::Key::B: return Key::B;
+                case sf::Keyboard::Key::C: return Key::C;
+                case sf::Keyboard::Key::D: return Key::D;
+                case sf::Keyboard::Key::E: return Key::E;
+                case sf::Keyboard::Key::F: return Key::F;
+                case sf::Keyboard::Key::G: return Key::G;
+                case sf::Keyboard::Key::H: return Key::H;
+                case sf::Keyboard::Key::I: return Key::I;
+                case sf::Keyboard::Key::J: return Key::J;
+                case sf::Keyboard::Key::K: return Key::K;
+                case sf::Keyboard::Key::L: return Key::L;
+                case sf::Keyboard::Key::M: return Key::M;
+                case sf::Keyboard::Key::N: return Key::N;
+                case sf::Keyboard::Key::O: return Key::O;
+                case sf::Keyboard::Key::P: return Key::P;
+                case sf::Keyboard::Key::Q: return Key::Q;
+                case sf::Keyboard::Key::R: return Key::R;
+                case sf::Keyboard::Key::S: return Key::S;
+                case sf::Keyboard::Key::T: return Key::T;
+                case sf::Keyboard::Key::U: return Key::U;
+                case sf::Keyboard::Key::V: return Key::V;
+                case sf::Keyboard::Key::W: return Key::W;
+                case sf::Keyboard::Key::X: return Key::X;
+                case sf::Keyboard::Key::Y: return Key::Y;
+                case sf::Keyboard::Key::Z: return Key::Z;
+
+                case sf::Keyboard::Key::F1: return Key::F1;
+                case sf::Keyboard::Key::F2: return Key::F2;
+                case sf::Keyboard::Key::F3: return Key::F3;
+                case sf::Keyboard::Key::F4: return Key::F4;
+                case sf::Keyboard::Key::F5: return Key::F5;
+                case sf::Keyboard::Key::F6: return Key::F6;
+                case sf::Keyboard::Key::F7: return Key::F7;
+                case sf::Keyboard::Key::F8: return Key::F8;
+                case sf::Keyboard::Key::F9: return Key::F9;
+                case sf::Keyboard::Key::F10: return Key::F10;
+                case sf::Keyboard::Key::F11: return Key::F11;
+                case sf::Keyboard::Key::F12: return Key::F12;
+                default: return Key::COUNT;
+            }
+        }
+
+        inline void ProcessEvents() {
+            if (!Window) return;
+            
+            mir::input::Update();
+
+            while (const auto event = Window->pollEvent()) {
+                if (event->is<sf::Event::Closed>()) {
+                    Close();
+                }
+                else if (const auto* key = event->getIf<sf::Event::KeyPressed>()) {
+                    mir::Key targetKey = MapKey(key->code);
+                    if (targetKey != mir::Key::COUNT) {
+                        mir::input::SetKeyState(targetKey, true);
+                    }
+                }
+                else if (const auto* key = event->getIf<sf::Event::KeyReleased>()) {
+                    mir::Key targetKey = MapKey(key->code);
+                    if (targetKey != mir::Key::COUNT) {
+                        mir::input::SetKeyState(targetKey, false);
+                    }
+                }
+                else if (const auto* mouse = event->getIf<sf::Event::MouseButtonPressed>()) {
+                    std::size_t btnIdx = 0;
+                    if (mouse->button == sf::Mouse::Button::Right) btnIdx = 1;
+                    else if (mouse->button == sf::Mouse::Button::Middle) btnIdx = 2;
+                    mir::input::SetMouseState(btnIdx, true);
+                    mir::input::SetMousePosition(static_cast<float>(mouse->position.x), static_cast<float>(mouse->position.y));
+                }
+                else if (const auto* mouse = event->getIf<sf::Event::MouseButtonReleased>()) {
+                    std::size_t btnIdx = 0;
+                    if (mouse->button == sf::Mouse::Button::Right) btnIdx = 1;
+                    else if (mouse->button == sf::Mouse::Button::Middle) btnIdx = 2;
+                    mir::input::SetMouseState(btnIdx, false);
+                    mir::input::SetMousePosition(static_cast<float>(mouse->position.x), static_cast<float>(mouse->position.y));
+                }
+            }
+        }
+
         static inline Bool IsOpening() { return Window && Window->isOpen(); }
 
         static inline void Display(){

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../core/Component.hpp"
-#include <String.hpp>
+#include <container/String.hpp>
 
 namespace mir::sprite {
     struct Texture : public Component<Texture, String<>> {};

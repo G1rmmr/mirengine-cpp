@@ -89,69 +89,41 @@ namespace player{
             mir::event::Subscribe(action);
         }
 
-        inline void SubscribeJump(const mir::ID id){
-            mir::Action<const mir::event::type::Jump&> action
-                = [id](const mir::event::type::Jump&){
-                if(mir::physics::InAirFlags[id]) return;
+        // 점프, 키 입력, 사망 이벤트 구독을 삭제하고 단일 폴링 함수로 대체합니다.
+    }
 
+    inline void UpdateInput(const mir::ID id) {
+        // W 눌렸을 때 (점프)
+        if (mir::input::IsJustPressed(mir::Key::W)) {
+            if (!mir::physics::InAirFlags[id]) {
                 const mir::Real force = JUMP_POWER / std::sqrt(mir::physics::Masses[id]);
-
                 mir::transform::Velocities[id].y = -force;
                 mir::physics::InAirFlags[id] = true;
-            };
-            mir::event::Subscribe(action);
+                mir::camera::Shake(0.01, 1);
+                mir::camera::Follow(id);
+            }
         }
 
-        inline void SubscribeKeyPressed(const mir::ID id){
-            mir::Action<const mir::event::type::KeyPressed&> action
-                = [id](const mir::event::type::KeyPressed& event){
-                switch(event.Input){
-                case mir::event::type::Key::W:
-                    mir::event::Publish(mir::event::type::Jump{});
-                    mir::camera::Shake(0.01, 1);
-                    mir::camera::Follow(id);
-                    break;
-
-                case mir::event::type::Key::A:
-                    mir::transform::Velocities[id].x = -SPEED;
-                    break;
-
-                case mir::event::type::Key::D:
-                    mir::transform::Velocities[id].x = SPEED;
-                    break;
-
-                case mir::event::type::Key::Space:
-                    mir::camera::Follow(id);
-                    break;
-
-                default: break;
-                }
-            };
-            mir::event::Subscribe(action);
+        // A/D 이동 폴링
+        if (mir::input::IsPressed(mir::Key::A)) {
+            mir::transform::Velocities[id].x = -SPEED;
+        } 
+        else if (mir::input::IsPressed(mir::Key::D)) {
+            mir::transform::Velocities[id].x = SPEED;
+        } 
+        else {
+            mir::transform::Velocities[id].x = 0;
         }
 
-        inline void SubscribeKeyReleased(const mir::ID id){
-            mir::Action<const mir::event::type::KeyReleased&> action
-                = [id](const mir::event::type::KeyReleased& event){
-                switch(event.Input){
-                case mir::event::type::Key::A:
-                case mir::event::type::Key::D:
-                    mir::transform::Velocities[id].x = 0;
-                    break;
-
-                default: break;
-                }
-            };
-            mir::event::Subscribe(action);
+        // Space (카메라 팔로우)
+        if (mir::input::IsJustPressed(mir::Key::Space)) {
+            mir::camera::Follow(id);
         }
 
-        inline void SubscribeDeath(const mir::ID id){
-            mir::Action<const mir::event::type::Death&> action
-                = [id](const mir::event::type::Death&){
-                network::PostScore(NAME, Score);
-                network::GetTopPlayers();
-            };
-            mir::event::Subscribe(action);
+        // 실시간 사망 조건 검사 (구독 제거)
+        if (mir::stats::Healths[id] <= 0) {
+            network::PostScore(NAME, Score);
+            network::GetTopPlayers();
         }
     }
 
@@ -164,13 +136,6 @@ namespace player{
         InitSprite(id);
         InitStats(id);
 
-        SubscribeCollision(id);
-        SubscribeJump(id);
-
-        SubscribeKeyPressed(id);
-        SubscribeKeyReleased(id);
-
-        SubscribeDeath(id);
         return id;
     }
 }

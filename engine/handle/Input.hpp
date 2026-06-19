@@ -1,63 +1,69 @@
 #pragma once
 
-#include <unordered_map>
+#include "Key.hpp"
 #include <array>
 
-#include "Event.hpp"
-#include "../view/Display.hpp"
-#include "../util/Types.hpp"
+namespace mir::input {
+    constexpr std::size_t KEY_COUNT = static_cast<std::size_t>(Key::COUNT);
 
-namespace mir{
-    namespace input{
-        namespace{
-            static inline const Dictionary<sf::Keyboard::Key, event::type::Key> KEY_MAP = {
-                {sf::Keyboard::Key::Escape, event::type::Key::Escape},
-                {sf::Keyboard::Key::W, event::type::Key::W},
-                {sf::Keyboard::Key::A, event::type::Key::A},
-                {sf::Keyboard::Key::S, event::type::Key::S},
-                {sf::Keyboard::Key::D, event::type::Key::D},
-                {sf::Keyboard::Key::F1, event::type::Key::F1},
-                {sf::Keyboard::Key::F2, event::type::Key::F2},
-                {sf::Keyboard::Key::Space, event::type::Key::Space},
-                {sf::Keyboard::Key::Enter, event::type::Key::Enter}
-            };
+    inline std::array<bool, KEY_COUNT> currentStates{ false };
+    inline std::array<bool, KEY_COUNT> previousStates{ false };
 
-            static inline Array<Bool, TypeCast<Size>(sf::Keyboard::KeyCount)> IsPressedState;
+    inline std::array<bool, 3> currentMouseStates{ false };
+    inline std::array<bool, 3> previousMouseStates{ false };
+
+    inline float mouseX = 0.f;
+    inline float mouseY = 0.f;
+
+    inline void Update() {
+        previousStates = currentStates;
+        previousMouseStates = currentMouseStates;
+    }
+
+    inline bool IsPressed(const Key key) {
+        return currentStates[static_cast<std::size_t>(key)];
+    }
+
+    inline bool IsJustPressed(const Key key) {
+        std::size_t idx = static_cast<std::size_t>(key);
+        return currentStates[idx] && !previousStates[idx];
+    }
+
+    inline bool IsJustReleased(const Key key) {
+        std::size_t idx = static_cast<std::size_t>(key);
+        return !currentStates[idx] && previousStates[idx];
+    }
+
+    inline bool IsMousePressed(const std::size_t button) {
+        return button < 3 && currentMouseStates[button];
+    }
+
+    inline bool IsMouseJustPressed(const std::size_t button) {
+        return button < 3 && currentMouseStates[button] && !previousMouseStates[button];
+    }
+
+    inline float GetMouseX() {
+        return mouseX;
+    }
+
+    inline float GetMouseY() {
+        return mouseY;
+    }
+
+    inline void SetKeyState(Key key, bool pressed) {
+        if (key != Key::COUNT) {
+            currentStates[static_cast<std::size_t>(key)] = pressed;
         }
+    }
 
-        static inline Bool IsPressed(event::type::Key key){
-            for(const auto& [input, value] : KEY_MAP){
-                if(value == key) return IsPressedState[TypeCast<Size>(input)];
-            }
-            return false;
+    inline void SetMouseState(std::size_t button, bool pressed) {
+        if (button < 3) {
+            currentMouseStates[button] = pressed;
         }
+    }
 
-        static inline void Process(){
-            while(const auto event = Window->pollEvent()){
-                if(event->is<sf::Event::Closed>()){
-                    mir::window::Close();
-                }
-                else if(const auto* key = event->getIf<sf::Event::KeyPressed>()){
-                    Size code = TypeCast<Size>(key->code);
-                    if(KEY_MAP.count(key->code) && !IsPressedState[code]){
-                        IsPressedState[code] = true;
-                        event::Publish(event::type::KeyPressed{KEY_MAP.at(key->code)});
-                    }
-                }
-                else if(const auto* key = event->getIf<sf::Event::KeyReleased>()){
-                     Size code = TypeCast<Size>(key->code);
-                     if(KEY_MAP.count(key->code)){
-                        IsPressedState[code] = false;
-                        event::Publish(event::type::KeyReleased{KEY_MAP.at(key->code)});
-                    }
-                }
-                else if(const auto* mouse = event->getIf<sf::Event::MouseButtonPressed>()){
-                    event::Publish(event::type::MousePressed{mouse->position.x, mouse->position.y});
-                }
-                else if(const auto* mouse = event->getIf<sf::Event::MouseButtonReleased>()){
-                    event::Publish(event::type::MouseReleased{mouse->position.x, mouse->position.y});
-                }
-            }
-        }
+    inline void SetMousePosition(float x, float y) {
+        mouseX = x;
+        mouseY = y;
     }
 }
