@@ -1,5 +1,52 @@
----
+# .clang-format
 BasedOnStyle: Microsoft
+Language: Cpp
+Standard: Latest
+
+# 1. Indentation
 IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# 접근 한정자(public, protected, private) 들여쓰기 제외 (class 키워드와 정렬)
+AccessModifierOffset: -4
+IndentAccessModifiers: false
+
+# case 키워드 들여쓰기 제외 (switch 키워드와 정렬)
+IndentCaseLabels: false
+
+# 네임스페이스 내부 들여쓰기 활성화
+NamespaceIndentation: All
+
+# 네임스페이스 닫는 중괄호 뒤 주석 자동 수정/추가 방지
+FixNamespaceComments: false
+
+# 2. Spaces
+# 조건/반복문 괄호 앞 공백 허용 (예: if (cond))
+SpaceBeforeParens: ControlStatements
+
+# 연산자 앞뒤 공백 허용 (예: val /= 2)
+SpaceBeforeAssignmentOperators: true
+
+# 중괄호 앞 공백 허용 및 중괄호 시작을 선언과 같은 줄에 위치 (Attach)
+BreakBeforeBraces: Attach
+
+# 괄호 내부 공백 제거 (예: (val < 0))
+SpacesInParentheses: false
+SpacesInConditionalStatement: false
+
+# 3. Short Statements (한 줄 처리 관련)
+# 한 줄 조건문 및 반복문 (중괄호가 없는 경우) 한 줄로 정렬 허용
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
+
+# 한 줄 함수 한 줄에 위치 허용
+AllowShortFunctionsOnASingleLine: All
+AllowShortBlocksOnASingleLine: Always
+
+# 4. Limit & Alignment
+# 최대 길이: 120자
 ColumnLimit: 120
----
+
+# 포인터 위치: 현대 모던 C++ 스타일에 맞춰 왼쪽에 정렬 (예: int* ptr)
+PointerAlignment: Left

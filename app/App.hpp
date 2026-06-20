@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Mir>
+#include "Mir.hpp"
 
 #include "game/Network.hpp"
 #include "game/Player.hpp"
@@ -76,6 +76,7 @@ namespace app {
         mir::effect::Update(deltaTime);
         mir::movement::Update(deltaTime);
         mir::collision::Update();
+        mir::event::Update();
         mir::animation::Update(deltaTime);
         mir::camera::Update(deltaTime);
         mir::combat::Update(deltaTime);

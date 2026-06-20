@@ -4,6 +4,8 @@
 #include "Entity.hpp"
 #include "Manager.hpp"
 
+using namespace zet;
+
 namespace mir {
 	template<typename Derived, typename Type>
 	class Component {

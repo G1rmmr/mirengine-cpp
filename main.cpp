@@ -1,4 +1,5 @@
 #include "src/App.hpp"
+#include "view/backend/SFMLDisplay.hpp"
 
 int main() {
     try{

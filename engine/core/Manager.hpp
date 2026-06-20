@@ -10,6 +10,8 @@
 	#include "Config.hpp"
 #endif
 
+using namespace zet;
+
 namespace mir::core {
 	class Manager {
 	public:
@@ -26,11 +28,11 @@ namespace mir::core {
 			return instance;
 		}
 
-		Id AddEntity() noexcept {
+		Id AddEntity() const noexcept {
 			return availablePool.Create(true);
 		}
 
-		void DeleteEntity(const Id id) noexcept {
+		void DeleteEntity(const Id id) const noexcept {
 			struct Payload {
 				Id EntityId;
 			};
@@ -73,7 +75,7 @@ namespace mir::core {
 			}
 		}
 
-		void UpdateSystem(const float deltaTime) noexcept {
+		void UpdateSystem(const float deltaTime) const noexcept {
 			for (SystemFunc update : systemFuncs) {
 				update(deltaTime);
 			}
@@ -106,7 +108,7 @@ namespace mir::core {
 		Manager() noexcept : cleanupCount(0), systemCount(0) {}
 		~Manager() = default;
 
-		void destroyEntity(Id id) noexcept {
+		void destroyEntity(Id id) const noexcept {
 			if (IsValidEntity(id)) {
 				for (CleanupFunc cleanup : cleanupFuncs) {
 					cleanup(id);

@@ -1,4 +1,58 @@
 ---
-Checks: 'bugprone-*,performance-*,portability-*,readability-*,microsoft-*'
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  microsoft-*,
+  -modernize-use-auto
+
 WarningsAsErrors: ''
----
+
+HeaderFilterRegex: '.*'
+
+CheckOptions:
+  # =========================================================================
+  # Naming Rules (프로젝트 Style Guide 반영)
+  # =========================================================================
+
+  # 1. PascalCase (CamelCase in clang-tidy)
+  # 클래스 명, 구조체 명, public 멤버 변수, 전역 변수
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.StructCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.PublicMemberCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.GlobalVariableCase
+    value:           CamelCase
+
+  # 2. camelCase (camelBack in clang-tidy)
+  # 함수 명, public 외 멤버 변수 (protected, private), 지역 변수, 매개변수
+  - key:             readability-identifier-naming.FunctionCase
+    value:           camelBack
+  - key:             readability-identifier-naming.ProtectedMemberCase
+    value:           camelBack
+  - key:             readability-identifier-naming.PrivateMemberCase
+    value:           camelBack
+  - key:             readability-identifier-naming.LocalVariableCase
+    value:           camelBack
+  - key:             readability-identifier-naming.ParameterCase
+    value:           camelBack
+
+  # 3. UPPER_SNAKE_CASE (UPPER_CASE in clang-tidy)
+  # 일반 상수, constexpr 변수, 전역 상수, 멤버 상수, 매크로
+  - key:             readability-identifier-naming.ConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.ConstexprVariableCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.GlobalConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.MemberConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.StaticConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.MacroDefinitionCase
+    value:           UPPER_CASE
+...
