@@ -10,6 +10,10 @@ namespace mir {
 	template<typename Derived, typename Type>
 	class Component {
 	public:
+		static constexpr bool IsValidEntity(const Id id) noexcept {
+			return storage.Contains(id);
+		}
+
 		static constexpr const Type& Get(const Id id) noexcept {
 			return storage.Get(id);
 		}

@@ -2,10 +2,6 @@
 
 #include <container/String.hpp>
 #include <container/Map.hpp>
-#include <container/List.hpp>
-
-#include <memory/PointHandle.hpp>
-
 #include "../component/Tag.hpp"
 
 namespace mir::event {

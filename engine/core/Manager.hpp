@@ -28,11 +28,11 @@ namespace mir::core {
 			return instance;
 		}
 
-		Id AddEntity() const noexcept {
+		Id AddEntity() noexcept {
 			return availablePool.Create(true);
 		}
 
-		void DeleteEntity(const Id id) const noexcept {
+		void DeleteEntity(const Id id) noexcept {
 			struct Payload {
 				Id EntityId;
 			};
@@ -75,7 +75,7 @@ namespace mir::core {
 			}
 		}
 
-		void UpdateSystem(const float deltaTime) const noexcept {
+		void UpdateSystem(const float deltaTime) noexcept {
 			for (SystemFunc update : systemFuncs) {
 				update(deltaTime);
 			}
@@ -108,7 +108,7 @@ namespace mir::core {
 		Manager() noexcept : cleanupCount(0), systemCount(0) {}
 		~Manager() = default;
 
-		void destroyEntity(Id id) const noexcept {
+		void destroyEntity(Id id) noexcept {
 			if (IsValidEntity(id)) {
 				for (CleanupFunc cleanup : cleanupFuncs) {
 					cleanup(id);

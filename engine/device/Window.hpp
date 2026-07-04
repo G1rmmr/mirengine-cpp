@@ -1,7 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include <memory/PointHandle.hpp>
+#include <memory/PointerHandle.hpp>
+#include <container/String.hpp>
+#include "../math/Math.hpp"
 
 using namespace zet;
 
@@ -25,10 +27,9 @@ namespace mir::window {
     inline std::uint16_t ScreenWidth;
     inline std::uint16_t ScreenHeight;
     
-    // 윈도우 인스턴스를 가리키는 추상 핸들
-    inline PointHandle<void> WindowInstance = nullptr;
+    inline PointerHandle<void> WindowInstance{};
 
-    PointHandle<void> GetWindow() noexcept;
+    PointerHandle<void> GetWindow() noexcept;
     bool IsOpen() noexcept;
     bool IsOpening() noexcept;
 

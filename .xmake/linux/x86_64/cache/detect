@@ -1,801 +1,846 @@
 {
-    find_package_linux_x86_64_fetch_package_system = {
-        ["apt::libxfixes-dev_31f0eaa885a84ef6b740f6ed04fea3e3_release_external"] = {
-            links = {
-                "Xfixes"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXfixes.a",
-                "/usr/lib/x86_64-linux-gnu/libXfixes.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libxcursor-dev_665b359dc13241789f6ca7a586bc5127_release_external"] = {
-            links = {
-                "Xcursor"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXcursor.a",
-                "/usr/lib/x86_64-linux-gnu/libXcursor.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        vorbisfile_0c3b1284ea2c4ed898e74501ea460787_release_external = {
-            links = "vorbisfile"
-        },
-        ["apt::libxau-dev_f28a3a7249e64bfeafc481e65ce195a9_release_external"] = {
-            links = {
-                "Xau"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXau.a",
-                "/usr/lib/x86_64-linux-gnu/libXau.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libxi-dev_2f225dfd5e274482ae09ba4da0c185c5_release_external"] = {
-            links = {
-                "Xi"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXi.a",
-                "/usr/lib/x86_64-linux-gnu/libXi.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        vorbis_0c3b1284ea2c4ed898e74501ea460787_release_external = {
-            links = "vorbis"
-        },
-        ["apt::libfreetype-dev_d404b5258b954ba5987dad6326c314c2_release_external"] = {
-            links = {
-                "freetype"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libfreetype.a",
-                "/usr/lib/x86_64-linux-gnu/libfreetype.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libxrender-dev_75df963310db406385383085b95b222e_release_external"] = {
-            links = {
-                "Xrender"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXrender.a",
-                "/usr/lib/x86_64-linux-gnu/libXrender.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["pkgconfig::freetype2_d404b5258b954ba5987dad6326c314c2_release_external"] = false,
-        ["apt::x11proto-dev_22469615461f49aebbfa4e10af6edb62_release_external"] = { },
-        GLX_4e0143c97b65425b855ad5fd03038b6a_release_external = {
-            links = "GLX"
-        },
-        ["apt::libxdmcp-dev_fac034d258af4aada2c864884ac5f660_release_external"] = {
-            links = {
-                "Xdmcp"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXdmcp.a",
-                "/usr/lib/x86_64-linux-gnu/libXdmcp.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libxrandr-dev_a36fcab100ed449e86944351e00c0384_release_external"] = {
-            links = {
-                "Xrandr"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXrandr.a",
-                "/usr/lib/x86_64-linux-gnu/libXrandr.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libflac-dev_f61b85bace96451c9f6043a054153ad2_release_external"] = {
-            links = {
-                "FLAC++",
-                "FLAC"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libFLAC++.a",
-                "/usr/lib/x86_64-linux-gnu/libFLAC.a",
-                "/usr/lib/x86_64-linux-gnu/libFLAC++.so",
-                "/usr/lib/x86_64-linux-gnu/libFLAC.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libxext-dev_720ea2f3e1ad433eb8fb44751e93f178_release_external"] = {
-            links = {
-                "Xext"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libXext.a",
-                "/usr/lib/x86_64-linux-gnu/libXext.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["libpthread-stubs_e6c09af522624eb1ae863fe21c4aa62c_release_external"] = false,
-        ["apt::libxcb1-dev_37052fd83b89473abd67102965ff1e6c_release_external"] = {
-            links = {
-                "xcb"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libxcb.a",
-                "/usr/lib/x86_64-linux-gnu/libxcb.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        vorbisenc_0c3b1284ea2c4ed898e74501ea460787_release_external = {
-            links = "vorbisenc"
-        },
-        ["pacman::libogg_2cf2ce14849041a9b7bcea56bc632f00_release_external"] = false,
-        ["pacman::flac_f61b85bace96451c9f6043a054153ad2_release_external"] = false,
-        ["xcb-proto_eafb62cb3f37412ebe648eb0ab4b4b35_release_external"] = false,
-        ["system::z_95eb630a402e40ec8568849d53fe452c_release"] = {
-            links = "z"
-        },
-        ["apt::libogg-dev_2cf2ce14849041a9b7bcea56bc632f00_release_external"] = {
-            links = {
-                "ogg"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libogg.a",
-                "/usr/lib/x86_64-linux-gnu/libogg.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libx11-dev_fa5de29573fd426583b062bb45cc2a89_release_external"] = {
-            links = {
-                "X11"
-            },
-            libfiles = {
-                "/usr/lib/x86_64-linux-gnu/libX11.a",
-                "/usr/lib/x86_64-linux-gnu/libX11.so"
-            },
-            shared = true,
-            linkdirs = {
-                "/usr/lib/x86_64-linux-gnu"
-            },
-            static = true
-        },
-        ["apt::libflac++-dev_f61b85bace96451c9f6043a054153ad2_release_external"] = false,
-        ["apt::xtrans-dev_588d85a9c99148b8ae87dee11b39ab40_release_external"] = { },
-        OpenGL_4e0143c97b65425b855ad5fd03038b6a_release_external = {
-            links = "OpenGL"
-        },
-        ["pacman::freetype2_d404b5258b954ba5987dad6326c314c2_release_external"] = false
-    },
-    find_program_gcc_arch_x86_64_plat_linux_checktoolcxx = {
-        ["g++"] = "/usr/bin/g++"
-    },
-    find_program = {
-        zig = false,
-        brew = false,
-        ["pkg-config"] = false,
-        gcc = "/usr/bin/gcc",
-        pkgconf = false,
-        dotnet = false,
-        emerge = false,
-        git = "/usr/bin/git",
-        nim = false,
-        gzip = "/usr/bin/gzip",
-        tar = "/usr/bin/tar",
-        dpkg = "/usr/bin/dpkg",
-        ["/usr/bin/gcc"] = "/usr/bin/gcc",
-        ["/usr/bin/g++"] = "/usr/bin/g++",
-        pacman = false
-    },
     find_program_fetch_package_system = {
         cmake = "/usr/bin/cmake"
-    },
-    find_package_linux_x86_64_fetch_package_xmake = {
-        ["xmake::mir-container_4e0143c97b65425b855ad5fd03038b6a_release_@default_external"] = {
-            links = {
-                "mir-container"
-            },
-            static = true,
-            linkdirs = {
-                "/home/g1/.xmake/packages/m/mir-container/@default/4e0143c97b65425b855ad5fd03038b6a/lib"
-            },
-            version = "@default",
-            sysincludedirs = {
-                "/home/g1/.xmake/packages/m/mir-container/@default/4e0143c97b65425b855ad5fd03038b6a/include"
-            },
-            libfiles = {
-                "/home/g1/.xmake/packages/m/mir-container/@default/4e0143c97b65425b855ad5fd03038b6a/lib/libmir-container.a"
-            }
-        },
-        ["xmake::util-macros_21ebacb0450b4b16b06b586ecc142d3f_release_1.20.0_external"] = {
-            version = "1.20.0"
-        },
-        ["xmake::libxfixes_31f0eaa885a84ef6b740f6ed04fea3e3_release_6.0.1_external"] = false,
-        ["xmake::libx11_fa5de29573fd426583b062bb45cc2a89_release_1.8.13_external"] = false,
-        ["xmake::eudev_daa70b4239914d39a27086b139af0a0e_release_v3.2.14_external"] = {
-            links = {
-                "udev"
-            },
-            libfiles = {
-                "/home/g1/.xmake/packages/e/eudev/v3.2.14/daa70b4239914d39a27086b139af0a0e/lib/libudev.a"
-            },
-            license = "GPL-2.0",
-            linkdirs = {
-                "/home/g1/.xmake/packages/e/eudev/v3.2.14/daa70b4239914d39a27086b139af0a0e/lib"
-            },
-            version = "v3.2.14",
-            sysincludedirs = {
-                "/home/g1/.xmake/packages/e/eudev/v3.2.14/daa70b4239914d39a27086b139af0a0e/include"
-            },
-            static = true
-        },
-        ["xmake::xcb-proto_eafb62cb3f37412ebe648eb0ab4b4b35_release_1.17.0_external"] = false,
-        ["xmake::libxdmcp_fac034d258af4aada2c864884ac5f660_release_1.1.5_external"] = false,
-        ["xmake::libxext_720ea2f3e1ad433eb8fb44751e93f178_release_1.3.7_external"] = false,
-        ["xmake::openssl_6c51ab6278e2479b883dffafac69fdaf_release_1.1.1-w_external"] = {
-            links = {
-                "ssl",
-                "crypto"
-            },
-            version = "1.1.1-w",
-            libfiles = {
-                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/lib/libssl.a",
-                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/lib/libcrypto.a"
-            },
-            license = "Apache-2.0",
-            syslinks = {
-                "pthread",
-                "dl"
-            },
-            static = true,
-            sysincludedirs = {
-                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/include"
-            },
-            linkdirs = {
-                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/lib"
-            }
-        },
-        ["xmake::opengl_4e0143c97b65425b855ad5fd03038b6a_release_latest_external"] = false,
-        ["xmake::libxrandr_a36fcab100ed449e86944351e00c0384_release_1.5.4_external"] = false,
-        ["xmake::sfml_2a93fc39b3374fcfb58a49ccc01a35e1_release_3.0.1_external"] = {
-            libfiles = {
-                "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/lib/libsfml-graphics-s.a",
-                "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/lib/libsfml-window-s.a",
-                "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/lib/libsfml-audio-s.a",
-                "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/lib/libsfml-network-s.a",
-                "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/lib/libsfml-system-s.a"
-            },
-            syslinks = {
-                "dl",
-                "rt",
-                "pthread"
-            },
-            links = {
-                "sfml-graphics-s",
-                "sfml-window-s",
-                "sfml-audio-s",
-                "sfml-network-s",
-                "sfml-system-s"
-            },
-            linkdirs = {
-                "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/lib"
-            },
-            version = "3.0.1",
-            license = "zlib",
-            sysincludedirs = {
-                "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/include"
-            },
-            static = true,
-            components = {
-                window = {
-                    links = "sfml-window-s",
-                    syslinks = "dl"
-                },
-                __base = {
-                    sysincludedirs = {
-                        "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/include",
-                        "/home/g1/.xmake/packages/e/eudev/v3.2.14/daa70b4239914d39a27086b139af0a0e/include"
-                    },
-                    linkdirs = {
-                        "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1/lib",
-                        "/usr/lib/x86_64-linux-gnu",
-                        "/home/g1/.xmake/packages/e/eudev/v3.2.14/daa70b4239914d39a27086b139af0a0e/lib"
-                    },
-                    links = {
-                        "freetype",
-                        "z",
-                        "Xcursor",
-                        "Xrandr",
-                        "Xrender",
-                        "udev",
-                        "Xi",
-                        "Xext",
-                        "Xfixes",
-                        "X11",
-                        "xcb",
-                        "Xau",
-                        "Xdmcp",
-                        "OpenGL",
-                        "GLX",
-                        "FLAC++",
-                        "FLAC",
-                        "vorbisfile",
-                        "vorbisenc",
-                        "vorbis",
-                        "ogg"
-                    },
-                    defines = "SFML_STATIC"
-                },
-                audio = {
-                    links = "sfml-audio-s"
-                },
-                graphics = {
-                    links = "sfml-graphics-s"
-                },
-                network = {
-                    links = "sfml-network-s"
-                },
-                system = {
-                    links = "sfml-system-s",
-                    syslinks = {
-                        "rt",
-                        "pthread"
-                    }
-                }
-            },
-            defines = "SFML_STATIC"
-        },
-        ["xmake::zlib_95eb630a402e40ec8568849d53fe452c_release_v1.3.2_external"] = false,
-        ["xmake::libpthread-stubs_e6c09af522624eb1ae863fe21c4aa62c_release_0.5_external"] = false,
-        ["xmake::libffi_46686cf534074f4ebf90e4ab1f9662dd_release_3.4.8_external"] = {
-            links = {
-                "ffi"
-            },
-            libfiles = {
-                "/home/g1/.xmake/packages/l/libffi/3.4.8/46686cf534074f4ebf90e4ab1f9662dd/lib/libffi.a"
-            },
-            license = "MIT",
-            linkdirs = {
-                "/home/g1/.xmake/packages/l/libffi/3.4.8/46686cf534074f4ebf90e4ab1f9662dd/lib"
-            },
-            version = "3.4.8",
-            sysincludedirs = {
-                "/home/g1/.xmake/packages/l/libffi/3.4.8/46686cf534074f4ebf90e4ab1f9662dd/include"
-            },
-            static = true
-        },
-        ["xmake::libflac_f61b85bace96451c9f6043a054153ad2_release_1.5.0_external"] = false,
-        ["xmake::ca-certificates_e9ba281ae183402a80dc072d4d571c20_release_20250131_external"] = {
-            version = "20250131"
-        },
-        ["xmake::xorgproto_22469615461f49aebbfa4e10af6edb62_release_2023.2_external"] = false,
-        ["xmake::libogg_2cf2ce14849041a9b7bcea56bc632f00_release_v1.3.6_external"] = false,
-        ["xmake::libxcursor_665b359dc13241789f6ca7a586bc5127_release_1.2.3_external"] = false,
-        ["xmake::libxi_2f225dfd5e274482ae09ba4da0c185c5_release_1.8.2_external"] = false,
-        ["xmake::xtrans_588d85a9c99148b8ae87dee11b39ab40_release_1.6.0_external"] = false,
-        ["xmake::libxrender_75df963310db406385383085b95b222e_release_0.9.12_external"] = false,
-        ["xmake::freetype_d404b5258b954ba5987dad6326c314c2_release_2.14.1_external"] = false,
-        ["xmake::libxau_f28a3a7249e64bfeafc481e65ce195a9_release_1.0.12_external"] = false,
-        ["xmake::libxcb_37052fd83b89473abd67102965ff1e6c_release_1.17.0_external"] = false,
-        ["xmake::glx_4e0143c97b65425b855ad5fd03038b6a_release_latest_external"] = false,
-        ["xmake::libvorbis_0c3b1284ea2c4ed898e74501ea460787_release_1.3.7_external"] = false
-    },
-    ["detect.sdks.find_vcpkgdir"] = false,
-    ["lib.detect.has_flags"] = {
-        ["linux_x86_64_/usr/bin/gcc__cc_cxflags_-m64_-Wno-gnu-line-marker -Werror"] = true,
-        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-fdiagnostics-color=always"] = true,
-        ["linux_x86_64_/usr/bin/gcc__cc_cxflags_-m64_-fdiagnostics-color=always"] = true,
-        ["linux_x86_64_/usr/bin/gcc__cc__-m64_-fPIC"] = true,
-        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-fvisibility-inlines-hidden"] = true,
-        ["linux_x86_64_/usr/bin/g++__ld__-m64 -m64_-fPIC"] = true,
-        ["linux_x86_64_/usr/bin/g++__cxx__-m64_-O0"] = true,
-        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-Wno-gnu-line-marker -Werror"] = true,
-        ["linux_x86_64_/usr/bin/g++__cxx__-m64_-fPIC"] = true,
-        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-MMD -MF"] = true,
-        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-std=c++20"] = true
     },
     find_programver_fetch_package_system = {
         ["/usr/bin/cmake"] = "4.2.3"
     },
-    find_program_fetch_package_xmake = {
-        libtool = false,
-        ["pkg-config"] = false,
-        gperf = false,
-        autotools = false,
-        cmake = false,
-        python3 = false,
-        autoconf = false,
-        automake = false,
-        python2 = false,
-        python = false,
-        m4 = false,
-        ninja = false
+    find_program_gcc_arch_x86_64_plat_linux_checktoolar = {
+        ar = "/usr/bin/ar"
+    },
+    find_program_gcc_arch_x86_64_plat_linux_checktoolcxx = {
+        ["g++"] = "/usr/bin/g++"
     },
     ["detect.sdks.find_dotnet"] = {
         dotnet = false
     },
-    find_program_gcc_arch_x86_64_plat_linux_checktoolld = {
-        ["g++"] = "/usr/bin/g++"
-    },
-    find_program_gcc_arch_x86_64_plat_linux_checktoolcc = {
-        gcc = "/usr/bin/gcc"
-    },
     ["core.tools.gcc.has_ldflags"] = {
         ["/usr/bin/g++_"] = {
-            ["--ctf-variables"] = true,
-            ["--disable-reloc-section"] = true,
-            ["--unique"] = true,
-            ["--enable-non-contiguous-regions-warnings"] = true,
-            ["--export-dynamic-symbol-list"] = true,
-            ["-Ttext"] = true,
-            ["-V"] = true,
-            ["--large-address-aware"] = true,
-            ["--whole-archive"] = true,
-            ["--remap-inputs-file"] = true,
-            ["--warn-multiple-gp"] = true,
-            ["--dependency-file"] = true,
-            ["--export-dynamic-symbol"] = true,
-            ["--no-gnu2-tls-tag"] = true,
-            ["--error-unresolved-symbols"] = true,
-            ["--ld-generated-unwind-info"] = true,
-            ["--stats"] = true,
-            ["-Y"] = true,
-            ["--exclude-modules-for-implib"] = true,
-            ["--dynamic-list-cpp-new"] = true,
-            ["--trace"] = true,
-            ["--warn-execstack"] = true,
-            ["--split-by-file"] = true,
-            ["-L"] = true,
-            ["--gc-keep-exported"] = true,
-            ["-l"] = true,
-            ["-init"] = true,
-            ["--file-alignment"] = true,
-            ["--no-warnings"] = true,
-            ["--enable-auto-image-base"] = true,
-            ["--require-defined"] = true,
-            ["-EB"] = true,
-            ["--rosegment"] = true,
-            ["--enable-new-dtags"] = true,
-            ["--major-os-version"] = true,
-            ["-static"] = true,
-            ["--subsystem"] = true,
-            ["--strip-discarded"] = true,
-            ["--oformat"] = true,
-            ["--minor-subsystem-version"] = true,
-            ["--no-ctf-variables"] = true,
-            ["--library-path"] = true,
-            ["-c"] = true,
-            ["--no-warn-search-mismatch"] = true,
-            ["--error-handling-script"] = true,
-            ["--no-undefined-version"] = true,
-            ["--version-exports-section"] = true,
-            ["--dynamic-list"] = true,
-            ["--no-warn-execstack"] = true,
-            ["--disable-auto-import"] = true,
-            ["--push-state"] = true,
-            ["--exclude-symbols"] = true,
-            ["--enable-reloc-section"] = true,
-            ["-plugin-save-temps"] = true,
-            ["-plugin"] = true,
-            ["-rpath"] = true,
-            ["--exclude-all-symbols"] = true,
-            ["-EL"] = true,
-            ["--check-sections"] = true,
-            ["--omagic"] = true,
-            ["--no-warn-mismatch"] = true,
-            ["--wrap"] = true,
-            ["-plugin-opt"] = true,
-            ["--add-stdcall-alias"] = true,
-            ["--pic-executable"] = true,
-            ["--output-def"] = true,
-            ["--warn-alternate-em"] = true,
-            ["--warn-execstack-objects"] = true,
-            ["--traditional-format"] = true,
-            ["--disable-multiple-abs-defs"] = true,
-            ["-f"] = true,
-            ["--warn-section-align"] = true,
-            ["--warn-common"] = true,
-            ["--no-gc-sections"] = true,
-            ["--discard-locals"] = true,
-            ["--kill-at"] = true,
-            ["--disable-auto-image-base"] = true,
-            ["--no-map-whole-files"] = true,
-            ["-Tdata"] = true,
-            ["--section-ordering-file"] = true,
-            ["--section-start"] = true,
-            ["--discard-all"] = true,
-            ["--no-print-map-locals"] = true,
-            ["--sort-common"] = true,
-            ["--enable-stdcall-fixup"] = true,
-            ["--no-print-gc-sections"] = true,
-            ["-y"] = true,
-            ["--disable-stdcall-fixup"] = true,
-            ["--dynamic-linker"] = true,
-            ["--no-rosegment"] = true,
-            ["--default-imported-symver"] = true,
-            ["--gc-sections"] = true,
-            ["-Bsymbolic-functions"] = true,
-            ["--remap-inputs"] = true,
-            ["--dynamic-list-cpp-typeinfo"] = true,
-            ["--no-accept-unknown-input-arch"] = true,
-            ["--print-gc-sections"] = true,
-            ["--no-define-common"] = true,
-            ["--fatal-warnings"] = true,
-            ["-b"] = true,
             ["--relocatable"] = true,
-            ["--warn-once"] = true,
-            ["-nostdlib"] = true,
             ["-dp"] = true,
-            ["-a"] = true,
-            ["--default-symver"] = true,
-            ["--no-fatal-warnings"] = true,
-            ["--no-error-rwx-segments"] = true,
-            ["--enable-extra-pep-debug"] = true,
-            ["-m"] = true,
-            ["--warn-unresolved-symbols"] = true,
-            ["--compat-implib"] = true,
-            ["--nmagic"] = true,
-            ["--undefined-version"] = true,
-            ["--error-rwx-segments"] = true,
-            ["--help"] = true,
-            ["--filter"] = true,
-            ["--export-dynamic"] = true,
-            ["-rpath-link"] = true,
-            ["--disable-long-section-names"] = true,
-            ["--output"] = true,
-            ["--no-stats"] = true,
-            ["-Qy"] = true,
-            ["--entry"] = true,
-            ["--allow-multiple-definition"] = true,
-            ["-Bsymbolic"] = true,
-            ["--print-map-discarded"] = true,
-            ["--version-script"] = true,
-            ["--warn-rwx-segments"] = true,
-            ["--no-undefined"] = true,
-            ["--architecture"] = true,
-            ["-R"] = true,
-            ["--end-group"] = true,
-            ["--strip-all"] = true,
-            ["--as-needed"] = true,
-            ["--major-subsystem-version"] = true,
-            ["--format"] = true,
-            ["--map-whole-files"] = true,
-            ["--auxiliary"] = true,
-            ["--enable-extra-pe-debug"] = true,
-            ["-Ttext-segment"] = true,
-            ["-T"] = true,
-            ["--allow-shlib-undefined"] = true,
-            ["-debug"] = true,
-            ["--minor-os-version"] = true,
-            ["-Ur"] = true,
-            ["--export-all-symbols"] = true,
-            ["-o"] = true,
-            ["--stack"] = true,
-            ["-g"] = true,
-            ["--disable-linker-version"] = true,
-            ["--exclude-libs"] = true,
-            ["--no-eh-frame-hdr"] = true,
-            ["--section-alignment"] = true,
-            ["--relax"] = true,
-            ["--just-symbols"] = true,
-            ["--gnu2-tls-tag"] = true,
-            ["--no-print-map-discarded"] = true,
-            ["--no-gnu-tls-tag"] = true,
-            ["--out-implib"] = true,
-            ["--verbose"] = true,
-            ["--disable-runtime-pseudo-reloc"] = true,
-            ["--task-link"] = true,
-            ["--trace-symbol"] = true,
-            ["--major-image-version"] = true,
-            ["--strip-debug"] = true,
-            ["-Map"] = true,
+            ["--enable-runtime-pseudo-reloc"] = true,
+            ["--split-by-reloc"] = true,
+            ["--subsystem"] = true,
+            ["--version-exports-section"] = true,
+            ["-assert"] = true,
+            ["-plugin-save-temps"] = true,
+            ["--accept-unknown-input-arch"] = true,
+            ["-V"] = true,
             ["--warn-textrel"] = true,
-            ["--undefined"] = true,
-            ["--enable-long-section-names"] = true,
-            ["--print-map-locals"] = true,
-            ["--no-dynamic-linker"] = true,
-            ["--no-strip-discarded"] = true,
-            ["--no-error-execstack"] = true,
-            ["--demangle"] = true,
-            ["--no-allow-shlib-undefined"] = true,
-            ["--no-demangle"] = true,
-            ["--image-base"] = true,
-            ["--minor-image-version"] = true,
-            ["--discard-none"] = true,
-            ["--print-output-format"] = true,
-            ["-z"] = true,
-            ["-h"] = true,
-            ["--script"] = true,
-            ["--version"] = true,
-            ["--gpsize"] = true,
-            ["--force-exe-suffix"] = true,
-            ["-O"] = true,
-            ["--dynamic-list-data"] = true,
-            ["-G"] = true,
+            ["--print-gc-sections"] = true,
+            ["-static"] = true,
+            ["--strip-all"] = true,
+            ["--no-gnu2-tls-tag"] = true,
+            ["--rosegment"] = true,
+            ["--split-by-file"] = true,
+            ["-Bgroup"] = true,
+            ["-u"] = true,
+            ["--warn-common"] = true,
+            ["--disable-auto-image-base"] = true,
+            ["-f"] = true,
+            ["--filter"] = true,
+            ["--disable-long-section-names"] = true,
+            ["-m"] = true,
+            ["--enable-stdcall-fixup"] = true,
+            ["--reduce-memory-overheads"] = true,
+            ["--major-image-version"] = true,
+            ["--disable-auto-import"] = true,
+            ["-fini"] = true,
+            ["--eh-frame-hdr"] = true,
+            ["--gc-sections"] = true,
+            ["--no-check-sections"] = true,
+            ["--exclude-modules-for-implib"] = true,
+            ["--help"] = true,
+            ["--enable-linker-version"] = true,
+            ["--enable-reloc-section"] = true,
+            ["--push-state"] = true,
+            ["--ignore-unresolved-symbol"] = true,
+            ["--major-os-version"] = true,
+            ["--no-rosegment"] = true,
+            ["--enable-extra-pe-debug"] = true,
+            ["--no-ld-generated-unwind-info"] = true,
+            ["--no-gnu-tls-tag"] = true,
+            ["--entry"] = true,
+            ["-F"] = true,
+            ["--disable-linker-version"] = true,
+            ["--no-map-whole-files"] = true,
+            ["--no-undefined"] = true,
+            ["--no-as-needed"] = true,
+            ["-rpath"] = true,
+            ["--no-warn-rwx-segments"] = true,
+            ["--verbose"] = true,
             ["--orphan-handling"] = true,
+            ["-e"] = true,
+            ["--disable-runtime-pseudo-reloc"] = true,
+            ["--enable-non-contiguous-regions-warnings"] = true,
+            ["--default-imported-symver"] = true,
+            ["--discard-locals"] = true,
+            ["--no-relax"] = true,
+            ["--major-subsystem-version"] = true,
+            ["--no-demangle"] = true,
+            ["--no-accept-unknown-input-arch"] = true,
+            ["--support-old-code"] = true,
+            ["-L"] = true,
+            ["--no-error-execstack"] = true,
+            ["--no-error-rwx-segments"] = true,
+            ["--output-def"] = true,
+            ["--omagic"] = true,
+            ["--exclude-libs"] = true,
+            ["--strip-debug"] = true,
+            ["--traditional-format"] = true,
+            ["--minor-subsystem-version"] = true,
+            ["-Ur"] = true,
+            ["--no-copy-dt-needed-entries"] = true,
+            ["-Tldata-segment"] = true,
+            ["--version"] = true,
+            ["--stats"] = true,
+            ["-T"] = true,
+            ["--relax"] = true,
+            ["-rpath-link"] = true,
+            ["--dynamic-linker"] = true,
+            ["--disable-new-dtags"] = true,
+            ["--disable-large-address-aware"] = true,
+            ["--gc-keep-exported"] = true,
+            ["--library-path"] = true,
+            ["--disable-multiple-abs-defs"] = true,
+            ["-dT"] = true,
+            ["--warn-execstack"] = true,
+            ["--no-gc-sections"] = true,
+            ["-no-pie"] = true,
+            ["--no-print-gc-sections"] = true,
+            ["-O"] = true,
+            ["-plugin"] = true,
+            ["--discard-none"] = true,
+            ["--script"] = true,
+            ["-o"] = true,
+            ["--force-exe-suffix"] = true,
+            ["--error-unresolved-symbols"] = true,
+            ["--trace"] = true,
+            ["--print-output-format"] = true,
+            ["--print-map"] = true,
+            ["-y"] = true,
+            ["--require-defined"] = true,
+            ["--as-needed"] = true,
+            ["--format"] = true,
+            ["--dependency-file"] = true,
+            ["--no-warn-execstack"] = true,
+            ["--warn-alternate-em"] = true,
+            ["--enable-non-contiguous-regions"] = true,
+            ["--dynamic-list-cpp-new"] = true,
+            ["--default-symver"] = true,
+            ["--version-script"] = true,
+            ["-c"] = true,
+            ["--no-print-map-locals"] = true,
+            ["--discard-all"] = true,
+            ["--dynamic-list-cpp-typeinfo"] = true,
+            ["-EB"] = true,
+            ["--warn-section-align"] = true,
+            ["--end-group"] = true,
+            ["--cref"] = true,
+            ["--no-strip-discarded"] = true,
+            ["--gpsize"] = true,
+            ["--undefined"] = true,
+            ["--sort-section"] = true,
+            ["--minor-image-version"] = true,
+            ["--error-execstack"] = true,
+            ["--discard-sframe"] = true,
+            ["--warn-unresolved-symbols"] = true,
+            ["--no-dynamic-linker"] = true,
+            ["--stack"] = true,
+            ["--add-stdcall-alias"] = true,
+            ["--dll"] = true,
+            ["--strip-discarded"] = true,
+            ["--enable-auto-import"] = true,
+            ["-A"] = true,
+            ["--sort-common"] = true,
+            ["--remap-inputs-file"] = true,
+            ["--print-map-locals"] = true,
+            ["--ld-generated-unwind-info"] = true,
+            ["-R"] = true,
+            ["--export-dynamic"] = true,
+            ["--architecture"] = true,
+            ["--start-group"] = true,
+            ["-b"] = true,
+            ["--ctf-variables"] = true,
+            ["-init"] = true,
+            ["--force-group-allocation"] = true,
+            ["--allow-multiple-definition"] = true,
+            ["--whole-archive"] = true,
+            ["--unique"] = true,
+            ["--pop-state"] = true,
+            ["-Bsymbolic"] = true,
+            ["--retain-symbols-file"] = true,
+            ["-Bsymbolic-functions"] = true,
+            ["--export-all-symbols"] = true,
+            ["--heap"] = true,
+            ["--no-print-map-discarded"] = true,
+            ["--export-dynamic-symbol"] = true,
+            ["--demangle"] = true,
+            ["--no-warn-mismatch"] = true,
+            ["-I"] = true,
+            ["-Map"] = true,
+            ["--oformat"] = true,
+            ["-Y"] = true,
+            ["--print-memory-usage"] = true,
+            ["--copy-dt-needed-entries"] = true,
+            ["--warn-execstack-objects"] = true,
+            ["--map-whole-files"] = true,
+            ["--print-map-discarded"] = true,
+            ["--export-dynamic-symbol-list"] = true,
+            ["-Ttext-segment"] = true,
+            ["-Qy"] = true,
+            ["--no-allow-shlib-undefined"] = true,
+            ["-z"] = true,
+            ["-a"] = true,
+            ["--exclude-symbols"] = true,
+            ["-qmagic"] = true,
+            ["--remap-inputs"] = true,
+            ["-Bno-symbolic"] = true,
+            ["--trace-symbol"] = true,
+            ["--undefined-version"] = true,
+            ["--allow-shlib-undefined"] = true,
+            ["--no-stats"] = true,
+            ["--no-warnings"] = true,
+            ["--no-eh-frame-hdr"] = true,
+            ["--enable-auto-image-base"] = true,
+            ["--no-omagic"] = true,
+            ["-plugin-opt"] = true,
+            ["--no-export-dynamic"] = true,
+            ["--file-alignment"] = true,
+            ["--just-symbols"] = true,
+            ["--warn-once"] = true,
+            ["-P"] = true,
+            ["--auxiliary"] = true,
+            ["--library"] = true,
+            ["-Tdata"] = true,
+            ["--no-ctf-variables"] = true,
+            ["--dynamic-list"] = true,
+            ["-debug"] = true,
+            ["--pic-executable"] = true,
+            ["--image-base"] = true,
             ["--default-script"] = true,
-            ["-Tbss"] = true,
+            ["-flto"] = true,
+            ["-G"] = true,
+            ["-Ttext"] = true,
+            ["--no-whole-archive"] = true,
+            ["-Trodata-segment"] = true,
             ["--no-keep-memory"] = true,
+            ["--fatal-warnings"] = true,
+            ["--warn-rwx-segments"] = true,
+            ["-h"] = true,
+            ["-l"] = true,
+            ["--enable-new-dtags"] = true,
+            ["--check-sections"] = true,
+            ["--no-undefined-version"] = true,
+            ["--defsym"] = true,
+            ["-nostdlib"] = true,
+            ["--disable-stdcall-fixup"] = true,
+            ["--target-help"] = true,
+            ["-EL"] = true,
+            ["--output"] = true,
+            ["--no-define-common"] = true,
+            ["--no-warn-search-mismatch"] = true,
+            ["--gnu2-tls-tag"] = true,
+            ["--gnu-tls-tag"] = true,
+            ["--task-link"] = true,
+            ["-Bshareable"] = true,
+            ["--enable-extra-pep-debug"] = true,
+            ["--emit-relocs"] = true,
+            ["--section-ordering-file"] = true,
+            ["--no-fatal-warnings"] = true,
+            ["-Tbss"] = true,
+            ["--minor-os-version"] = true,
+            ["--warn-duplicate-exports"] = true,
+            ["--section-alignment"] = true,
+            ["--spare-dynamic-tags"] = true,
+            ["--section-start"] = true,
+            ["--exclude-all-symbols"] = true,
+            ["--kill-at"] = true,
+            ["--out-implib"] = true,
+            ["--warn-multiple-gp"] = true,
+            ["--nmagic"] = true,
+            ["--wrap"] = true,
+            ["-g"] = true,
+            ["--large-address-aware"] = true,
             ["--mri-script"] = true,
             ["--print-sysroot"] = true,
-            ["--emit-relocs"] = true,
-            ["-fini"] = true,
-            ["-Bgroup"] = true,
-            ["-Tldata-segment"] = true,
-            ["--disable-large-address-aware"] = true,
-            ["--enable-auto-import"] = true,
-            ["--sort-section"] = true,
+            ["--error-rwx-segments"] = true,
+            ["--dynamic-list-data"] = true,
+            ["--error-handling-script"] = true,
             ["-soname"] = true,
-            ["--no-ld-generated-unwind-info"] = true,
-            ["-Bno-symbolic"] = true,
-            ["--accept-unknown-input-arch"] = true,
-            ["-u"] = true,
-            ["--start-group"] = true,
-            ["--heap"] = true,
-            ["-qmagic"] = true,
-            ["--enable-linker-version"] = true,
-            ["--eh-frame-hdr"] = true,
-            ["--copy-dt-needed-entries"] = true,
-            ["--no-export-dynamic"] = true,
-            ["--split-by-reloc"] = true,
-            ["-Bshareable"] = true,
-            ["--print-memory-usage"] = true,
-            ["--pop-state"] = true,
-            ["--print-map"] = true,
-            ["-P"] = true,
-            ["-F"] = true,
-            ["--force-group-allocation"] = true,
-            ["--no-omagic"] = true,
-            ["--warn-duplicate-exports"] = true,
-            ["--defsym"] = true,
-            ["--discard-sframe"] = true,
-            ["-e"] = true,
-            ["--no-whole-archive"] = true,
-            ["--spare-dynamic-tags"] = true,
-            ["--dll"] = true,
-            ["--support-old-code"] = true,
-            ["--no-as-needed"] = true,
-            ["--no-warn-rwx-segments"] = true,
-            ["--target-help"] = true,
-            ["-no-pie"] = true,
-            ["--enable-runtime-pseudo-reloc"] = true,
-            ["--enable-non-contiguous-regions"] = true,
-            ["--no-check-sections"] = true,
-            ["-assert"] = true,
-            ["-A"] = true,
-            ["--library"] = true,
-            ["--no-relax"] = true,
-            ["-flto"] = true,
-            ["--ignore-unresolved-symbol"] = true,
-            ["--no-copy-dt-needed-entries"] = true,
-            ["--disable-new-dtags"] = true,
-            ["-dT"] = true,
-            ["--retain-symbols-file"] = true,
-            ["--reduce-memory-overheads"] = true,
-            ["-I"] = true,
-            ["--error-execstack"] = true,
-            ["--gnu-tls-tag"] = true,
-            ["-Trodata-segment"] = true,
-            ["--cref"] = true
+            ["--compat-implib"] = true,
+            ["--enable-long-section-names"] = true,
+            ["--disable-reloc-section"] = true
         }
     },
     ["detect.sdks.find_ascend"] = {
         ascend = false
     },
+    find_program_fetch_package_xmake = {
+        automake = false,
+        meson = false,
+        cmake = false,
+        ["pkg-config"] = false,
+        libtool = false,
+        autoconf = false,
+        bison = false,
+        m4 = false,
+        python = false,
+        ninja = false,
+        python2 = false,
+        python3 = false
+    },
+    find_package_linux_x86_64_fetch_package_system = {
+        ["apt::libxi-dev_86d38f45eddd4ef5aee06e19c25970cb_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXi.a",
+                "/usr/lib/x86_64-linux-gnu/libXi.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xi"
+            }
+        },
+        ["apt::libfreetype-dev_d404b5258b954ba5987dad6326c314c2_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libfreetype.a",
+                "/usr/lib/x86_64-linux-gnu/libfreetype.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "freetype"
+            }
+        },
+        ["apt::x11proto-dev_22469615461f49aebbfa4e10af6edb62_release_external"] = { },
+        ["apt::libx11-dev_fa5de29573fd426583b062bb45cc2a89_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libX11.a",
+                "/usr/lib/x86_64-linux-gnu/libX11.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "X11"
+            }
+        },
+        ["apt::libxrandr-dev_92388657d0db4cdcbb52c71b40bdb847_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXrandr.a",
+                "/usr/lib/x86_64-linux-gnu/libXrandr.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xrandr"
+            }
+        },
+        ["apt::libxcb1-dev_37052fd83b89473abd67102965ff1e6c_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libxcb.a",
+                "/usr/lib/x86_64-linux-gnu/libxcb.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "xcb"
+            }
+        },
+        ["system::z_95eb630a402e40ec8568849d53fe452c_release"] = {
+            links = "z"
+        },
+        ["apt::libxcursor-dev_037939099f9f4ec28446985dfc9b7e14_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXcursor.a",
+                "/usr/lib/x86_64-linux-gnu/libXcursor.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xcursor"
+            }
+        },
+        ["pkgconfig::freetype2_d404b5258b954ba5987dad6326c314c2_release_external"] = false,
+        ["libpthread-stubs_e6c09af522624eb1ae863fe21c4aa62c_release_external"] = false,
+        ["xcb-proto_eafb62cb3f37412ebe648eb0ab4b4b35_release_external"] = false,
+        ["apt::libxfixes-dev_32cbba7be85a4185b00b52ca82de8150_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXfixes.a",
+                "/usr/lib/x86_64-linux-gnu/libXfixes.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xfixes"
+            }
+        },
+        ["apt::libxdmcp-dev_fac034d258af4aada2c864884ac5f660_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXdmcp.a",
+                "/usr/lib/x86_64-linux-gnu/libXdmcp.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xdmcp"
+            }
+        },
+        ["apt::xtrans-dev_588d85a9c99148b8ae87dee11b39ab40_release_external"] = { },
+        ["apt::libxext-dev_f2028efa1de84bdb8bcf174232090114_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXext.a",
+                "/usr/lib/x86_64-linux-gnu/libXext.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xext"
+            }
+        },
+        ["apt::libxrender-dev_504f602166aa49fcb7386ef0f2d67c9b_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXrender.a",
+                "/usr/lib/x86_64-linux-gnu/libXrender.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xrender"
+            }
+        },
+        ["apt::libxau-dev_f28a3a7249e64bfeafc481e65ce195a9_release_external"] = {
+            libfiles = {
+                "/usr/lib/x86_64-linux-gnu/libXau.a",
+                "/usr/lib/x86_64-linux-gnu/libXau.so"
+            },
+            static = true,
+            linkdirs = {
+                "/usr/lib/x86_64-linux-gnu"
+            },
+            shared = true,
+            links = {
+                "Xau"
+            }
+        },
+        ["pacman::freetype2_d404b5258b954ba5987dad6326c314c2_release_external"] = false
+    },
+    ["detect.sdks.find_vcpkgdir"] = false,
+    find_package_linux_x86_64_fetch_package_xmake = {
+        ["xmake::freetype_d404b5258b954ba5987dad6326c314c2_release_2.14.1_external"] = false,
+        ["xmake::libxext_f2028efa1de84bdb8bcf174232090114_release_1.3.7_external"] = false,
+        ["xmake::libxrandr_92388657d0db4cdcbb52c71b40bdb847_release_1.5.4_external"] = false,
+        ["xmake::libxml2_0d66487e0de34b419fad31daa41c7c91_release_v2.14.3_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/l/libxml2/v2.14.3/0d66487e0de34b419fad31daa41c7c91/lib/libxml2.a"
+            },
+            syslinks = {
+                "m",
+                "pthread"
+            },
+            links = {
+                "xml2"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/libxml2/v2.14.3/0d66487e0de34b419fad31daa41c7c91/include/libxml2"
+            },
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/libxml2/v2.14.3/0d66487e0de34b419fad31daa41c7c91/lib"
+            },
+            license = "MIT",
+            version = "v2.14.3"
+        },
+        ["xmake::libsdl3_ttf_270375faad2045aab6586238dd58b214_release_3.2.2_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/lib/libSDL3_ttf.a"
+            },
+            links = {
+                "SDL3_ttf"
+            },
+            license = "zlib",
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/lib"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/include"
+            },
+            version = "3.2.2"
+        },
+        ["xmake::libsdl3_mixer_1e3ca57335a2468e87a82775f3ad57ea_release_3.2.4_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/lib/libSDL3_mixer.a"
+            },
+            links = {
+                "SDL3_mixer"
+            },
+            license = "zlib",
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/lib"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/include"
+            },
+            version = "3.2.4"
+        },
+        ["xmake::util-macros_21ebacb0450b4b16b06b586ecc142d3f_release_1.20.0_external"] = {
+            version = "1.20.0"
+        },
+        ["xmake::libsdl3_cada89f100be40b6a20e816986ea19bc_release_3.4.4_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
+            },
+            syslinks = {
+                "pthread",
+                "dl"
+            },
+            links = {
+                "SDL3"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/include"
+            },
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib"
+            },
+            license = "zlib",
+            version = "3.4.4"
+        },
+        ["xmake::libxcursor_037939099f9f4ec28446985dfc9b7e14_release_1.2.3_external"] = false,
+        ["xmake::openssl_6c51ab6278e2479b883dffafac69fdaf_release_1.1.1-w_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/lib/libssl.a",
+                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/lib/libcrypto.a"
+            },
+            syslinks = {
+                "pthread",
+                "dl"
+            },
+            links = {
+                "ssl",
+                "crypto"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/include"
+            },
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/o/openssl/1.1.1-w/6c51ab6278e2479b883dffafac69fdaf/lib"
+            },
+            license = "Apache-2.0",
+            version = "1.1.1-w"
+        },
+        ["xmake::libx11_fa5de29573fd426583b062bb45cc2a89_release_1.8.13_external"] = false,
+        ["xmake::lua_25fe9e89d87340309e564f8916664790_release_v5.4.8_external"] = {
+            syslinks = {
+                "dl",
+                "m"
+            },
+            libfiles = {
+                "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib/liblua.a"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/include/lua"
+            },
+            links = {
+                "lua"
+            },
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib"
+            },
+            static = true,
+            version = "v5.4.8"
+        },
+        ["xmake::xcb-proto_eafb62cb3f37412ebe648eb0ab4b4b35_release_1.17.0_external"] = false,
+        ["xmake::libxcb_37052fd83b89473abd67102965ff1e6c_release_1.17.0_external"] = false,
+        ["xmake::expat_dde197c0e726439f83e6b529893e8bb3_release_2.8.1_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/e/expat/2.8.1/dde197c0e726439f83e6b529893e8bb3/lib/libexpat.a"
+            },
+            links = {
+                "expat"
+            },
+            license = "MIT",
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/e/expat/2.8.1/dde197c0e726439f83e6b529893e8bb3/lib"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/e/expat/2.8.1/dde197c0e726439f83e6b529893e8bb3/include"
+            },
+            version = "2.8.1"
+        },
+        ["xmake::ca-certificates_e9ba281ae183402a80dc072d4d571c20_release_20250131_external"] = {
+            version = "20250131"
+        },
+        ["xmake::sol2_935a8a667cd24e86bbce6d9131e34070_release_v3.5.0_external"] = {
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/s/sol2/v3.5.0/935a8a667cd24e86bbce6d9131e34070/include"
+            },
+            version = "v3.5.0"
+        },
+        ["xmake::libxfixes_32cbba7be85a4185b00b52ca82de8150_release_6.0.1_external"] = false,
+        ["xmake::zlib_95eb630a402e40ec8568849d53fe452c_release_v1.3.2_external"] = false,
+        ["xmake::libsdl3_image_9bf488f3309346fbb2340c1f4eb4f1a6_release_3.4.0_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6/lib/libSDL3_image.a"
+            },
+            links = {
+                "SDL3_image"
+            },
+            license = "zlib",
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6/lib"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6/include"
+            },
+            version = "3.4.0"
+        },
+        ["xmake::xtrans_588d85a9c99148b8ae87dee11b39ab40_release_1.6.0_external"] = false,
+        ["xmake::libxi_86d38f45eddd4ef5aee06e19c25970cb_release_1.8.2_external"] = false,
+        ["xmake::egl-headers_cd777b21b8c84268bf5e21c2813eae03_release_2023.12.16_external"] = {
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03/include"
+            },
+            version = "2023.12.16",
+            license = "MIT"
+        },
+        ["xmake::libxau_f28a3a7249e64bfeafc481e65ce195a9_release_1.0.12_external"] = false,
+        ["xmake::libxdmcp_fac034d258af4aada2c864884ac5f660_release_1.1.5_external"] = false,
+        ["xmake::libxss_6e52e0599a424dcc854461f97a4008c3_release_1.2.5_external"] = {
+            links = {
+                "Xss"
+            },
+            shared = true,
+            license = "MIT",
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/libxss/1.2.5/6e52e0599a424dcc854461f97a4008c3/include"
+            },
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/libxss/1.2.5/6e52e0599a424dcc854461f97a4008c3/lib"
+            },
+            libfiles = {
+                "/home/g1/.xmake/packages/l/libxss/1.2.5/6e52e0599a424dcc854461f97a4008c3/lib/libXss.so",
+                "/home/g1/.xmake/packages/l/libxss/1.2.5/6e52e0599a424dcc854461f97a4008c3/lib/libXss.so.1.0.0",
+                "/home/g1/.xmake/packages/l/libxss/1.2.5/6e52e0599a424dcc854461f97a4008c3/lib/libXss.so.1"
+            },
+            version = "1.2.5"
+        },
+        ["xmake::opengl-headers_59ed79d7030a4b298d033d457b08e5ff_release_2024.01.04_external"] = {
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff/include"
+            },
+            version = "2024.01.04",
+            license = "MIT"
+        },
+        ["xmake::libxrender_504f602166aa49fcb7386ef0f2d67c9b_release_0.9.12_external"] = false,
+        ["xmake::libffi_46686cf534074f4ebf90e4ab1f9662dd_release_3.4.8_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/l/libffi/3.4.8/46686cf534074f4ebf90e4ab1f9662dd/lib/libffi.a"
+            },
+            links = {
+                "ffi"
+            },
+            license = "MIT",
+            static = true,
+            linkdirs = {
+                "/home/g1/.xmake/packages/l/libffi/3.4.8/46686cf534074f4ebf90e4ab1f9662dd/lib"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/l/libffi/3.4.8/46686cf534074f4ebf90e4ab1f9662dd/include"
+            },
+            version = "3.4.8"
+        },
+        ["xmake::libpthread-stubs_e6c09af522624eb1ae863fe21c4aa62c_release_0.5_external"] = false,
+        ["xmake::xorgproto_22469615461f49aebbfa4e10af6edb62_release_2023.2_external"] = false,
+        ["xmake::wayland_b48a347d57a940749b5f3611ec88e675_release_1.25.0_external"] = {
+            links = {
+                "wayland-cursor",
+                "wayland-client",
+                "wayland-egl",
+                "wayland-server"
+            },
+            shared = true,
+            license = "MIT",
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/include"
+            },
+            linkdirs = {
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib"
+            },
+            libfiles = {
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-cursor.so",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-client.so",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-egl.so",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-server.so",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-egl.so.1.25.0",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-server.so.0.25.0",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-cursor.so.0",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-client.so.0",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-cursor.so.0.25.0",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-client.so.0.25.0",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-egl.so.1",
+                "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675/lib/libwayland-server.so.0"
+            },
+            version = "1.25.0"
+        },
+        ["xmake::zet_d6fa6d14ff6145129b395575f8474bb1_release_@default_external"] = {
+            libfiles = {
+                "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/lib/libzet.a"
+            },
+            sysincludedirs = {
+                "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/include"
+            },
+            links = {
+                "zet"
+            },
+            linkdirs = {
+                "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/lib"
+            },
+            static = true,
+            version = "@default"
+        }
+    },
+    find_program_gcc_arch_x86_64_plat_linux_checktoolcc = {
+        gcc = "/usr/bin/gcc"
+    },
+    find_program = {
+        emerge = false,
+        ["/usr/bin/gcc"] = "/usr/bin/gcc",
+        git = "/usr/bin/git",
+        dotnet = false,
+        brew = false,
+        gcc = "/usr/bin/gcc",
+        ["pkg-config"] = false,
+        zig = false,
+        nim = false,
+        gzip = "/usr/bin/gzip",
+        ["/usr/bin/g++"] = "/usr/bin/g++",
+        pacman = false,
+        dpkg = "/usr/bin/dpkg",
+        tar = "/usr/bin/tar",
+        pkgconf = false
+    },
+    find_program_gcc_arch_x86_64_plat_linux_checktoolld = {
+        ["g++"] = "/usr/bin/g++"
+    },
+    ["lib.detect.has_flags"] = {
+        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-MMD -MF"] = true,
+        ["linux_x86_64_/usr/bin/g++__cxx__-m64_-O3"] = true,
+        ["linux_x86_64_/usr/bin/g++__ld__-m64 -m64_-fPIC"] = true,
+        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-std=c++20"] = true,
+        ["linux_x86_64_/usr/bin/gcc__cc_cxflags_-m64_-fdiagnostics-color=always"] = true,
+        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-fdiagnostics-color=always"] = true,
+        ["linux_x86_64_/usr/bin/gcc__cc__-m64_-fPIC"] = true,
+        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-Wno-gnu-line-marker -Werror"] = true,
+        ["linux_x86_64_/usr/bin/gcc__cc_cxflags_-m64_-Wno-gnu-line-marker -Werror"] = true,
+        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-fvisibility-inlines-hidden"] = true,
+        ["linux_x86_64_/usr/bin/g++__cxx_cxflags_-m64_-DNDEBUG"] = true,
+        ["linux_x86_64_/usr/bin/g++__cxx__-m64_-fPIC"] = true
+    },
     ["core.tools.gcc.has_cflags"] = {
         ["/usr/bin/gcc_"] = {
-            ["-shared"] = true,
-            ["-print-search-dirs"] = true,
-            ["-print-multiarch"] = true,
             ["-pie"] = true,
-            ["-Xassembler"] = true,
-            ["-Xpreprocessor"] = true,
-            ["-c"] = true,
-            ["-S"] = true,
-            ["--param"] = true,
-            ["-dumpversion"] = true,
-            ["-Xlinker"] = true,
-            ["--target-help"] = true,
-            ["-print-multi-lib"] = true,
+            ["-print-search-dirs"] = true,
+            ["-print-sysroot"] = true,
+            ["--help"] = true,
+            ["-no-canonical-prefixes"] = true,
+            ["-x"] = true,
+            ["-print-sysroot-headers-suffix"] = true,
+            ["-dumpspecs"] = true,
             ["-time"] = true,
             ["-print-libgcc-file-name"] = true,
             ["-pass-exit-codes"] = true,
-            ["-B"] = true,
-            ["-v"] = true,
-            ["-print-sysroot-headers-suffix"] = true,
-            ["-x"] = true,
-            ["-o"] = true,
-            ["-no-canonical-prefixes"] = true,
-            ["-pipe"] = true,
             ["-print-multi-directory"] = true,
-            ["-dumpspecs"] = true,
+            ["-shared"] = true,
             ["--version"] = true,
-            ["-print-sysroot"] = true,
-            ["--help"] = true,
-            ["-E"] = true,
+            ["-S"] = true,
             ["-save-temps"] = true,
+            ["-Xassembler"] = true,
+            ["-dumpmachine"] = true,
+            ["--param"] = true,
+            ["-dumpversion"] = true,
+            ["-Xlinker"] = true,
+            ["-v"] = true,
+            ["--target-help"] = true,
+            ["-c"] = true,
+            ["-Xpreprocessor"] = true,
+            ["-E"] = true,
+            ["-pipe"] = true,
+            ["-print-multiarch"] = true,
             ["-print-multi-os-directory"] = true,
-            ["-dumpmachine"] = true
+            ["-o"] = true,
+            ["-B"] = true,
+            ["-print-multi-lib"] = true
         },
         ["/usr/bin/g++_"] = {
-            ["-shared"] = true,
-            ["-print-search-dirs"] = true,
-            ["-print-multiarch"] = true,
             ["-pie"] = true,
-            ["-Xassembler"] = true,
-            ["-pipe"] = true,
-            ["-c"] = true,
+            ["-print-search-dirs"] = true,
+            ["-print-sysroot"] = true,
+            ["--help"] = true,
+            ["-no-canonical-prefixes"] = true,
+            ["-x"] = true,
+            ["-print-sysroot-headers-suffix"] = true,
+            ["-dumpspecs"] = true,
+            ["-time"] = true,
+            ["-print-libgcc-file-name"] = true,
+            ["-pass-exit-codes"] = true,
+            ["-print-multi-directory"] = true,
+            ["-shared"] = true,
+            ["--version"] = true,
             ["-S"] = true,
+            ["-save-temps"] = true,
+            ["-Xassembler"] = true,
+            ["-dumpmachine"] = true,
             ["--param"] = true,
             ["-dumpversion"] = true,
             ["-Xlinker"] = true,
-            ["--target-help"] = true,
-            ["-Xpreprocessor"] = true,
-            ["--help"] = true,
-            ["-print-libgcc-file-name"] = true,
-            ["-print-multi-lib"] = true,
-            ["-B"] = true,
             ["-v"] = true,
-            ["-print-sysroot-headers-suffix"] = true,
-            ["-x"] = true,
-            ["-o"] = true,
-            ["-no-canonical-prefixes"] = true,
-            ["-time"] = true,
-            ["-print-multi-directory"] = true,
-            ["-dumpspecs"] = true,
-            ["--version"] = true,
-            ["-print-sysroot"] = true,
-            ["-pass-exit-codes"] = true,
+            ["--target-help"] = true,
+            ["-c"] = true,
+            ["-Xpreprocessor"] = true,
             ["-E"] = true,
-            ["-save-temps"] = true,
+            ["-pipe"] = true,
+            ["-print-multiarch"] = true,
             ["-print-multi-os-directory"] = true,
-            ["-dumpmachine"] = true
+            ["-o"] = true,
+            ["-B"] = true,
+            ["-print-multi-lib"] = true
         }
     }
 }

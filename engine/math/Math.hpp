@@ -3,6 +3,7 @@
 #include <cmath>
 #include <numbers>
 #include <random>
+#include <algorithm>
 
 #include "Vector2.hpp"
 #include "Vector3.hpp"
@@ -10,7 +11,38 @@
 #include "Matrix4.hpp"
 #include "Quaternion.hpp"
 
+namespace mir {
+    template <typename T>
+    struct Point2 {
+        T x;
+        T y;
+        constexpr Point2() : x(0), y(0) {}
+        constexpr Point2(T x, T y) : x(x), y(y) {}
+    };
+
+    struct Color {
+        std::uint8_t r = 255;
+        std::uint8_t g = 255;
+        std::uint8_t b = 255;
+        std::uint8_t a = 255;
+    };
+
+    using Int = int;
+    using Byte = std::uint8_t;
+
+    template <typename To, typename From>
+    constexpr To TypeCast(From val) noexcept {
+        return static_cast<To>(val);
+    }
+}
+
 namespace mir::math {
+    using ::mir::Point2;
+    using ::mir::Color;
+    using ::mir::Int;
+    using ::mir::Byte;
+    using ::mir::TypeCast;
+
     static constexpr float PI = std::numbers::pi;
 
     namespace {

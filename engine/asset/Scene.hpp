@@ -29,7 +29,7 @@ namespace mir::scene {
             return;
         }
 
-        debug::Log("Scene Transition: %s -> %s", Current.CStr(), name.CStr());
+        debug::Log("Scene Transition: %s -> %s", current.CStr(), sceneName.CStr());
 
         current = sceneName;
         iter->second();

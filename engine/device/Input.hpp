@@ -1,18 +1,16 @@
 #pragma once
 
 #include "Key.hpp"
-#include <container/List.hpp>
-
-using namespace zet;
+#include <array>
 
 namespace mir::input {
     constexpr std::size_t KEY_COUNT = static_cast<std::size_t>(Key::COUNT);
 
-    inline List<bool, KEY_COUNT> CurrentStates{ false };
-    inline List<bool, KEY_COUNT> PreviousStates{ false };
+    inline std::array<bool, KEY_COUNT> CurrentStates{};
+    inline std::array<bool, KEY_COUNT> PreviousStates{};
 
-    inline List<bool, 3> CurrentMouseStates{ false };
-    inline List<bool, 3> PreviousMouseStates{ false };
+    inline std::array<bool, 3> CurrentMouseStates{};
+    inline std::array<bool, 3> PreviousMouseStates{};
 
     inline float MouseX = 0.f;
     inline float MouseY = 0.f;

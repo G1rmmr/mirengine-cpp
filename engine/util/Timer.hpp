@@ -63,7 +63,7 @@ namespace mir::time {
     }
 
     inline void Update(const float deltaTime) noexcept {
-        if (TimerTasks.Empty()) return;
+        if (TimerTasks.Size() == 0) return;
 
         List<TimerTask> nextTasks;
         for (std::size_t i = 0; i < TimerTasks.Size(); ++i) {
