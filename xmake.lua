@@ -31,12 +31,17 @@ package("zet")
     add_configs("namespace", {description = "Set the library namespace", default = "zet", type = "string"})
     
     on_install(function (package)
-        io.gsub("xmake.lua", "add_requires%(\"doctest\"%)", "")
-        local configs = {}
-        if package:config("namespace") then
-            configs.namespace = package:config("namespace")
-        end
-        import("package.tools.xmake").install(package, configs)
+        io.writefile("xmake.lua", [[
+add_rules("mode.debug", "mode.release")
+target("zet")
+    set_kind("static")
+    set_languages("c++20")
+    add_includedirs("src", "src/container", "src/memory", {public = true})
+    add_headerfiles("src/**.hpp")
+    add_files("src/*.cpp")
+    add_defines("ZET_NAMESPACE=mir", {public = true})
+]])
+        import("package.tools.xmake").install(package, {})
     end)
 package_end()
 
