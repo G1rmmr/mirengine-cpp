@@ -51,7 +51,7 @@ namespace mir::core {
 			if (id.Index >= MAX_ID) {
 				return false;
 			}
-			return availablePool.Get(id);
+			return availablePool.IsValid(id);
 		}
 
 		template<typename Payload>
