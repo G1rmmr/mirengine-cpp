@@ -28,11 +28,11 @@ namespace mir::core {
 			return instance;
 		}
 
-		Id AddEntity() const noexcept {
+		Id AddEntity() noexcept {
 			return availablePool.Create(true);
 		}
 
-		void DeleteEntity(const Id id) const noexcept {
+		void DeleteEntity(const Id id) noexcept {
 			struct Payload {
 				Id EntityId;
 			};
@@ -51,7 +51,7 @@ namespace mir::core {
 			if (id.Index >= MAX_ID) {
 				return false;
 			}
-			return availablePool.Get(id);
+			return availablePool.IsValid(id);
 		}
 
 		template<typename Payload>
@@ -64,18 +64,18 @@ namespace mir::core {
 				}
 			}
 
-			if (cleanupCount < MAX_COMPONENT) {
-				cleanupFuncs[cleanupCount++] = cleanup;
+			if (cleanupFuncs.Size() < MAX_COMPONENT) {
+				cleanupFuncs.Push(cleanup);
 			}
 		}
 
 		void AddSystem(SystemFunc system) noexcept {
-			if (systemCount < MAX_SYSTEM) {
-				systemFuncs[systemCount++] = system;
+			if (systemFuncs.Size() < MAX_SYSTEM) {
+				systemFuncs.Push(system);
 			}
 		}
 
-		void UpdateSystem(const float deltaTime) const noexcept {
+		void UpdateSystem(const float deltaTime) noexcept {
 			for (SystemFunc update : systemFuncs) {
 				update(deltaTime);
 			}
@@ -102,13 +102,10 @@ namespace mir::core {
 		List<CleanupFunc, MAX_COMPONENT> cleanupFuncs{};
 		List<SystemFunc, MAX_SYSTEM> systemFuncs{};
 
-		std::size_t cleanupCount = 0;
-		std::size_t systemCount = 0;
-
-		Manager() noexcept : cleanupCount(0), systemCount(0) {}
+		Manager() noexcept {}
 		~Manager() = default;
 
-		void destroyEntity(Id id) const noexcept {
+		void destroyEntity(Id id) noexcept {
 			if (IsValidEntity(id)) {
 				for (CleanupFunc cleanup : cleanupFuncs) {
 					cleanup(id);

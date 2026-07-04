@@ -1,6 +1,10 @@
 {
     packages = {
-        "/home/g1/.xmake/packages/n/ninja/v1.13.1/e7cc4735aeb048e6870171a23c4ee800",
+        "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790",
+        "/home/g1/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6",
+        "/home/g1/.xmake/packages/s/sol2/v3.5.0/935a8a667cd24e86bbce6d9131e34070",
+        "/home/g1/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03",
+        "/home/g1/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff",
         "/home/g1/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92",
         "/home/g1/.xmake/packages/u/util-macros/1.20.0/21ebacb0450b4b16b06b586ecc142d3f",
         "/home/g1/.xmake/packages/l/libffi/3.4.8/46686cf534074f4ebf90e4ab1f9662dd",
@@ -13,10 +17,16 @@
         "/home/g1/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2",
         "/home/g1/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee",
         "/home/g1/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5",
-        "/home/g1/.xmake/packages/a/autotools/latest/725e51fe81b74141ade9efbd3ccaf900",
-        "/home/g1/.xmake/packages/g/gperf/3.2.1/efebb5f5e634400e95353d8b19c09308",
-        "/home/g1/.xmake/packages/e/eudev/v3.2.14/daa70b4239914d39a27086b139af0a0e",
-        "/home/g1/.xmake/packages/s/sfml/3.0.1/2a93fc39b3374fcfb58a49ccc01a35e1",
-        "/home/g1/.xmake/packages/m/mir-container/@default/4e0143c97b65425b855ad5fd03038b6a"
+        "/home/g1/.xmake/packages/l/libxss/1.2.5/6e52e0599a424dcc854461f97a4008c3",
+        "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b",
+        "/home/g1/.xmake/packages/l/libxml2/v2.14.3/0d66487e0de34b419fad31daa41c7c91",
+        "/home/g1/.xmake/packages/e/expat/2.8.1/dde197c0e726439f83e6b529893e8bb3",
+        "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060",
+        "/home/g1/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675",
+        "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc",
+        "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6",
+        "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214",
+        "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea",
+        "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1"
     }
 }

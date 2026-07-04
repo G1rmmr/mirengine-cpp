@@ -18,9 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - { name: Windows, os: windows-latest }
-          - { name: Linux, os: ubuntu-latest }
-          - { name: macOS, os: macos-latest }
+          - { name: Windows, os: windows-latest, xmake_args: "-p windows -a x64" }
+          - { name: Linux, os: ubuntu-latest, xmake_args: "-p linux -a x86_64" }
+          - { name: macOS, os: macos-latest, xmake_args: "-p macosx" }
         build_type:
           - debug
           - release
@@ -29,11 +29,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install SFML Dependencies (Linux)
+      - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
-        run: sudo apt-get update; sudo apt-get install -y libx11-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libfreetype6-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev
-
-      - name: Build
         run: |
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-          cmake --build build --config ${{ matrix.build_type }}
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libpulse-dev libx11-dev libxext-dev libgl1-mesa-dev libpng-dev libjpeg-dev libxrender-dev libxi-dev libxfixes-dev libxrandr-dev libxcursor-dev libxinerama-dev libwayland-dev libxss-dev xutils-dev
+
+      - name: Set up xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+
+      - name: Configure and Build
+        run: |
+          xmake f -y ${{ matrix.platform.xmake_args }} -m ${{ matrix.build_type }} -c
+          xmake -y -a
+
+      - name: Run Tests
+        run: |
+          xmake run mirengine-tests

@@ -2,6 +2,7 @@
 
 #include <container/String.hpp>
 #include <container/List.hpp>
+#include "../core/Entity.hpp"
 
 using namespace zet;
 
