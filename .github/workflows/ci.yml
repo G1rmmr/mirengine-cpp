@@ -18,9 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - { name: Windows, os: windows-latest }
-          - { name: Linux, os: ubuntu-latest }
-          - { name: macOS, os: macos-latest }
+          - { name: Windows, os: windows-latest, xmake_args: "-p windows -a x64" }
+          - { name: Linux, os: ubuntu-latest, xmake_args: "-p linux -a x86_64" }
+          - { name: macOS, os: macos-latest, xmake_args: "-p macosx" }
         build_type:
           - debug
           - release
@@ -42,7 +42,7 @@ jobs:
 
       - name: Configure and Build
         run: |
-          xmake f -y -m ${{ matrix.build_type }} -c
+          xmake f -y ${{ matrix.platform.xmake_args }} -m ${{ matrix.build_type }} -c
           xmake -y -a
 
       - name: Run Tests

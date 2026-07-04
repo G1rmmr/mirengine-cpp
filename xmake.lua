@@ -33,7 +33,7 @@ package("zet")
     on_install(function (package)
         local configs = {}
         if package:config("namespace") then
-            table.insert(configs, "--namespace=" .. package:config("namespace"))
+            configs.namespace = package:config("namespace")
         end
         import("package.tools.xmake").install(package, configs)
     end)
