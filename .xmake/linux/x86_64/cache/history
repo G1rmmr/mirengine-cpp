@@ -40,6 +40,13 @@
         "xmake run mirengine-tests",
         "xmake f -c",
         "xmake build mirengine-tests",
+        "xmake run mirengine-tests",
+        "xmake f -c",
+        "xmake build mirengine-tests",
+        "xmake require --uninstall zet",
+        "xmake require --uninstall --extra={configs={namespace='mir'}} zet",
+        "xmake f -c",
+        "xmake build mirengine-tests",
         "xmake run mirengine-tests"
     }
 }
