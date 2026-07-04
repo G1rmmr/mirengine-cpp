@@ -54,10 +54,12 @@ package("libsdl3_image")
     add_versions("github:3.4.0", "release-3.4.0")
     add_versions("github:3.2.0", "release-3.2.0")
 
-    add_deps("cmake")
+    add_deps("cmake", "libpng", "libjpeg")
 
     on_load(function (package)
         package:add("deps", "libsdl3", { configs = { shared = package:config("shared") }})
+        package:add("deps", "libpng", { configs = { shared = package:config("shared") }})
+        package:add("deps", "libjpeg", { configs = { shared = package:config("shared") }})
     end)
 
     on_install(function (package)

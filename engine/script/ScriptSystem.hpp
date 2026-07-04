@@ -3,7 +3,7 @@
 #include <sol/sol.hpp>
 #include "../core/Entity.hpp"
 
-namespace mir::system {
+namespace mir::script {
     class ScriptSystem {
     public:
         static ScriptSystem& Instance() noexcept {
