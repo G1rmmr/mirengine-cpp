@@ -64,14 +64,14 @@ namespace mir::core {
 				}
 			}
 
-			if (cleanupCount < MAX_COMPONENT) {
-				cleanupFuncs[cleanupCount++] = cleanup;
+			if (cleanupFuncs.Size() < MAX_COMPONENT) {
+				cleanupFuncs.Push(cleanup);
 			}
 		}
 
 		void AddSystem(SystemFunc system) noexcept {
-			if (systemCount < MAX_SYSTEM) {
-				systemFuncs[systemCount++] = system;
+			if (systemFuncs.Size() < MAX_SYSTEM) {
+				systemFuncs.Push(system);
 			}
 		}
 
@@ -102,10 +102,7 @@ namespace mir::core {
 		List<CleanupFunc, MAX_COMPONENT> cleanupFuncs{};
 		List<SystemFunc, MAX_SYSTEM> systemFuncs{};
 
-		std::size_t cleanupCount = 0;
-		std::size_t systemCount = 0;
-
-		Manager() noexcept : cleanupCount(0), systemCount(0) {}
+		Manager() noexcept {}
 		~Manager() = default;
 
 		void destroyEntity(Id id) noexcept {

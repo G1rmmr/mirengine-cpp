@@ -29,7 +29,9 @@ target("mirengine-tests")
     
     add_deps("mirengine-lib")
     add_packages("zet", "lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
-    add_syslinks("png", "z")
+    if is_plat("linux") then
+        add_syslinks("png", "z")
+    end
     add_defines("ZET_NAMESPACE=mir", "zet=mir")
     if is_mode("debug") then
         add_defines("DEBUG_MODE")
