@@ -4,15 +4,15 @@ A high-performance, ultra-lightweight C++20 and SDL3 2D game engine built around
 
 ---
 
-### 🌐 Documentation / 문서
+### Documentation / 문서
 Select your preferred language for detailed setup, features, structure, and execution guides:
 
-- 🇰🇷 **[한국어 문서 (Korean Docs)](docs/README_KR.md)**
-- 🇺🇸 **[English Documentation (English Docs)](docs/README_EN.md)**
+- **[한국어 문서 (Korean Docs)](docs/README_KR.md)**
+- **[English Documentation (English Docs)](docs/README_EN.md)**
 
 ---
 
-### ⚡ Quick Start / 빠른 시작
+### Quick Start / 빠른 시작
 ```bash
 # Configure and build the project
 xmake f -m release

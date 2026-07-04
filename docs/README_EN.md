@@ -4,7 +4,7 @@ A high-performance, ultra-lightweight 2D game engine built on C++20 and SDL3. It
 
 ---
 
-## 📌 Key Features
+## Key Features
 - **Modern C++20 Core:** Utilizes the latest C++ features and custom SIMD-optimized math modules.
 - **SDL3 Runtime Integration:** Employs SDL3 for cross-platform window creation, input polling, 2D graphic rendering, and `SDL3_mixer` for audio.
 - **ECS (Entity-Component-System) Architecture:** Employs cache-efficient `SparseSet` container for components and Command Buffer for deferred deletion and component assignment.
@@ -13,7 +13,7 @@ A high-performance, ultra-lightweight 2D game engine built on C++20 and SDL3. It
 
 ---
 
-## 📂 Project Directory Structure
+## Project Directory Structure
 ```text
 mirengine-cpp/
 ├── .github/workflows/      # GitHub Actions CI configurations
@@ -34,7 +34,7 @@ mirengine-cpp/
 
 ---
 
-## 🛠️ Dependencies & Packages
+## Dependencies & Packages
 The engine automatically downloads and links the following dependencies via Xmake:
 - **`zet`**: Zero-allocated Execution Toolkit (Container Library)
 - **`lua 5.4.x` / `sol2`**: Scripting bindings
@@ -42,7 +42,7 @@ The engine automatically downloads and links the following dependencies via Xmak
 
 ---
 
-## 🚀 Build and Run
+## Build and Run
 
 ### Prerequisites
 - [Xmake](https://xmake.io/) installed
