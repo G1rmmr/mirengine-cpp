@@ -34,6 +34,9 @@
         "xmake f -c",
         "xmake ",
         "xmake f -c",
-        "xmake "
+        "xmake ",
+        "xmake f -c",
+        "xmake build mirengine-tests",
+        "xmake run mirengine-tests"
     }
 }
