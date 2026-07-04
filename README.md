@@ -1,4 +1,4 @@
-# MIR Engine
+# MIR (Modern Interface & Runtime) Engine
 
 A high-performance, ultra-lightweight C++20 and SDL3 2D game engine built around the Entity-Component-System (ECS) architecture and zero-allocation containers.
 

@@ -1,4 +1,4 @@
-# MIR Engine - 한국어 문서
+# MIR (Modern Interface & Runtime) Engine - 한국어 문서
 
 C++20 및 SDL3를 기반으로 작성된 고성능, 초경량 2D 게임 엔진입니다. 메모리 할당 최소화를 위해 개발된 `zet` 컨테이너 패키지와 엔티티-컴포넌트(ECS) 패턴을 기반으로 설계되었습니다.
 
