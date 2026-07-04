@@ -13,13 +13,6 @@ includes("engine")
 set_project("mirengine")
 set_version("1.0.0")
 
--- Option to build as a macOS bundle
-option("build_bundle")
-    set_default(false)
-    set_showmenu(true)
-    set_description("Build as macOS app bundle")
-option_end()
-
 -- Define local zet package
 package("zet")
     set_homepage("https://github.com/G1rmmr/mir-container")
@@ -37,7 +30,7 @@ target("zet")
     set_kind("static")
     set_languages("c++20")
     add_includedirs("src", "src/container", "src/memory", {public = true})
-    add_headerfiles("src/**.hpp")
+    add_headerfiles("src/(**.hpp)")
     add_files("src/*.cpp")
     add_defines("ZET_NAMESPACE=mir", {public = true})
 ]])
@@ -87,47 +80,3 @@ add_requires("libsdl3")
 add_requires("libsdl3_image")
 add_requires("libsdl3_ttf")
 add_requires("libsdl3_mixer")
-
-target("mirengine")
-    set_kind("binary")
-
-    -- Set C++ standard
-    set_languages("c++20")
-
-    -- Add includes for engine source folders
-    add_includedirs("engine", { public = true })
-
-    -- Dependency on mirengine static library
-    add_deps("mirengine-lib")
-
-    -- Add source files
-    add_files("main.cpp")
-
-    -- Link libraries / packages
-    add_packages("zet", "lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
-    add_syslinks("png", "z")
-
-    -- Compile-commands generation
-    add_rules("plugin.compile_commands.autoupdate", { outputdir = "." })
-
-    -- Build mode definitions
-    add_defines("ZET_NAMESPACE=mir", "zet=mir")
-    if is_mode("debug") then
-        add_defines("DEBUG_MODE")
-    end
-
-if is_plat("macosx") then
-    add_defines("GL_SILENCE_DEPRECATION")
-
-    if has_config("build_bundle") then
-        add_rules("xcode.application")
-        add_values("xcode.bundle_identifier", "com.example.art-gallery-ghost")
-        add_values("xcode.bundle_name", "Art Gallery Ghost")
-        add_values("xcode.bundle_version", "1.0")
-        add_values("xcode.bundle_short_version", "1.0")
-
-        after_build(function(target)
-            os.exec("codesign --force --deep --sign - %s", target:targetdir() .. "/Art Gallery Ghost.app")
-        end)
-    end
-end
