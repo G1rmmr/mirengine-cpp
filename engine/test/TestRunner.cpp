@@ -60,8 +60,8 @@ void TestScript() {
     auto result = lua.safe_script(R"(
         local manager = Manager.Instance()
         local entity = manager:AddEntity()
-        Transform.setPosition(entity, 100.0, 200.0)
-        Sprite.setTexture(entity, "assets/hero.png")
+        Transform.SetPosition(entity, 100.0, 200.0)
+        Sprite.SetTexture(entity, "assets/hero.png")
         return entity
     )");
     

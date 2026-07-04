@@ -45,40 +45,40 @@ mirengine-cpp/
 
 ### 2. 컴포넌트 API
 - **Transform** (위치 및 크기):
-  - `Transform.setPosition(id, x, y)` / `Transform.getPositionX(id)` / `Transform.getPositionY(id)`
-  - `Transform.setRotation(id, r)` / `Transform.getRotation(id)`
-  - `Transform.setScale(id, s)` / `Transform.getScale(id)`
-  - `Transform.isValid(id)` / `Transform.remove(id)`
+  - `Transform.SetPosition(id, x, y)` / `Transform.GetPositionX(id)` / `Transform.GetPositionY(id)`
+  - `Transform.SetRotation(id, r)` / `Transform.GetRotation(id)`
+  - `Transform.SetScale(id, s)` / `Transform.GetScale(id)`
+  - `Transform.IsValid(id)` / `Transform.Remove(id)`
 - **Sprite** (렌더링 리소스):
-  - `Sprite.setTexture(id, "path")` / `Sprite.getTexture(id)`
-  - `Sprite.setSourceSize(id, w, h)` / `Sprite.setDestinationSize(id, w, h)`
-  - `Sprite.setAnchor(id, x, y)` / `Sprite.setTint(id, r, g, b)`
-  - `Sprite.setZindex(id, z)` / `Sprite.getZindex(id)`
-  - `Sprite.setAlpha(id, a)` / `Sprite.getAlpha(id)`
-  - `Sprite.isValid(id)` / `Sprite.remove(id)`
+  - `Sprite.SetTexture(id, "path")` / `Sprite.GetTexture(id)`
+  - `Sprite.SetSourceSize(id, w, h)` / `Sprite.SetDestinationSize(id, w, h)`
+  - `Sprite.SetAnchor(id, x, y)` / `Sprite.SetTint(id, r, g, b)`
+  - `Sprite.SetZindex(id, z)` / `Sprite.GetZindex(id)`
+  - `Sprite.SetAlpha(id, a)` / `Sprite.GetAlpha(id)`
+  - `Sprite.IsValid(id)` / `Sprite.Remove(id)`
 - **Rigidbody** (물리 설정):
-  - `Rigidbody.setVelocity(id, vx, vy)` / `Rigidbody.getVelocityX(id)` / `Rigidbody.getVelocityY(id)`
-  - `Rigidbody.setGravity(id, g)` / `Rigidbody.getGravity(id)`
-  - `Rigidbody.setOnGround(id, bool)` / `Rigidbody.isOnGround(id)`
-  - `Rigidbody.isValid(id)` / `Rigidbody.remove(id)`
+  - `Rigidbody.SetVelocity(id, vx, vy)` / `Rigidbody.GetVelocityX(id)` / `Rigidbody.GetVelocityY(id)`
+  - `Rigidbody.SetGravity(id, g)` / `Rigidbody.GetGravity(id)`
+  - `Rigidbody.SetOnGround(id, bool)` / `Rigidbody.IsOnGround(id)`
+  - `Rigidbody.IsValid(id)` / `Rigidbody.Remove(id)`
 - **Collider** (충돌체 설정):
-  - `Collider.setBound(id, w, h)` / `Collider.getBoundX(id)` / `Collider.getBoundY(id)`
-  - `Collider.setOffset(id, x, y)` / `Collider.getOffsetX(id)` / `Collider.getOffsetY(id)`
-  - `Collider.setShouldTrigger(id, bool)` / `Collider.getShouldTrigger(id)`
-  - `Collider.isValid(id)` / `Collider.remove(id)`
+  - `Collider.SetBound(id, w, h)` / `Collider.GetBoundX(id)` / `Collider.GetBoundY(id)`
+  - `Collider.SetOffset(id, x, y)` / `Collider.GetOffsetX(id)` / `Collider.GetOffsetY(id)`
+  - `Collider.SetShouldTrigger(id, bool)` / `Collider.GetShouldTrigger(id)`
+  - `Collider.IsValid(id)` / `Collider.Remove(id)`
 - **Tag** (이벤트 트리거 태그):
-  - `Tag.set(id, "TagName")` / `Tag.get(id)` / `Tag.isValid(id)` / `Tag.remove(id)`
+  - `Tag.Set(id, "TagName")` / `Tag.Get(id)` / `Tag.IsValid(id)` / `Tag.Remove(id)`
 
 ### 3. 디바이스 입력 및 사운드
 - **Input & Key**:
-  - `Input.isPressed(Key.W)` / `Input.isJustPressed(Key.Space)` / `Input.isJustReleased(Key.Enter)`
-  - `Input.getMouseX()` / `Input.getMouseY()`
+  - `Input.IsPressed(Key.W)` / `Input.IsJustPressed(Key.Space)` / `Input.IsJustReleased(Key.Enter)`
+  - `Input.GetMouseX()` / `Input.GetMouseY()`
 - **Sound**:
-  - `Sound.load("path")` / `Sound.play("name", vol, pitch)` / `Sound.playBgm("name", vol, loop)` / `Sound.stopBgm()` / `Sound.stopAll()`
+  - `Sound.Load("path")` / `Sound.Play("name", vol, pitch)` / `Sound.PlayBgm("name", vol, loop)` / `Sound.StopBgm()` / `Sound.StopAll()`
 
 ### 4. 서브시스템
-- `Movement.update(id, deltaTime)`: 물리 이동 업데이트 적용
-- `Collision.update(lhsId, rhsId)` -> `bool`: AABB 박스 충돌 판단 검사
+- `Movement.Update(id, deltaTime)`: 물리 이동 업데이트 적용
+- `Collision.Update(lhsId, rhsId)` -> `bool`: AABB 박스 충돌 판단 검사
 
 ---
 

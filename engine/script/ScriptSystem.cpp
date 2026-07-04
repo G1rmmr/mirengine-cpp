@@ -61,63 +61,63 @@ namespace mir::script {
 
         // Bind Sound functions
         auto sound = lua.create_table();
-        sound["load"] = [](const std::string& name) {
+        sound["Load"] = [](const std::string& name) {
             mir::sound::Load(name.c_str());
         };
-        sound["play"] = [](const std::string& name, float volume, float pitch) {
+        sound["Play"] = [](const std::string& name, float volume, float pitch) {
             mir::sound::Play(name.c_str(), volume, pitch);
         };
-        sound["playAt"] = [](const std::string& name, float x, float y, float volume, float pitch) {
+        sound["PlayAt"] = [](const std::string& name, float x, float y, float volume, float pitch) {
             mir::sound::PlayAt(name.c_str(), x, y, volume, pitch);
         };
-        sound["playBgm"] = [](const std::string& name, float volume, bool loop) {
+        sound["PlayBgm"] = [](const std::string& name, float volume, bool loop) {
             mir::sound::PlayBgm(name.c_str(), volume, loop);
         };
-        sound["stopBgm"] = &mir::sound::StopBgm;
-        sound["setBgmVolume"] = &mir::sound::SetBgmVolume;
-        sound["setMasterVolume"] = &mir::sound::SetMasterVolume;
-        sound["stopAll"] = &mir::sound::StopAll;
+        sound["StopBgm"] = &mir::sound::StopBgm;
+        sound["SetBgmVolume"] = &mir::sound::SetBgmVolume;
+        sound["SetMasterVolume"] = &mir::sound::SetMasterVolume;
+        sound["StopAll"] = &mir::sound::StopAll;
         lua["Sound"] = sound;
 
         // Bind Texture functions
         auto texture = lua.create_table();
-        texture["load"] = [](const std::string& name) {
+        texture["Load"] = [](const std::string& name) {
             mir::texture::Load(name.c_str());
         };
         lua["Texture"] = texture;
 
         // Bind Font functions
         auto font = lua.create_table();
-        font["load"] = [](const std::string& name) {
+        font["Load"] = [](const std::string& name) {
             mir::font::Load(name.c_str());
         };
         lua["Font"] = font;
 
         // Bind Transform Component functions
         auto transform = lua.create_table();
-        transform["setPosition"] = &mir::transform::SetPosition;
-        transform["getPositionX"] = [](mir::Id id) -> float {
+        transform["SetPosition"] = &mir::transform::SetPosition;
+        transform["GetPositionX"] = [](mir::Id id) -> float {
             return mir::transform::PositionX::IsValidEntity(id) ? mir::transform::PositionX::Get(id) : 0.f;
         };
-        transform["getPositionY"] = [](mir::Id id) -> float {
+        transform["GetPositionY"] = [](mir::Id id) -> float {
             return mir::transform::PositionY::IsValidEntity(id) ? mir::transform::PositionY::Get(id) : 0.f;
         };
-        transform["getRotation"] = [](mir::Id id) -> float {
+        transform["GetRotation"] = [](mir::Id id) -> float {
             return mir::transform::Rotation::IsValidEntity(id) ? mir::transform::Rotation::Get(id) : 0.f;
         };
-        transform["getScale"] = [](mir::Id id) -> float {
+        transform["GetScale"] = [](mir::Id id) -> float {
             return mir::transform::Scale::IsValidEntity(id) ? mir::transform::Scale::Get(id) : 1.f;
         };
-        transform["setRotation"] = [](mir::Id id, float r) {
+        transform["SetRotation"] = [](mir::Id id, float r) {
             mir::transform::Rotation::Set(id, r);
         };
-        transform["setScale"] = [](mir::Id id, float s) {
+        transform["SetScale"] = [](mir::Id id, float s) {
             mir::transform::Scale::Set(id, s);
         };
-        transform["isValid"] = [](mir::Id id) -> bool {
+        transform["IsValid"] = [](mir::Id id) -> bool {
             return mir::transform::PositionX::IsValidEntity(id);
         };
-        transform["remove"] = [](mir::Id id) {
+        transform["Remove"] = [](mir::Id id) {
             mir::transform::PositionX::Remove(id);
             mir::transform::PositionY::Remove(id);
             mir::transform::Rotation::Remove(id);
@@ -127,32 +127,32 @@ namespace mir::script {
 
         // Bind Sprite Component functions
         auto sprite = lua.create_table();
-        sprite["setTexture"] = [](mir::Id id, const std::string& path) {
+        sprite["SetTexture"] = [](mir::Id id, const std::string& path) {
             mir::sprite::Texture::Set(id, path.c_str());
         };
-        sprite["getTexture"] = [](mir::Id id) -> std::string {
+        sprite["GetTexture"] = [](mir::Id id) -> std::string {
             return mir::sprite::Texture::IsValidEntity(id) ? mir::sprite::Texture::Get(id).c_str() : "";
         };
-        sprite["setSourceSize"] = &mir::sprite::SetSourceSize;
-        sprite["setDestinationSize"] = &mir::sprite::SetDestinationSize;
-        sprite["setAnchor"] = &mir::sprite::SetAnchor;
-        sprite["setTint"] = &mir::sprite::SetTint;
-        sprite["setZindex"] = [](mir::Id id, std::uint16_t z) {
+        sprite["SetSourceSize"] = &mir::sprite::SetSourceSize;
+        sprite["SetDestinationSize"] = &mir::sprite::SetDestinationSize;
+        sprite["SetAnchor"] = &mir::sprite::SetAnchor;
+        sprite["SetTint"] = &mir::sprite::SetTint;
+        sprite["SetZindex"] = [](mir::Id id, std::uint16_t z) {
             mir::sprite::Zindex::Set(id, z);
         };
-        sprite["getZindex"] = [](mir::Id id) -> std::uint16_t {
+        sprite["GetZindex"] = [](mir::Id id) -> std::uint16_t {
             return mir::sprite::Zindex::IsValidEntity(id) ? mir::sprite::Zindex::Get(id) : 0;
         };
-        sprite["setAlpha"] = [](mir::Id id, std::uint8_t a) {
+        sprite["SetAlpha"] = [](mir::Id id, std::uint8_t a) {
             mir::sprite::Alpha::Set(id, a);
         };
-        sprite["getAlpha"] = [](mir::Id id) -> std::uint8_t {
+        sprite["GetAlpha"] = [](mir::Id id) -> std::uint8_t {
             return mir::sprite::Alpha::IsValidEntity(id) ? mir::sprite::Alpha::Get(id) : 255;
         };
-        sprite["isValid"] = [](mir::Id id) -> bool {
+        sprite["IsValid"] = [](mir::Id id) -> bool {
             return mir::sprite::Texture::IsValidEntity(id);
         };
-        sprite["remove"] = [](mir::Id id) {
+        sprite["Remove"] = [](mir::Id id) {
             mir::sprite::Texture::Remove(id);
             mir::sprite::SourceWidth::Remove(id);
             mir::sprite::SourceHeight::Remove(id);
@@ -170,29 +170,29 @@ namespace mir::script {
 
         // Bind Rigidbody Component functions
         auto rb = lua.create_table();
-        rb["setVelocity"] = &mir::rigidbody::SetVelocity;
-        rb["getVelocityX"] = [](mir::Id id) -> float {
+        rb["SetVelocity"] = &mir::rigidbody::SetVelocity;
+        rb["GetVelocityX"] = [](mir::Id id) -> float {
             return mir::rigidbody::VelocityX::IsValidEntity(id) ? mir::rigidbody::VelocityX::Get(id) : 0.f;
         };
-        rb["getVelocityY"] = [](mir::Id id) -> float {
+        rb["GetVelocityY"] = [](mir::Id id) -> float {
             return mir::rigidbody::VelocityY::IsValidEntity(id) ? mir::rigidbody::VelocityY::Get(id) : 0.f;
         };
-        rb["setGravity"] = [](mir::Id id, float g) {
+        rb["SetGravity"] = [](mir::Id id, float g) {
             mir::rigidbody::Gravity::Set(id, g);
         };
-        rb["getGravity"] = [](mir::Id id) -> float {
+        rb["GetGravity"] = [](mir::Id id) -> float {
             return mir::rigidbody::Gravity::IsValidEntity(id) ? mir::rigidbody::Gravity::Get(id) : 0.f;
         };
-        rb["setOnGround"] = [](mir::Id id, bool onGround) {
+        rb["SetOnGround"] = [](mir::Id id, bool onGround) {
             mir::rigidbody::OnGround::Set(id, onGround);
         };
-        rb["isOnGround"] = [](mir::Id id) -> bool {
+        rb["IsOnGround"] = [](mir::Id id) -> bool {
             return mir::rigidbody::OnGround::IsValidEntity(id) ? mir::rigidbody::OnGround::Get(id) : false;
         };
-        rb["isValid"] = [](mir::Id id) -> bool {
+        rb["IsValid"] = [](mir::Id id) -> bool {
             return mir::rigidbody::VelocityX::IsValidEntity(id);
         };
-        rb["remove"] = [](mir::Id id) {
+        rb["Remove"] = [](mir::Id id) {
             mir::rigidbody::VelocityX::Remove(id);
             mir::rigidbody::VelocityY::Remove(id);
             mir::rigidbody::Gravity::Remove(id);
@@ -202,30 +202,30 @@ namespace mir::script {
 
         // Bind Collider Component functions
         auto col = lua.create_table();
-        col["setBound"] = &mir::collider::SetBound;
-        col["getBoundX"] = [](mir::Id id) -> float {
+        col["SetBound"] = &mir::collider::SetBound;
+        col["GetBoundX"] = [](mir::Id id) -> float {
             return mir::collider::BoundX::IsValidEntity(id) ? mir::collider::BoundX::Get(id) : 0.f;
         };
-        col["getBoundY"] = [](mir::Id id) -> float {
+        col["GetBoundY"] = [](mir::Id id) -> float {
             return mir::collider::BoundY::IsValidEntity(id) ? mir::collider::BoundY::Get(id) : 0.f;
         };
-        col["setOffset"] = &mir::collider::SetOffset;
-        col["getOffsetX"] = [](mir::Id id) -> float {
+        col["SetOffset"] = &mir::collider::SetOffset;
+        col["GetOffsetX"] = [](mir::Id id) -> float {
             return mir::collider::OffsetX::IsValidEntity(id) ? mir::collider::OffsetX::Get(id) : 0.f;
         };
-        col["getOffsetY"] = [](mir::Id id) -> float {
+        col["GetOffsetY"] = [](mir::Id id) -> float {
             return mir::collider::OffsetY::IsValidEntity(id) ? mir::collider::OffsetY::Get(id) : 0.f;
         };
-        col["setShouldTrigger"] = [](mir::Id id, bool trigger) {
+        col["SetShouldTrigger"] = [](mir::Id id, bool trigger) {
             mir::collider::ShouldTrigger::Set(id, trigger);
         };
-        col["getShouldTrigger"] = [](mir::Id id) -> bool {
+        col["GetShouldTrigger"] = [](mir::Id id) -> bool {
             return mir::collider::ShouldTrigger::IsValidEntity(id) ? mir::collider::ShouldTrigger::Get(id) : false;
         };
-        col["isValid"] = [](mir::Id id) -> bool {
+        col["IsValid"] = [](mir::Id id) -> bool {
             return mir::collider::BoundX::IsValidEntity(id);
         };
-        col["remove"] = [](mir::Id id) {
+        col["Remove"] = [](mir::Id id) {
             mir::collider::BoundX::Remove(id);
             mir::collider::BoundY::Remove(id);
             mir::collider::OffsetX::Remove(id);
@@ -236,28 +236,28 @@ namespace mir::script {
 
         // Bind Tag Component functions (mir::event)
         auto tag = lua.create_table();
-        tag["set"] = [](mir::Id id, const std::string& name) {
+        tag["Set"] = [](mir::Id id, const std::string& name) {
             mir::event::SetTag(id, name.c_str());
         };
-        tag["get"] = [](mir::Id id) -> std::string {
+        tag["Get"] = [](mir::Id id) -> std::string {
             return mir::event::Tag::IsValidEntity(id) ? mir::event::Tag::Get(id).c_str() : "";
         };
-        tag["isValid"] = [](mir::Id id) -> bool {
+        tag["IsValid"] = [](mir::Id id) -> bool {
             return mir::event::Tag::IsValidEntity(id);
         };
-        tag["remove"] = [](mir::Id id) {
+        tag["Remove"] = [](mir::Id id) {
             mir::event::Tag::Remove(id);
         };
         lua["Tag"] = tag;
 
         // Bind Movement System
         auto movement = lua.create_table();
-        movement["update"] = &mir::movement::Update;
+        movement["Update"] = &mir::movement::Update;
         lua["Movement"] = movement;
 
         // Bind Collision System
         auto collision = lua.create_table();
-        collision["update"] = &mir::collision::Update;
+        collision["Update"] = &mir::collision::Update;
         lua["Collision"] = collision;
 
         // Bind Key Enum
@@ -306,17 +306,17 @@ namespace mir::script {
 
         // Bind Input functions
         auto input = lua.create_table();
-        input["isPressed"] = [](mir::Key key) -> bool {
+        input["IsPressed"] = [](mir::Key key) -> bool {
             return mir::input::IsPressed(key);
         };
-        input["isJustPressed"] = [](mir::Key key) -> bool {
+        input["IsJustPressed"] = [](mir::Key key) -> bool {
             return mir::input::IsJustPressed(key);
         };
-        input["isJustReleased"] = [](mir::Key key) -> bool {
+        input["IsJustReleased"] = [](mir::Key key) -> bool {
             return mir::input::IsJustReleased(key);
         };
-        input["getMouseX"] = &mir::input::GetMouseX;
-        input["getMouseY"] = &mir::input::GetMouseY;
+        input["GetMouseX"] = &mir::input::GetMouseX;
+        input["GetMouseY"] = &mir::input::GetMouseY;
         lua["Input"] = input;
 
         // Load entrypoint script
