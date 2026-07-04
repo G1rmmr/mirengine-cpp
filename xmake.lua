@@ -31,6 +31,7 @@ package("zet")
     add_configs("namespace", {description = "Set the library namespace", default = "zet", type = "string"})
     
     on_install(function (package)
+        io.gsub("xmake.lua", "add_requires%(\"doctest\"%)", "")
         local configs = {}
         if package:config("namespace") then
             configs.namespace = package:config("namespace")
