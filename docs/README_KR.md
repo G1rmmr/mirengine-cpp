@@ -80,6 +80,123 @@ mirengine-cpp/
 - `Movement.Update(id, deltaTime)`: 물리 이동 업데이트 적용
 - `Collision.Update(lhsId, rhsId)` -> `bool`: AABB 박스 충돌 판단 검사
 
+### 5. 게임 개발 코드 예시 (script/main.lua)
+```lua
+local player = nil
+local ground = nil
+local speed = 250.0
+local jumpForce = -600.0
+
+function Init()
+    -- 리소스 사전 로딩 및 BGM 재생
+    Texture.Load("assets/textures/player.png")
+    Texture.Load("assets/textures/tiles.png")
+    Sound.Load("assets/sounds/jump.wav")
+    Sound.Load("assets/sounds/bgm.mp3")
+    Sound.PlayBgm("assets/sounds/bgm.mp3", 50.0, true)
+
+    local manager = Manager.Instance()
+
+    -- 플레이어 세팅
+    player = manager:AddEntity()
+    Transform.SetPosition(player, 100.0, 100.0)
+    Sprite.SetTexture(player, "assets/textures/player.png")
+    Sprite.SetSourceSize(player, 64.0, 64.0)
+    Sprite.SetDestinationSize(player, 64.0, 64.0)
+    Sprite.SetAnchor(player, 0.5, 0.5)
+    Rigidbody.SetVelocity(player, 0.0, 0.0)
+    Rigidbody.SetGravity(player, 980.0)
+    Rigidbody.SetOnGround(player, false)
+    Collider.SetBound(player, 50.0, 60.0)
+    Collider.SetOffset(player, -25.0, -30.0)
+    Collider.SetShouldTrigger(player, true)
+
+    -- 바닥 세팅
+    ground = manager:AddEntity()
+    Transform.SetPosition(ground, 0.0, 500.0)
+    Sprite.SetTexture(ground, "assets/textures/tiles.png")
+    Sprite.SetSourceSize(ground, 800.0, 50.0)
+    Sprite.SetDestinationSize(ground, 800.0, 50.0)
+    Collider.SetBound(ground, 800.0, 50.0)
+    Collider.SetShouldTrigger(ground, true)
+end
+
+function Update(deltaTime)
+    local vx = 0.0
+    local vy = Rigidbody.GetVelocityY(player)
+
+    if Input.IsPressed(Key.A) or Input.IsPressed(Key.Left) then
+        vx = -speed
+    elseif Input.IsPressed(Key.D) or Input.IsPressed(Key.Right) then
+        vx = speed
+    end
+
+    if Input.IsJustPressed(Key.Space) and Rigidbody.IsOnGround(player) then
+        vy = jumpForce
+        Rigidbody.SetOnGround(player, false)
+        Sound.Play("assets/sounds/jump.wav", 100.0, 1.0)
+    end
+
+    Rigidbody.SetVelocity(player, vx, vy)
+    Movement.Update(player, deltaTime)
+
+    -- 충돌 처리
+    if Collision.Update(player, ground) then
+        if vy >= 0.0 then
+            Rigidbody.SetOnGround(player, true)
+            Rigidbody.SetVelocity(player, vx, 0.0)
+            Transform.SetPosition(player, Transform.GetPositionX(player), Transform.GetPositionY(ground) - 30.0)
+        end
+    end
+end
+
+function Shutdown()
+    Sound.StopAll()
+end
+```
+
+### 6. 커스텀 컴포넌트 & 시스템 설계 예시
+```lua
+-- Lua 커스텀 컴포넌트 테이블
+local HealthComponent = {}
+local EnemyAIComponent = {}
+
+function AddHealthComponent(entity, hp)
+    HealthComponent[entity.index] = { hp = hp, maxHp = hp }
+end
+
+function AddEnemyAI(entity, targetX)
+    EnemyAIComponent[entity.index] = { state = "Patrol", targetX = targetX }
+end
+
+-- 루아 커스텀 시스템
+function HealthSystem(deltaTime)
+    for index, health in pairs(HealthComponent) do
+        local entityId = Id(index, 1)
+        if health.hp <= 0 then
+            Manager.Instance():DeleteEntity(entityId)
+            HealthComponent[index] = nil
+        end
+    end
+end
+
+function EnemyAISystem(deltaTime)
+    for index, ai in pairs(EnemyAIComponent) do
+        local entityId = Id(index, 1)
+        local currentX = Transform.GetPositionX(entityId)
+        if ai.state == "Patrol" then
+            if currentX >= ai.targetX then
+                Rigidbody.SetVelocity(entityId, -50.0, 0.0)
+                ai.targetX = 200.0
+            elseif currentX <= ai.targetX and Rigidbody.GetVelocityX(entityId) < 0 then
+                Rigidbody.SetVelocity(entityId, 50.0, 0.0)
+                ai.targetX = 600.0
+            end
+        end
+    end
+end
+```
+
 ---
 
 ## 의존성 및 패키지
