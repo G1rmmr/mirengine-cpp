@@ -1,10 +1,10 @@
 {
-    recheck = false,
     options = {
         clean = true
     },
     mtimes = {
-        ["engine/xmake.lua"] = 1783146732,
-        ["xmake.lua"] = 1783146561
-    }
+        ["xmake.lua"] = 1783148603,
+        ["engine/xmake.lua"] = 1783146888
+    },
+    recheck = false
 }

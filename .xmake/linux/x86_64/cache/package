@@ -1,87 +1,46 @@
 {
-    libsdl3_image = {
-        links = {
-            "SDL3_image",
-            "SDL3"
+    zet = {
+        installdir = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1",
+        libfiles = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/lib/libzet.a",
+        __requireconfs = {
+            configs = {
+                namespace = "mir"
+            }
         },
-        version = "3.4.0",
+        __enabled = true,
+        sysincludedirs = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/include",
+        linkdirs = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/lib",
+        static = true,
+        version = "@default",
+        links = "zet",
+        __requirestr = "zet"
+    },
+    libsdl3_image = {
+        installdir = "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6",
+        libfiles = {
+            "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6/lib/libSDL3_image.a",
+            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
+        },
+        syslinks = {
+            "pthread",
+            "dl"
+        },
+        __enabled = true,
         sysincludedirs = {
             "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6/include",
             "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/include",
             "/home/g1/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff/include",
             "/home/g1/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03/include"
         },
-        envs = {
-            PYTHONPATH = {
-                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
-                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
-            },
-            LD_LIBRARY_PATH = {
-                "/home/g1/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
-                "/home/g1/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
-                "/home/g1/.xmake/packages/l/libxcb/1.17.0/37052fd83b89473abd67102965ff1e6c/lib",
-                "/home/g1/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib",
-                "/home/g1/.xmake/packages/l/libxfixes/6.0.1/32cbba7be85a4185b00b52ca82de8150/lib",
-                "/home/g1/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
-                "/home/g1/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
-            },
-            SSL_CERT_DIR = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
-            },
-            PATH = {
-                "/home/g1/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/g1/.xmake/packages/c/cmake/4.2.3/e71a3c9d8ba0426bac589c2c548be58b/bin",
-                "/home/g1/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
-                "/home/g1/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
-                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
-                "/home/g1/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
-                "/home/g1/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2/bin",
-                "/home/g1/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee/bin",
-                "/home/g1/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5/bin",
-                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
-                "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
-                "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
-            },
-            SSL_CERT_FILE = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
-            }
-        },
         linkdirs = {
             "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6/lib",
             "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib"
         },
-        __requirestr = "libsdl3_image",
-        installdir = "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6",
         static = true,
-        __enabled = true,
         license = "zlib",
-        syslinks = {
-            "pthread",
-            "dl"
-        },
-        libfiles = {
-            "/home/g1/.xmake/packages/l/libsdl3_image/3.4.0/9bf488f3309346fbb2340c1f4eb4f1a6/lib/libSDL3_image.a",
-            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
-        }
-    },
-    libsdl3_mixer = {
-        links = {
-            "SDL3_mixer",
-            "SDL3"
-        },
-        version = "3.2.4",
-        sysincludedirs = {
-            "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/include",
-            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/include",
-            "/home/g1/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff/include",
-            "/home/g1/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03/include"
-        },
         envs = {
-            PYTHONPATH = {
-                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
-                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
+            SSL_CERT_DIR = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
             },
             LD_LIBRARY_PATH = {
                 "/home/g1/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
@@ -92,8 +51,12 @@
                 "/home/g1/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
                 "/home/g1/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
             },
-            SSL_CERT_DIR = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
+            SSL_CERT_FILE = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
+            },
+            PYTHONPATH = {
+                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
+                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
             },
             PATH = {
                 "/home/g1/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
@@ -110,61 +73,58 @@
                 "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
                 "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
                 "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
-            },
-            SSL_CERT_FILE = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
             }
         },
-        linkdirs = {
-            "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/lib",
-            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib"
+        version = "3.4.0",
+        links = {
+            "SDL3_image",
+            "SDL3"
         },
-        __requirestr = "libsdl3_mixer",
-        installdir = "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea",
-        static = true,
-        __enabled = true,
-        license = "zlib",
-        syslinks = {
-            "pthread",
-            "dl"
-        },
-        libfiles = {
-            "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/lib/libSDL3_mixer.a",
-            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
-        }
+        __requirestr = "libsdl3_image"
     },
-    lua = {
-        links = "lua",
-        version = "v5.4.8",
-        sysincludedirs = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/include/lua",
-        linkdirs = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib",
-        __requirestr = "lua 5.4.x",
-        installdir = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790",
-        envs = {
-            PATH = {
-                "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/bin"
-            }
-        },
-        __enabled = true,
-        static = true,
+    sol2 = {
+        installdir = "/home/g1/.xmake/packages/s/sol2/v3.5.0/935a8a667cd24e86bbce6d9131e34070",
+        libfiles = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib/liblua.a",
         syslinks = {
             "dl",
             "m"
         },
-        libfiles = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib/liblua.a"
+        __enabled = true,
+        sysincludedirs = {
+            "/home/g1/.xmake/packages/s/sol2/v3.5.0/935a8a667cd24e86bbce6d9131e34070/include",
+            "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/include/lua"
+        },
+        linkdirs = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib",
+        envs = {
+            PATH = {
+                "/home/g1/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/g1/.xmake/packages/c/cmake/4.2.3/e71a3c9d8ba0426bac589c2c548be58b/bin",
+                "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/bin"
+            }
+        },
+        version = "v3.5.0",
+        links = "lua",
+        __requirestr = "sol2"
     },
     libsdl3 = {
-        links = "SDL3",
-        version = "3.4.4",
+        installdir = "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc",
+        libfiles = "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a",
+        syslinks = {
+            "pthread",
+            "dl"
+        },
+        __enabled = true,
         sysincludedirs = {
             "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/include",
             "/home/g1/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff/include",
             "/home/g1/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03/include"
         },
+        linkdirs = "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib",
+        static = true,
+        license = "zlib",
         envs = {
-            PYTHONPATH = {
-                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
-                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
+            SSL_CERT_DIR = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
             },
             LD_LIBRARY_PATH = {
                 "/home/g1/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
@@ -175,8 +135,12 @@
                 "/home/g1/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
                 "/home/g1/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
             },
-            SSL_CERT_DIR = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
+            SSL_CERT_FILE = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
+            },
+            PYTHONPATH = {
+                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
+                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
             },
             PATH = {
                 "/home/g1/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
@@ -193,57 +157,41 @@
                 "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
                 "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
                 "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
-            },
-            SSL_CERT_FILE = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
             }
         },
-        linkdirs = "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib",
-        __requirestr = "libsdl3",
-        installdir = "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc",
-        static = true,
-        __enabled = true,
-        license = "zlib",
+        version = "3.4.4",
+        links = "SDL3",
+        __requirestr = "libsdl3"
+    },
+    libsdl3_ttf = {
+        installdir = "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214",
+        libfiles = {
+            "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/lib/libSDL3_ttf.a",
+            "/usr/lib/x86_64-linux-gnu/libfreetype.a",
+            "/usr/lib/x86_64-linux-gnu/libfreetype.so",
+            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
+        },
         syslinks = {
             "pthread",
             "dl"
         },
-        libfiles = "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
-    },
-    zet = {
-        links = "zet",
-        version = "@default",
-        sysincludedirs = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/include",
-        linkdirs = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/lib",
-        __requireconfs = {
-            configs = {
-                namespace = "mir"
-            }
-        },
-        installdir = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1",
         __enabled = true,
-        static = true,
-        __requirestr = "zet",
-        libfiles = "/home/g1/.xmake/packages/z/zet/@default/d6fa6d14ff6145129b395575f8474bb1/lib/libzet.a"
-    },
-    libsdl3_ttf = {
-        links = {
-            "SDL3_ttf",
-            "freetype",
-            "z",
-            "SDL3"
-        },
-        version = "3.2.2",
         sysincludedirs = {
             "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/include",
             "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/include",
             "/home/g1/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff/include",
             "/home/g1/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03/include"
         },
+        linkdirs = {
+            "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/lib",
+            "/usr/lib/x86_64-linux-gnu",
+            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib"
+        },
+        static = true,
+        license = "zlib",
         envs = {
-            PYTHONPATH = {
-                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
-                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
+            SSL_CERT_DIR = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
             },
             LD_LIBRARY_PATH = {
                 "/home/g1/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
@@ -254,8 +202,12 @@
                 "/home/g1/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
                 "/home/g1/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
             },
-            SSL_CERT_DIR = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
+            SSL_CERT_FILE = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
+            },
+            PYTHONPATH = {
+                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
+                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
             },
             PATH = {
                 "/home/g1/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
@@ -272,54 +224,102 @@
                 "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
                 "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
                 "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
-            },
-            SSL_CERT_FILE = {
-                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
             }
         },
-        linkdirs = {
-            "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/lib",
-            "/usr/lib/x86_64-linux-gnu",
-            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib"
+        version = "3.2.2",
+        links = {
+            "SDL3_ttf",
+            "freetype",
+            "z",
+            "SDL3"
         },
-        __requirestr = "libsdl3_ttf",
-        installdir = "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214",
-        static = true,
-        __enabled = true,
-        license = "zlib",
+        __requirestr = "libsdl3_ttf"
+    },
+    libsdl3_mixer = {
+        installdir = "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea",
+        libfiles = {
+            "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/lib/libSDL3_mixer.a",
+            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
+        },
         syslinks = {
             "pthread",
             "dl"
         },
-        libfiles = {
-            "/home/g1/.xmake/packages/l/libsdl3_ttf/3.2.2/270375faad2045aab6586238dd58b214/lib/libSDL3_ttf.a",
-            "/usr/lib/x86_64-linux-gnu/libfreetype.a",
-            "/usr/lib/x86_64-linux-gnu/libfreetype.so",
-            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib/libSDL3.a"
-        }
-    },
-    sol2 = {
-        links = "lua",
-        version = "v3.5.0",
-        sysincludedirs = {
-            "/home/g1/.xmake/packages/s/sol2/v3.5.0/935a8a667cd24e86bbce6d9131e34070/include",
-            "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/include/lua"
-        },
-        linkdirs = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib",
-        __requirestr = "sol2",
-        installdir = "/home/g1/.xmake/packages/s/sol2/v3.5.0/935a8a667cd24e86bbce6d9131e34070",
         __enabled = true,
+        sysincludedirs = {
+            "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/include",
+            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/include",
+            "/home/g1/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff/include",
+            "/home/g1/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03/include"
+        },
+        linkdirs = {
+            "/home/g1/.xmake/packages/l/libsdl3_mixer/3.2.4/1e3ca57335a2468e87a82775f3ad57ea/lib",
+            "/home/g1/.xmake/packages/l/libsdl3/3.4.4/cada89f100be40b6a20e816986ea19bc/lib"
+        },
+        static = true,
+        license = "zlib",
         envs = {
+            SSL_CERT_DIR = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
+            },
+            LD_LIBRARY_PATH = {
+                "/home/g1/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
+                "/home/g1/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
+                "/home/g1/.xmake/packages/l/libxcb/1.17.0/37052fd83b89473abd67102965ff1e6c/lib",
+                "/home/g1/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib",
+                "/home/g1/.xmake/packages/l/libxfixes/6.0.1/32cbba7be85a4185b00b52ca82de8150/lib",
+                "/home/g1/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
+                "/home/g1/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
+            },
+            SSL_CERT_FILE = {
+                "/home/g1/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
+            },
+            PYTHONPATH = {
+                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages",
+                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b"
+            },
             PATH = {
                 "/home/g1/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
                 "/home/g1/.xmake/packages/c/cmake/4.2.3/e71a3c9d8ba0426bac589c2c548be58b/bin",
-                "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/bin"
+                "/home/g1/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/g1/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/g1/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
+                "/home/g1/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
+                "/home/g1/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2/bin",
+                "/home/g1/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee/bin",
+                "/home/g1/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5/bin",
+                "/home/g1/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
+                "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
+                "/home/g1/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
             }
         },
+        version = "3.2.4",
+        links = {
+            "SDL3_mixer",
+            "SDL3"
+        },
+        __requirestr = "libsdl3_mixer"
+    },
+    lua = {
+        installdir = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790",
+        libfiles = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib/liblua.a",
         syslinks = {
             "dl",
             "m"
         },
-        libfiles = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib/liblua.a"
+        __enabled = true,
+        sysincludedirs = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/include/lua",
+        linkdirs = "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/lib",
+        static = true,
+        envs = {
+            PATH = {
+                "/home/g1/.xmake/packages/l/lua/v5.4.8/25fe9e89d87340309e564f8916664790/bin"
+            }
+        },
+        version = "v5.4.8",
+        links = "lua",
+        __requirestr = "lua 5.4.x"
     }
 }
