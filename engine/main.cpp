@@ -84,6 +84,9 @@ int main(int argc, char* argv[]) {
     // 2. 스크립트 시스템 초기화 (내부적으로 script/main.lua 로딩 및 Init() 호출)
     auto& scriptSys = script::ScriptSystem::Instance();
     scriptSys.Initialize();
+    
+    // Commit entities and components created during Init()
+    core::Manager::Instance().UpdateSystem(0.0f);
 
     std::cout << "MIR Engine Started Successfully!" << std::endl;
 

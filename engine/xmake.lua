@@ -52,6 +52,7 @@ target("mirengine")
     if is_plat("linux") then
         add_syslinks("png", "z")
         add_ldflags("-rdynamic")
+        add_ldflags("-Wl,--whole-archive,-llua,--no-whole-archive", {force = true})
     end
     add_defines("ZET_NAMESPACE=mir", "zet=mir")
     if is_mode("debug") then
