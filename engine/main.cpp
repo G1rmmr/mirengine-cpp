@@ -3,12 +3,84 @@
 #include "core/Manager.hpp"
 #include <SDL3/SDL.h>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include <cctype>
 
 using namespace mir;
 
+static inline std::string trim(std::string s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+    return s;
+}
+
+struct RuntimeConfig {
+    std::string title = "MIR Engine";
+    window::Mode mode = window::Mode::Windowed;
+    window::Resolution resolution = window::Resolution::HD;
+    uint32_t width = 1280;
+    uint32_t height = 720;
+};
+
+RuntimeConfig LoadRuntimeConfig() {
+    RuntimeConfig config;
+    std::ifstream file("mirengine_config.txt");
+    if (!file.is_open()) {
+        return config;
+    }
+    std::string line;
+    while (std::getline(file, line)) {
+        auto commentPos = line.find('#');
+        if (commentPos != std::string::npos) {
+            line = line.substr(0, commentPos);
+        }
+        line = trim(line);
+        if (line.empty()) continue;
+
+        auto eqPos = line.find('=');
+        if (eqPos == std::string::npos) continue;
+
+        std::string key = trim(line.substr(0, eqPos));
+        std::string val = trim(line.substr(eqPos + 1));
+
+        if (key == "WINDOW_TITLE") {
+            config.title = val;
+        } else if (key == "WINDOW_MODE") {
+            if (val == "Windowed") config.mode = window::Mode::Windowed;
+            else if (val == "Fullscreen") config.mode = window::Mode::Fullscreen;
+            else if (val == "Borderless") config.mode = window::Mode::Borderless;
+            else if (val == "Desktop") config.mode = window::Mode::Desktop;
+        } else if (key == "WINDOW_RESOLUTION") {
+            if (val == "HD") config.resolution = window::Resolution::HD;
+            else if (val == "FHD") config.resolution = window::Resolution::FHD;
+            else if (val == "QHD") config.resolution = window::Resolution::QHD;
+            else if (val == "UHD") config.resolution = window::Resolution::UHD;
+            else if (val == "Custom") config.resolution = window::Resolution::Custom;
+        } else if (key == "WINDOW_WIDTH") {
+            try { config.width = std::stoul(val); } catch (...) {}
+        } else if (key == "WINDOW_HEIGHT") {
+            try { config.height = std::stoul(val); } catch (...) {}
+        }
+    }
+    return config;
+}
+
 int main(int argc, char* argv[]) {
-    // 1. 윈도우 초기화 (HD 해상도: 1280x720, 창 모드)
-    window::Init("MIR Engine", window::Mode::Windowed, window::Resolution::HD);
+    // 1. 윈도우 초기화 (mirengine_config.txt가 존재하면 설정을 읽어서 적용)
+    RuntimeConfig config = LoadRuntimeConfig();
+    window::Init(
+        String<>(config.title.c_str()),
+        config.mode,
+        config.resolution,
+        config.width,
+        config.height
+    );
     
     if (!window::IsOpen()) {
         std::cerr << "Failed to initialize game window." << std::endl;

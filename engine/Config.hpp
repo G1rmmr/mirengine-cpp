@@ -3,7 +3,7 @@
 #include <cstddef>
 
 #ifndef CONFIG_MAX_ENTITY
-#define CONFIG_MAX_ENTITY 4096
+#define CONFIG_MAX_ENTITY 65000
 #endif
 
 #ifndef CONFIG_MAX_COMPONENT

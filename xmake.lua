@@ -15,10 +15,10 @@ set_version("1.0.0")
 
 -- Define local zet package
 package("zet")
-    set_homepage("https://github.com/G1rmmr/mir-container")
+    set_homepage("https://github.com/G1rmmr/zetcontainer-cpp")
     set_description("Zero-allocated Execution Toolkit")
     
-    set_urls("/home/g1/source/zet-cpp/.git", "https://github.com/G1rmmr/mir-container.git")
+    set_urls("/home/g1/source/zetcontainer-cpp/.git", "https://github.com/G1rmmr/zetcontainer-cpp.git")
     add_versions("main", "main")
     
     add_configs("namespace", {description = "Set the library namespace", default = "zet", type = "string"})

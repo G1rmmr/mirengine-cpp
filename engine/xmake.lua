@@ -8,6 +8,7 @@ target("mirengine-lib")
     add_includedirs(".", { public = true })
 
     -- Add source files recursively under engine (excluding main and tests)
+    add_headerfiles("**.hpp|test/**.hpp")
     add_files("**.cpp|main.cpp|test/**.cpp")
 
     -- Link libraries / packages

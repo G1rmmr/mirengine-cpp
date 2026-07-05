@@ -197,41 +197,51 @@ function EnemyAISystem(deltaTime)
 end
 ```
 
-## 엔진 설정 커스터마이징 (최대 엔티티 / 컴포넌트 / 시스템 개수 설정)
+## 엔진 설정 커스터마이징 (`mirengine_config.txt`)
 
-MIR Engine은 메모리 무할당(`Zero-allocation`) 아키텍처를 지향하므로 컴포넌트 풀 크기나 시스템 배열 크기 등이 컴파일 타임에 결정됩니다. 기본 최대 개수 설정은 다음과 같습니다:
-- **최대 엔티티 개수 (MAX_ENTITY)**: 기본값 `4096`
-- **최대 컴포넌트 종류 개수 (MAX_COMPONENT)**: 기본값 `128`
-- **최대 시스템 개수 (MAX_SYSTEM)**: 기본값 `64`
+MIR Engine은 메모리 무할당(`Zero-allocation`) 아키텍처를 지향하므로 컴포넌트 풀이나 시스템 배열 크기 같은 성능 핵심 설정은 **컴파일 타임**에 결정됩니다. 반면, 윈도우 창 제목이나 크기 등은 엔진 재빌드 없이 **런타임**에 동적으로 변경할 수 있습니다.
 
-이 설정을 변경하는 방법은 두 가지가 있습니다.
+게임 프로젝트(예: `canvasguard-lua`)의 루트 디렉토리에 **`mirengine_config.txt`** 파일을 생성하여 아래와 같이 설정할 수 있습니다.
 
-### 방법 A: 프로젝트 로컬 설정 파일 (`mirengine_config.txt`) 활용 (추천)
-엔진 코드를 건드리지 않고 게임 프로젝트(예: `canvasguard-lua`)의 루트 디렉토리에 **`mirengine_config.txt`** 파일을 생성하여 한계를 설정할 수 있습니다. 
+### 1. 컴파일 타임 설정 (엔진 재빌드 필요)
+Zero-allocation 자료구조 크기에 영향을 주는 설정들입니다. 변경 시 엔진이 다시 빌드되어 적용됩니다.
+* **`MAX_ENTITY`**: 최대 엔티티 개수 (기본값 `4096`)
+* **`MAX_COMPONENT`**: 최대 컴포넌트 종류 개수 (기본값 `128`)
+* **`MAX_SYSTEM`**: 최대 시스템 개수 (기본값 `64`)
+
+### 2. 런타임 설정 (엔진 재빌드 불필요)
+이미 빌드된 엔진 바이너리(`mirengine`)가 실행 시점에 동적으로 로드하는 설정들입니다.
+* **`WINDOW_TITLE`**: 게임 창 제목 (기본값 `MIR Engine`)
+* **`WINDOW_MODE`**: 창 모드 (기본값 `Windowed`)
+  * 설정 가능 값: `Windowed`, `Fullscreen`, `Borderless`, `Desktop`
+* **`WINDOW_RESOLUTION`**: 해상도 프리셋 (기본값 `HD`)
+  * 설정 가능 값: `HD` (1280x720), `FHD` (1920x1080), `QHD` (2560x1440), `UHD` (3840x2160), `Custom`
+* **`WINDOW_WIDTH`**: `Custom` 해상도 선택 시 창 너비 (기본값 `1280`)
+* **`WINDOW_HEIGHT`**: `Custom` 해상도 선택 시 창 높이 (기본값 `720`)
+
+---
+
+### 설정 예시 (`mirengine_config.txt`)
 
 ```text
-# 예: canvasguard-lua/mirengine_config.txt
+# ==========================================
+# 1. Compile-time Configs (Triggers rebuild)
+# ==========================================
 MAX_ENTITY=2000
 MAX_COMPONENT=256
 MAX_SYSTEM=128
+
+# ==========================================
+# 2. Runtime Configs (Dynamic loading)
+# ==========================================
+WINDOW_TITLE=My Awesome Lua Game
+WINDOW_MODE=Windowed
+WINDOW_RESOLUTION=Custom
+WINDOW_WIDTH=1600
+WINDOW_HEIGHT=900
 ```
-이후 게임 실행 스크립트(`./run.sh`) 등을 실행하면 `xmake` 빌드 시점에 해당 값을 읽어 자동으로 컴파일 매크로로 반영하여 엔진을 다시 빌드합니다.
 
-### 방법 B: 엔진 내부 설정 헤더 (`Config.hpp`) 직접 수정
-엔진 소스 코드 내의 [Config.hpp](file:///home/g1/source/mirengine-cpp/engine/Config.hpp) 파일에서 직접 매크로 기본값을 정의할 수 있습니다.
-```cpp
-#ifndef CONFIG_MAX_ENTITY
-#define CONFIG_MAX_ENTITY 4096
-#endif
-
-#ifndef CONFIG_MAX_COMPONENT
-#define CONFIG_MAX_COMPONENT 128
-#endif
-
-#ifndef CONFIG_MAX_SYSTEM
-#define CONFIG_MAX_SYSTEM 64
-#endif
-```
+---
 
 ---
 

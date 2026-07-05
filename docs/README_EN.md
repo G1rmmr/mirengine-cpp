@@ -197,41 +197,51 @@ function EnemyAISystem(deltaTime)
 end
 ```
 
-## Engine Configuration Customization (Entity / Component / System Limits)
+## Engine Configuration Customization (`mirengine_config.txt`)
 
-Since MIR Engine utilizes a zero-allocation architecture, container sizes for entities, component pools, and subsystems are determined at compile time. The default limits are:
-- **Maximum Entities (MAX_ENTITY)**: Default `4096`
-- **Maximum Component Types (MAX_COMPONENT)**: Default `128`
-- **Maximum Subsystems (MAX_SYSTEM)**: Default `64`
+Since MIR Engine utilizes a zero-allocation architecture, performance-critical settings such as entity pools and system array sizes are determined at **compile time**. However, window settings (like title and resolution) can be customized at **runtime** without rebuilding the engine.
 
-These limits can be configured in two ways:
+You can configure these limits by creating a **`mirengine_config.txt`** file in the root directory of your game project (e.g., `canvasguard-lua`):
 
-### Option A: Project Local Configuration (`mirengine_config.txt`) (Recommended)
-Without touching the engine's source code, you can create a **`mirengine_config.txt`** file in the root directory of your game project (e.g., `canvasguard-lua`):
+### 1. Compile-time Configuration (Requires Engine Rebuild)
+These settings determine the size of static, zero-allocation container sizes. Changing them will trigger an engine rebuild.
+* **`MAX_ENTITY`**: Maximum number of entities (Default `4096`)
+* **`MAX_COMPONENT`**: Maximum number of component types (Default `128`)
+* **`MAX_SYSTEM`**: Maximum number of subsystems (Default `64`)
+
+### 2. Runtime Configuration (No Rebuild Needed)
+These settings are loaded dynamically at startup by the prebuilt engine binary (`mirengine`).
+* **`WINDOW_TITLE`**: Game window title (Default `MIR Engine`)
+* **`WINDOW_MODE`**: Window mode (Default `Windowed`)
+  * Supported values: `Windowed`, `Fullscreen`, `Borderless`, `Desktop`
+* **`WINDOW_RESOLUTION`**: Resolution preset (Default `HD`)
+  * Supported values: `HD` (1280x720), `FHD` (1920x1080), `QHD` (2560x1440), `UHD` (3840x2160), `Custom`
+* **`WINDOW_WIDTH`**: Custom screen width (Default `1280`, used when `WINDOW_RESOLUTION=Custom`)
+* **`WINDOW_HEIGHT`**: Custom screen height (Default `720`, used when `WINDOW_RESOLUTION=Custom`)
+
+---
+
+### Configuration Example (`mirengine_config.txt`)
 
 ```text
-# Example: canvasguard-lua/mirengine_config.txt
+# ==========================================
+# 1. Compile-time Configs (Triggers rebuild)
+# ==========================================
 MAX_ENTITY=2000
 MAX_COMPONENT=256
 MAX_SYSTEM=128
+
+# ==========================================
+# 2. Runtime Configs (Dynamic loading)
+# ==========================================
+WINDOW_TITLE=My Awesome Lua Game
+WINDOW_MODE=Windowed
+WINDOW_RESOLUTION=Custom
+WINDOW_WIDTH=1600
+WINDOW_HEIGHT=900
 ```
-When running the game execution script (`./run.sh`), `xmake` parses this configuration at build time and applies the limits as compiler macros automatically.
 
-### Option B: Modify the Engine Configuration Header (`Config.hpp`)
-You can directly change the default fallback macros in [Config.hpp](file:///home/g1/source/mirengine-cpp/engine/Config.hpp):
-```cpp
-#ifndef CONFIG_MAX_ENTITY
-#define CONFIG_MAX_ENTITY 4096
-#endif
-
-#ifndef CONFIG_MAX_COMPONENT
-#define CONFIG_MAX_COMPONENT 128
-#endif
-
-#ifndef CONFIG_MAX_SYSTEM
-#define CONFIG_MAX_SYSTEM 64
-#endif
-```
+---
 
 ---
 
