@@ -5,5 +5,5 @@
 using namespace zet;
 
 namespace mir::texture {
-    void Load(const String<>& name) noexcept;
+    bool Load(const String<>& name) noexcept;
 }

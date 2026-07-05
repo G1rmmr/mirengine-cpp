@@ -5,7 +5,7 @@
 using namespace zet;
 
 namespace mir::sound {
-    void Load(const String<>& name) noexcept;
+    bool Load(const String<>& name) noexcept;
 
     void Play(const String<>& name, float volume = 100.f, float pitch = 1.f) noexcept;
     void PlayAt(const String<>& name, const float x, const float y, float volume = 100.f, float pitch = 1.f) noexcept;

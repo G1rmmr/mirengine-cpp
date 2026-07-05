@@ -6,6 +6,7 @@
 #include "../component/Collider.hpp"
 #include "../component/Tag.hpp"
 #include "../device/Input.hpp"
+#include "../device/Window.hpp"
 #include "../device/Key.hpp"
 #include "../system/Movement.hpp"
 #include "../system/Collision.hpp"
@@ -62,8 +63,8 @@ namespace mir::script {
 
         // Bind Sound functions
         auto sound = lua.create_table();
-        sound["Load"] = [](const std::string& name) {
-            mir::sound::Load(name.c_str());
+        sound["Load"] = [](const std::string& name) -> bool {
+            return mir::sound::Load(name.c_str());
         };
         sound["Play"] = [](const std::string& name, float volume, float pitch) {
             mir::sound::Play(name.c_str(), volume, pitch);
@@ -82,15 +83,15 @@ namespace mir::script {
 
         // Bind Texture functions
         auto texture = lua.create_table();
-        texture["Load"] = [](const std::string& name) {
-            mir::texture::Load(name.c_str());
+        texture["Load"] = [](const std::string& name) -> bool {
+            return mir::texture::Load(name.c_str());
         };
         lua["Texture"] = texture;
 
         // Bind Font functions
         auto font = lua.create_table();
-        font["Load"] = [](const std::string& name) {
-            mir::font::Load(name.c_str());
+        font["Load"] = [](const std::string& name) -> bool {
+            return mir::font::Load(name.c_str());
         };
         lua["Font"] = font;
 
@@ -319,6 +320,11 @@ namespace mir::script {
         input["GetMouseX"] = &mir::input::GetMouseX;
         input["GetMouseY"] = &mir::input::GetMouseY;
         lua["Input"] = input;
+
+        // Bind Window functions
+        auto window = lua.create_table();
+        window["Close"] = &mir::window::Close;
+        lua["Window"] = window;
 
         // Bind zet::List types
         lua.new_usertype<zet::List<int, 100>>("ListInt",

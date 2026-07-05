@@ -13,6 +13,7 @@
 #include <container/Map.hpp>
 #include <container/List.hpp>
 #include <string>
+#include <cstdio>
 
 using namespace zet;
 
@@ -72,33 +73,44 @@ namespace mir::sdl {
 }
 
 namespace mir::texture {
-    void Load(const String<>& name) noexcept {
-        if (sdl::GetLoadedTexture(name)) return;
+    bool Load(const String<>& name) noexcept {
+        if (sdl::GetLoadedTexture(name)) return true;
 
         String<> path = resource::GetPath(name);
         if (path.Empty()) {
             path = name;
         }
 
-        if (!sdl::sdlRenderer) return;
+        if (!sdl::sdlRenderer) return false;
 
         SDL_Texture* tex = IMG_LoadTexture(sdl::sdlRenderer, path.CStr());
         if (tex) {
             sdl::textureCache.Insert(name, tex);
+            return true;
         }
+        return false;
     }
 }
 
 namespace mir::font {
-    void Load(const String<>& name) noexcept {
-        // Font loaded on demand in DrawTextSDL to support sizes
+    bool Load(const String<>& name) noexcept {
+        String<> path = resource::GetPath(name);
+        if (path.Empty()) {
+            path = name;
+        }
+        std::FILE* f = std::fopen(path.CStr(), "r");
+        if (f) {
+            std::fclose(f);
+            return true;
+        }
+        return false;
     }
 }
 
 namespace mir::sound {
-    void Load(const String<>& name) noexcept {
+    bool Load(const String<>& name) noexcept {
         MIX_Audio** audioPtr = sdl::soundCache.Find(name);
-        if (audioPtr) return;
+        if (audioPtr) return true;
 
         String<> path = resource::GetPath(name);
         if (path.Empty()) {
@@ -113,12 +125,14 @@ namespace mir::sound {
             audioOpened = true;
         }
 
-        if (!sdl::sdlMixer) return;
+        if (!sdl::sdlMixer) return false;
 
         MIX_Audio* audio = MIX_LoadAudio(sdl::sdlMixer, path.CStr(), true);
         if (audio) {
             sdl::soundCache.Insert(name, audio);
+            return true;
         }
+        return false;
     }
 
     void Play(const String<>& name, float volume, float pitch) noexcept {

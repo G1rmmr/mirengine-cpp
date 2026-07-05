@@ -5,5 +5,5 @@
 using namespace zet;
 
 namespace mir::font {
-    void Load(const String<>& name) noexcept;
+    bool Load(const String<>& name) noexcept;
 }
