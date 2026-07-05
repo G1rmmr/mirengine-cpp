@@ -377,14 +377,14 @@ namespace mir::script {
 
         // Load entrypoint script
         try {
-            auto result = lua.safe_script_file("script/main.lua");
+            auto result = lua.safe_script_file("main.lua");
             if (!result.valid()) {
                 sol::error err = result;
-                mir::debug::Log("Failed to run script/main.lua: %s", err.what());
+                mir::debug::Log("Failed to run main.lua: %s", err.what());
                 return;
             }
         } catch (const std::exception& e) {
-            mir::debug::Log("Exception while running script/main.lua: %s", e.what());
+            mir::debug::Log("Exception while running main.lua: %s", e.what());
             return;
         }
 
