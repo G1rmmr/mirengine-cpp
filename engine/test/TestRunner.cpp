@@ -115,24 +115,33 @@ void TestScript() {
     core::Manager::Instance().UpdateSystem(0.0f);
     
     // Verify they collide
-    auto result5 = lua.safe_script(R"(
-        local e1, e2 = ...
-        return Collision.Update(e1, e2)
-    )", e1, e2);
+    sol::protected_function func5 = lua.safe_script(R"(
+        return function(e1, e2)
+            return Collision.Update(e1, e2)
+        end
+    )");
+    assert(func5.valid());
+    auto result5 = func5(e1, e2);
     assert(result5.valid() && result5.get<bool>() == true);
     
     // Move e2 out of collision range
-    lua.safe_script(R"(
-        local e1, e2 = ...
-        Transform.SetPosition(e2, 20.0, 20.0)
-    )", e1, e2);
+    sol::protected_function func_move = lua.safe_script(R"(
+        return function(e1, e2)
+            Transform.SetPosition(e2, 20.0, 20.0)
+        end
+    )");
+    assert(func_move.valid());
+    func_move(e1, e2);
     core::Manager::Instance().UpdateSystem(0.0f);
     
     // Verify they do not collide anymore
-    auto result6 = lua.safe_script(R"(
-        local e1, e2 = ...
-        return Collision.Update(e1, e2)
-    )", e1, e2);
+    sol::protected_function func6 = lua.safe_script(R"(
+        return function(e1, e2)
+            return Collision.Update(e1, e2)
+        end
+    )");
+    assert(func6.valid());
+    auto result6 = func6(e1, e2);
     assert(result6.valid() && result6.get<bool>() == false);
     
     scriptSys.Shutdown();
