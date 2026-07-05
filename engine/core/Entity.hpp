@@ -17,5 +17,9 @@ namespace mir {
     };
 
     constexpr Id INVALID_ID{};
+#ifdef CONFIG_MAX_ENTITY
+    constexpr std::uint16_t MAX_ID = CONFIG_MAX_ENTITY;
+#else
     constexpr std::uint16_t MAX_ID = UINT16_MAX;
+#endif
 }

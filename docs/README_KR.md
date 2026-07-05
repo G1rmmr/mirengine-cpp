@@ -197,6 +197,42 @@ function EnemyAISystem(deltaTime)
 end
 ```
 
+## 엔진 설정 커스터마이징 (최대 엔티티 / 컴포넌트 / 시스템 개수 설정)
+
+MIR Engine은 메모리 무할당(`Zero-allocation`) 아키텍처를 지향하므로 컴포넌트 풀 크기나 시스템 배열 크기 등이 컴파일 타임에 결정됩니다. 기본 최대 개수 설정은 다음과 같습니다:
+- **최대 엔티티 개수 (MAX_ENTITY)**: 기본값 `4096`
+- **최대 컴포넌트 종류 개수 (MAX_COMPONENT)**: 기본값 `128`
+- **최대 시스템 개수 (MAX_SYSTEM)**: 기본값 `64`
+
+이 설정을 변경하는 방법은 두 가지가 있습니다.
+
+### 방법 A: 프로젝트 로컬 설정 파일 (`mirengine_config.txt`) 활용 (추천)
+엔진 코드를 건드리지 않고 게임 프로젝트(예: `canvasguard-lua`)의 루트 디렉토리에 **`mirengine_config.txt`** 파일을 생성하여 한계를 설정할 수 있습니다. 
+
+```text
+# 예: canvasguard-lua/mirengine_config.txt
+MAX_ENTITY=2000
+MAX_COMPONENT=256
+MAX_SYSTEM=128
+```
+이후 게임 실행 스크립트(`./run.sh`) 등을 실행하면 `xmake` 빌드 시점에 해당 값을 읽어 자동으로 컴파일 매크로로 반영하여 엔진을 다시 빌드합니다.
+
+### 방법 B: 엔진 내부 설정 헤더 (`Config.hpp`) 직접 수정
+엔진 소스 코드 내의 [Config.hpp](file:///home/g1/source/mirengine-cpp/engine/Config.hpp) 파일에서 직접 매크로 기본값을 정의할 수 있습니다.
+```cpp
+#ifndef CONFIG_MAX_ENTITY
+#define CONFIG_MAX_ENTITY 4096
+#endif
+
+#ifndef CONFIG_MAX_COMPONENT
+#define CONFIG_MAX_COMPONENT 128
+#endif
+
+#ifndef CONFIG_MAX_SYSTEM
+#define CONFIG_MAX_SYSTEM 64
+#endif
+```
+
 ---
 
 ## 의존성 및 패키지

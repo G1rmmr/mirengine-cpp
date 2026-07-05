@@ -197,6 +197,42 @@ function EnemyAISystem(deltaTime)
 end
 ```
 
+## Engine Configuration Customization (Entity / Component / System Limits)
+
+Since MIR Engine utilizes a zero-allocation architecture, container sizes for entities, component pools, and subsystems are determined at compile time. The default limits are:
+- **Maximum Entities (MAX_ENTITY)**: Default `4096`
+- **Maximum Component Types (MAX_COMPONENT)**: Default `128`
+- **Maximum Subsystems (MAX_SYSTEM)**: Default `64`
+
+These limits can be configured in two ways:
+
+### Option A: Project Local Configuration (`mirengine_config.txt`) (Recommended)
+Without touching the engine's source code, you can create a **`mirengine_config.txt`** file in the root directory of your game project (e.g., `canvasguard-lua`):
+
+```text
+# Example: canvasguard-lua/mirengine_config.txt
+MAX_ENTITY=2000
+MAX_COMPONENT=256
+MAX_SYSTEM=128
+```
+When running the game execution script (`./run.sh`), `xmake` parses this configuration at build time and applies the limits as compiler macros automatically.
+
+### Option B: Modify the Engine Configuration Header (`Config.hpp`)
+You can directly change the default fallback macros in [Config.hpp](file:///home/g1/source/mirengine-cpp/engine/Config.hpp):
+```cpp
+#ifndef CONFIG_MAX_ENTITY
+#define CONFIG_MAX_ENTITY 4096
+#endif
+
+#ifndef CONFIG_MAX_COMPONENT
+#define CONFIG_MAX_COMPONENT 128
+#endif
+
+#ifndef CONFIG_MAX_SYSTEM
+#define CONFIG_MAX_SYSTEM 64
+#endif
+```
+
 ---
 
 ## Dependencies & Packages

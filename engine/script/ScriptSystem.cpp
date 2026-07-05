@@ -13,6 +13,7 @@
 #include "../asset/Texture.hpp"
 #include "../asset/Font.hpp"
 #include "../util/Debugger.hpp"
+#include <container/List.hpp>
 
 #include <iostream>
 #include <string>
@@ -318,6 +319,61 @@ namespace mir::script {
         input["GetMouseX"] = &mir::input::GetMouseX;
         input["GetMouseY"] = &mir::input::GetMouseY;
         lua["Input"] = input;
+
+        // Bind zet::List types
+        lua.new_usertype<zet::List<int, 100>>("ListInt",
+            sol::constructors<zet::List<int, 100>()>(),
+            "push", [](zet::List<int, 100>& list, int val) { list.Push(val); },
+            "pop", &zet::List<int, 100>::Pop,
+            "clear", &zet::List<int, 100>::Clear,
+            "size", &zet::List<int, 100>::Size,
+            "capacity", &zet::List<int, 100>::Capacity,
+            "get", [](zet::List<int, 100>& list, std::size_t luaIdx) -> sol::optional<int> {
+                if (luaIdx < 1 || luaIdx > list.Size()) return sol::nullopt;
+                return list[luaIdx - 1];
+            },
+            "set", [](zet::List<int, 100>& list, std::size_t luaIdx, int val) -> bool {
+                if (luaIdx < 1 || luaIdx > list.Size()) return false;
+                list[luaIdx - 1] = val;
+                return true;
+            }
+        );
+
+        lua.new_usertype<zet::List<float, 100>>("ListFloat",
+            sol::constructors<zet::List<float, 100>()>(),
+            "push", [](zet::List<float, 100>& list, float val) { list.Push(val); },
+            "pop", &zet::List<float, 100>::Pop,
+            "clear", &zet::List<float, 100>::Clear,
+            "size", &zet::List<float, 100>::Size,
+            "capacity", &zet::List<float, 100>::Capacity,
+            "get", [](zet::List<float, 100>& list, std::size_t luaIdx) -> sol::optional<float> {
+                if (luaIdx < 1 || luaIdx > list.Size()) return sol::nullopt;
+                return list[luaIdx - 1];
+            },
+            "set", [](zet::List<float, 100>& list, std::size_t luaIdx, float val) -> bool {
+                if (luaIdx < 1 || luaIdx > list.Size()) return false;
+                list[luaIdx - 1] = val;
+                return true;
+            }
+        );
+
+        lua.new_usertype<zet::List<std::string, 100>>("ListString",
+            sol::constructors<zet::List<std::string, 100>()>(),
+            "push", [](zet::List<std::string, 100>& list, std::string val) { list.Push(val); },
+            "pop", &zet::List<std::string, 100>::Pop,
+            "clear", &zet::List<std::string, 100>::Clear,
+            "size", &zet::List<std::string, 100>::Size,
+            "capacity", &zet::List<std::string, 100>::Capacity,
+            "get", [](zet::List<std::string, 100>& list, std::size_t luaIdx) -> sol::optional<std::string> {
+                if (luaIdx < 1 || luaIdx > list.Size()) return sol::nullopt;
+                return list[luaIdx - 1];
+            },
+            "set", [](zet::List<std::string, 100>& list, std::size_t luaIdx, std::string val) -> bool {
+                if (luaIdx < 1 || luaIdx > list.Size()) return false;
+                list[luaIdx - 1] = val;
+                return true;
+            }
+        );
 
         // Load entrypoint script
         try {
