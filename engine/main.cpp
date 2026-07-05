@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <sol/sol.hpp>
 #include <cctype>
 
 using namespace mir;
@@ -30,49 +31,42 @@ struct RuntimeConfig {
 
 RuntimeConfig LoadRuntimeConfig() {
     RuntimeConfig config;
-    std::ifstream file("mirengine_config.txt");
-    if (!file.is_open()) {
+    sol::state lua;
+    
+    // config.lua 파일 실행 전, 열거형(enum) 바인딩
+    lua.new_enum<window::Mode>("WindowMode", {
+        {"Windowed", window::Mode::Windowed},
+        {"Fullscreen", window::Mode::Fullscreen},
+        {"Borderless", window::Mode::Borderless},
+        {"Desktop", window::Mode::Desktop}
+    });
+
+    lua.new_enum<window::Resolution>("WindowResolution", {
+        {"HD", window::Resolution::HD},
+        {"FHD", window::Resolution::FHD},
+        {"QHD", window::Resolution::QHD},
+        {"UHD", window::Resolution::UHD},
+        {"Custom", window::Resolution::Custom}
+    });
+
+    // config.lua 파일 실행 (오류 시 무시하고 기본값 반환)
+    auto result = lua.safe_script_file("config.lua", sol::script_pass_on_error);
+    if (!result.valid()) {
+        std::cerr << "config.lua not found or has errors. Using default settings." << std::endl;
         return config;
     }
-    std::string line;
-    while (std::getline(file, line)) {
-        auto commentPos = line.find('#');
-        if (commentPos != std::string::npos) {
-            line = line.substr(0, commentPos);
-        }
-        line = trim(line);
-        if (line.empty()) continue;
 
-        auto eqPos = line.find('=');
-        if (eqPos == std::string::npos) continue;
+    config.title = lua["WINDOW_TITLE"].get_or<std::string>("MIR Engine");
+    config.mode = lua["WINDOW_MODE"].get_or(window::Mode::Windowed);
+    config.resolution = lua["WINDOW_RESOLUTION"].get_or(window::Resolution::HD);
+    config.width = lua["WINDOW_WIDTH"].get_or<uint32_t>(1280);
+    config.height = lua["WINDOW_HEIGHT"].get_or<uint32_t>(720);
 
-        std::string key = trim(line.substr(0, eqPos));
-        std::string val = trim(line.substr(eqPos + 1));
-
-        if (key == "WINDOW_TITLE") {
-            config.title = val;
-        } else if (key == "WINDOW_MODE") {
-            if (val == "Windowed") config.mode = window::Mode::Windowed;
-            else if (val == "Fullscreen") config.mode = window::Mode::Fullscreen;
-            else if (val == "Borderless") config.mode = window::Mode::Borderless;
-            else if (val == "Desktop") config.mode = window::Mode::Desktop;
-        } else if (key == "WINDOW_RESOLUTION") {
-            if (val == "HD") config.resolution = window::Resolution::HD;
-            else if (val == "FHD") config.resolution = window::Resolution::FHD;
-            else if (val == "QHD") config.resolution = window::Resolution::QHD;
-            else if (val == "UHD") config.resolution = window::Resolution::UHD;
-            else if (val == "Custom") config.resolution = window::Resolution::Custom;
-        } else if (key == "WINDOW_WIDTH") {
-            try { config.width = std::stoul(val); } catch (...) {}
-        } else if (key == "WINDOW_HEIGHT") {
-            try { config.height = std::stoul(val); } catch (...) {}
-        }
-    }
     return config;
 }
 
 int main(int argc, char* argv[]) {
-    // 1. 윈도우 초기화 (mirengine_config.txt가 존재하면 설정을 읽어서 적용)
+    // 1. 윈도우 초기화 (config.lua가 존재하면 설정을 읽어서 적용)
     RuntimeConfig config = LoadRuntimeConfig();
     window::Init(
         String<>(config.title.c_str()),
