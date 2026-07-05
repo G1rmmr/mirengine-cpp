@@ -51,6 +51,7 @@ target("mirengine")
     add_packages("zet", "lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
     if is_plat("linux") then
         add_syslinks("png", "z")
+        add_ldflags("-rdynamic")
     end
     add_defines("ZET_NAMESPACE=mir", "zet=mir")
     if is_mode("debug") then
