@@ -23,7 +23,7 @@ target("mirengine-lib")
     -- Read project-specific config if it exists in the shell's current working directory
     on_load(function (target)
         local pwd = os.getenv("PWD") or (os.pwd and os.pwd()) or "."
-        local local_config = path.join(pwd, "mirengine_config.txt")
+        local local_config = path.join(pwd, "config.lua")
         if os.isfile(local_config) then
             for line in io.lines(local_config) do
                 local key, val = line:match("^%s*([%w_]+)%s*=%s*(%d+)%s*$")

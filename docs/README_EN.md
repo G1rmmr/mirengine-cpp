@@ -35,7 +35,7 @@ mirengine-cpp/
 ---
 
 ## Lua Scripting API Guide
-The engine boots up with `script/main.lua` as its entrypoint, where you can call the following APIs:
+The engine boots up with `main.lua` as its entrypoint, where you can call the following APIs:
 
 ### 1. ECS & Lifecycle
 - `Manager.Instance()`: Returns the ECS manager instance
@@ -80,7 +80,7 @@ The engine boots up with `script/main.lua` as its entrypoint, where you can call
 - `Movement.Update(id, deltaTime)`: Runs the movement update logic
 - `Collision.Update(lhsId, rhsId)` -> `bool`: Runs AABB collision intersection check
 
-### 5. Game Code Example (script/main.lua)
+### 5. Game Code Example (main.lua)
 ```lua
 local player = nil
 local ground = nil
@@ -197,11 +197,11 @@ function EnemyAISystem(deltaTime)
 end
 ```
 
-## Engine Configuration Customization (`mirengine_config.txt`)
+## Engine Configuration Customization (`config.lua`)
 
 Since MIR Engine utilizes a zero-allocation architecture, performance-critical settings such as entity pools and system array sizes are determined at **compile time**. However, window settings (like title and resolution) can be customized at **runtime** without rebuilding the engine.
 
-You can configure these limits by creating a **`mirengine_config.txt`** file in the root directory of your game project (e.g., `canvasguard-lua`):
+You can configure these limits by creating a **`config.lua`** file in the root directory of your game project (e.g., `canvasguard-lua`):
 
 ### 1. Compile-time Configuration (Requires Engine Rebuild)
 These settings determine the size of static, zero-allocation container sizes. Changing them will trigger an engine rebuild.
@@ -221,24 +221,24 @@ These settings are loaded dynamically at startup by the prebuilt engine binary (
 
 ---
 
-### Configuration Example (`mirengine_config.txt`)
+### Configuration Example (`config.lua`)
 
-```text
-# ==========================================
-# 1. Compile-time Configs (Triggers rebuild)
-# ==========================================
-MAX_ENTITY=2000
-MAX_COMPONENT=256
-MAX_SYSTEM=128
+```lua
+-- ==========================================
+-- 1. Compile-time Configs (Triggers rebuild)
+-- ==========================================
+MAX_ENTITY = 2000
+MAX_COMPONENT = 256
+MAX_SYSTEM = 128
 
-# ==========================================
-# 2. Runtime Configs (Dynamic loading)
-# ==========================================
-WINDOW_TITLE=My Awesome Lua Game
-WINDOW_MODE=Windowed
-WINDOW_RESOLUTION=Custom
-WINDOW_WIDTH=1600
-WINDOW_HEIGHT=900
+-- ==========================================
+-- 2. Runtime Configs (Dynamic loading)
+-- ==========================================
+WINDOW_TITLE = "My Awesome Lua Game"
+WINDOW_MODE = WindowMode.Windowed
+WINDOW_RESOLUTION = WindowResolution.Custom
+WINDOW_WIDTH = 1600
+WINDOW_HEIGHT = 900
 ```
 
 ---
