@@ -337,4 +337,16 @@ namespace simd {
         return vcombine_f32(vget_high_f32(rhs), vget_high_f32(lhs));
 #endif
     }
+
+#if defined(_MSC_VER)
+    [[msvc::forceinline]] inline void ENGINE_VECTORCALL Store(float* dest, const Floats val) noexcept {
+#else
+    __attribute__((always_inline)) inline void ENGINE_VECTORCALL Store(float* dest, const Floats val) noexcept {
+#endif
+#ifdef ENGINE_SIMD_SSE
+        _mm_store_ps(dest, val);
+#elif defined(ENGINE_SIMD_NEON)
+        vst1q_f32(dest, val);
+#endif
+    }
 }

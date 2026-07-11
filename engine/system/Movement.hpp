@@ -21,11 +21,7 @@ namespace mir::movement {
 
         // Extract updated components back
         alignas(16) float temp[4];
-#ifdef ENGINE_SIMD_SSE
-        simd::_mm_store_ps(temp, newPos);
-#else
-        simd::vst1q_f32(temp, newPos);
-#endif
+        simd::Store(temp, newPos);
 
         transform::SetPosition(id, temp[0], temp[1]);
     }
