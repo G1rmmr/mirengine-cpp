@@ -24,7 +24,7 @@ package("zet")
     add_configs("namespace", {description = "Set the library namespace", default = "zet", type = "string"})
     
     on_install(function (package)
-        io.gsub("src/container/Pool.hpp", "constexpr T& Get%(PoolHandle handle%) {", "constexpr bool IsValid(PoolHandle handle) const noexcept { return handle.Index < C && occupied[handle.Index] && generations[handle.Index] == handle.Generation; }\n\n        constexpr T& Get(PoolHandle handle) {")
+        io.gsub("src/container/Pool.hpp", "constexpr T& Get%(PoolHandle handle%) {", "constexpr bool IsValid(PoolHandle handle) const noexcept { return handle.Index < C && occupied[handle.Index] && generations[handle.Index] == handle.Generation; }\n\n        constexpr std::size_t GetGeneration(std::size_t index) const noexcept { return index < C ? generations[index] : 0; }\n\n        constexpr bool IsOccupied(std::size_t index) const noexcept { return index < C && occupied[index]; }\n\n        constexpr T& Get(PoolHandle handle) {")
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 target("zet")

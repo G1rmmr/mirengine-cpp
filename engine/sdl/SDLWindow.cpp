@@ -255,8 +255,8 @@ namespace mir::window {
 
         // Draw Sprites
         for (std::size_t i = 1; i < MAX_ID; ++i) {
-            Id id(i, 0);
-            if (!mir::core::Manager::Instance().IsValidEntity(id)) continue;
+            Id id = mir::core::Manager::Instance().GetActiveEntityId(i);
+            if (id == INVALID_ID) continue;
             if (!mir::sprite::Texture::IsValidEntity(id)) continue;
 
             const String<>& textureName = mir::sprite::Texture::Get(id);

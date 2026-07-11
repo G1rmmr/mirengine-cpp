@@ -54,6 +54,16 @@ namespace mir::core {
 			return availablePool.IsValid(id);
 		}
 
+		Id GetActiveEntityId(const std::size_t index) const noexcept {
+			if (index >= MAX_ID) {
+				return INVALID_ID;
+			}
+			if (availablePool.IsOccupied(index)) {
+				return Id(index, availablePool.GetGeneration(index));
+			}
+			return INVALID_ID;
+		}
+
 		template<typename Payload>
 		void AddComponent(void (*apply)(const void*), const Payload& payload, CleanupFunc cleanup) noexcept {
 			commandBuffer.Push<Payload>(apply, payload);
