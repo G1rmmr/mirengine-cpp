@@ -148,11 +148,55 @@ void TestScript() {
     std::cout << "Script Tests Passed!" << std::endl;
 }
 
+void TestShader() {
+    std::cout << "Running Shader Bindings Tests..." << std::endl;
+    
+    auto& scriptSys = script::ScriptSystem::Instance();
+    scriptSys.Initialize();
+    
+    sol::state& lua = scriptSys.GetLuaState();
+    
+    // GPU Table validation
+    auto result1 = lua.safe_script(R"(
+        assert(GPU ~= nil)
+        assert(type(GPU.CreateDevice) == "function")
+        assert(GPUShaderStage ~= nil)
+        assert(GPUShaderStage.Vertex ~= nil)
+        assert(GPU_SHADERFORMAT_SPIRV ~= nil)
+        return true
+    )");
+    assert(result1.valid() && result1.get<bool>() == true);
+
+    // Shader Class instantiation test
+    auto result2 = lua.safe_script(R"(
+        local vs = Shader.new()
+        assert(vs ~= nil)
+        assert(type(vs.LoadFromFile) == "function")
+        vs:Destroy()
+        return true
+    )");
+    assert(result2.valid() && result2.get<bool>() == true);
+
+    // GPUPipeline Class instantiation test
+    auto result3 = lua.safe_script(R"(
+        local pipeline = GPUPipeline.new()
+        assert(pipeline ~= nil)
+        assert(type(pipeline.Create) == "function")
+        pipeline:Destroy()
+        return true
+    )");
+    assert(result3.valid() && result3.get<bool>() == true);
+
+    scriptSys.Shutdown();
+    std::cout << "Shader Bindings Tests Passed!" << std::endl;
+}
+
 int main() {
     try {
         TestMath();
         TestCore();
         TestScript();
+        TestShader();
         std::cout << "All tests passed successfully!" << std::endl;
         return 0;
     } catch (const std::exception& e) {

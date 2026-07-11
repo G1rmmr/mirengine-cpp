@@ -2,6 +2,7 @@
 
 #include "../component/Rigidbody.hpp"
 #include "../component/Transform.hpp"
+#include "../math/Simd.hpp"
 
 namespace mir::movement {
     inline void Update(const Id id, const float deltaTime) {
@@ -10,9 +11,22 @@ namespace mir::movement {
 
         velocityY += rigidbody::OnGround::Get(id) ? 0 : rigidbody::Gravity::Get(id) * deltaTime;
 
-        float currentPosX = transform::PositionX::Get(id);
-        float currentPosY = transform::PositionY::Get(id);
+        // Pack position and velocity into 128-bit SIMD registers
+        simd::Floats pos = simd::Set(transform::PositionX::Get(id), transform::PositionY::Get(id), 0.f, 0.f);
+        simd::Floats vel = simd::Set(velocityX, velocityY, 0.f, 0.f);
+        simd::Floats dt = simd::Set(deltaTime);
 
-        transform::SetPosition(id, currentPosX + velocityX * deltaTime, currentPosY + velocityY * deltaTime);
+        // Perform parallel position update: pos + vel * dt
+        simd::Floats newPos = simd::Add(pos, simd::Mul(vel, dt));
+
+        // Extract updated components back
+        alignas(16) float temp[4];
+#ifdef ENGINE_SIMD_SSE
+        simd::_mm_store_ps(temp, newPos);
+#else
+        simd::vst1q_f32(temp, newPos);
+#endif
+
+        transform::SetPosition(id, temp[0], temp[1]);
     }
 }

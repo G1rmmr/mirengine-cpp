@@ -14,6 +14,9 @@
 #include "../asset/Texture.hpp"
 #include "../asset/Font.hpp"
 #include "../util/Debugger.hpp"
+#include "../device/Shader.hpp"
+#include "../device/GPUPipeline.hpp"
+#include "../sdl/SDLInternal.hpp"
 #include <container/List.hpp>
 
 #include <iostream>
@@ -380,6 +383,53 @@ namespace mir::script {
                 return true;
             }
         );
+
+        // Bind GPU Device Creation & Window association
+        auto gpu = lua.create_table();
+        gpu["CreateDevice"] = [](std::uint32_t formats, bool debugMode) -> std::uintptr_t {
+            return reinterpret_cast<std::uintptr_t>(SDL_CreateGPUDevice(formats, debugMode, nullptr));
+        };
+        gpu["DestroyDevice"] = [](std::uintptr_t device_addr) {
+            SDL_DestroyGPUDevice(reinterpret_cast<SDL_GPUDevice*>(device_addr));
+        };
+        gpu["ClaimWindow"] = [](std::uintptr_t device_addr) {
+            SDL_ClaimWindowForGPUDevice(reinterpret_cast<SDL_GPUDevice*>(device_addr), mir::sdl::sdlWindow);
+        };
+        gpu["ReleaseWindow"] = [](std::uintptr_t device_addr) {
+            SDL_ReleaseWindowFromGPUDevice(reinterpret_cast<SDL_GPUDevice*>(device_addr), mir::sdl::sdlWindow);
+        };
+        gpu["GetSwapchainFormat"] = [](std::uintptr_t device_addr) -> int {
+            return static_cast<int>(SDL_GetGPUSwapchainTextureFormat(reinterpret_cast<SDL_GPUDevice*>(device_addr), mir::sdl::sdlWindow));
+        };
+        lua["GPU"] = gpu;
+
+        // Bind Shader Class
+        lua.new_usertype<mir::Shader>("Shader",
+            sol::constructors<mir::Shader()>(),
+            "LoadFromFile", [](mir::Shader& self, std::uintptr_t device_addr, const std::string& filepath, const std::string& entrypoint, int stage, std::uint32_t numSamplers, std::uint32_t numUniformBuffers) -> bool {
+                return self.LoadFromFile(reinterpret_cast<SDL_GPUDevice*>(device_addr), filepath.c_str(), entrypoint.c_str(), static_cast<SDL_GPUShaderStage>(stage), numSamplers, numUniformBuffers);
+            },
+            "Destroy", &mir::Shader::Destroy
+        );
+
+        // Bind GPUPipeline Class
+        lua.new_usertype<mir::GPUPipeline>("GPUPipeline",
+            sol::constructors<mir::GPUPipeline()>(),
+            "Create", [](mir::GPUPipeline& self, std::uintptr_t device_addr, const mir::Shader& vs, const mir::Shader& fs, int renderTargetFormat) -> bool {
+                return self.Create(reinterpret_cast<SDL_GPUDevice*>(device_addr), vs, fs, static_cast<SDL_GPUTextureFormat>(renderTargetFormat));
+            },
+            "Destroy", &mir::GPUPipeline::Destroy
+        );
+
+        // Bind GPU Enums & Constants
+        lua.new_enum<SDL_GPUShaderStage>("GPUShaderStage", {
+            {"Vertex", SDL_GPU_SHADERSTAGE_VERTEX},
+            {"Fragment", SDL_GPU_SHADERSTAGE_FRAGMENT}
+        });
+        
+        lua.set("GPU_SHADERFORMAT_SPIRV", static_cast<std::uint32_t>(SDL_GPU_SHADERFORMAT_SPIRV));
+        lua.set("GPU_SHADERFORMAT_DXIL", static_cast<std::uint32_t>(SDL_GPU_SHADERFORMAT_DXIL));
+        lua.set("GPU_SHADERFORMAT_MSL", static_cast<std::uint32_t>(SDL_GPU_SHADERFORMAT_MSL));
 
         // Load entrypoint script
         try {

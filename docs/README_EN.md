@@ -76,11 +76,29 @@ The engine boots up with `main.lua` as its entrypoint, where you can call the fo
 - **Sound**:
   - `Sound.Load("path")` / `Sound.Play("name", vol, pitch)` / `Sound.PlayBgm("name", vol, loop)` / `Sound.StopBgm()` / `Sound.StopAll()`
 
-### 4. Subsystems
+### 4. GPU Shaders (SDL_GPU API)
+Allows managing custom shaders and pipelines using the integrated SDL3.0 GPU subsystem.
+* **Device Management**:
+  * `GPU.CreateDevice(formats, debugMode)` -> `device_addr` (uintptr_t)
+  * `GPU.DestroyDevice(device_addr)`
+  * `GPU.ClaimWindow(device_addr)` / `GPU.ReleaseWindow(device_addr)`
+  * `GPU.GetSwapchainFormat(device_addr)` -> `format` (int)
+* **Constants & Formats**:
+  * `GPUShaderStage.Vertex` / `GPUShaderStage.Fragment`
+  * `GPU_SHADERFORMAT_SPIRV` / `GPU_SHADERFORMAT_DXIL` / `GPU_SHADERFORMAT_MSL`
+* **Shader & GPUPipeline**:
+  * `Shader.new()`: Instantiates a new shader object
+    * `Shader:LoadFromFile(device_addr, filepath, entrypoint, stage, numSamplers, numUniformBuffers)` -> `bool`
+    * `Shader:Destroy()`
+  * `GPUPipeline.new()`: Instantiates a new graphics pipeline
+    * `GPUPipeline:Create(device_addr, vs, fs, renderTargetFormat)` -> `bool`
+    * `GPUPipeline:Destroy()`
+
+### 5. Subsystems
 - `Movement.Update(id, deltaTime)`: Runs the movement update logic
 - `Collision.Update(lhsId, rhsId)` -> `bool`: Runs AABB collision intersection check
 
-### 5. Game Code Example (main.lua)
+### 6. Game Code Example (main.lua)
 ```lua
 local player = nil
 local ground = nil
@@ -155,7 +173,7 @@ function Shutdown()
 end
 ```
 
-### 6. Custom Component & System Example
+### 7. Custom Component & System Example
 ```lua
 -- Lua Custom Components
 local HealthComponent = {}

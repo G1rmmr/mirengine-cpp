@@ -9,6 +9,7 @@ Select your preferred language for detailed setup, features, structure, and exec
 
 - **[한국어 문서 (Korean Docs)](docs/README_KR.md)**
 - **[English Documentation (English Docs)](docs/README_EN.md)**
+- **[SDL_GPU Shader Integration Guide (쉐이더 가이드)](file:///home/g1/.gemini/antigravity-cli/brain/787cde1a-3ac3-4e52-b284-10fc13ab52c9/shader_integration_guide.md)**
 
 ---
 

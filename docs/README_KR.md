@@ -76,11 +76,29 @@ mirengine-cpp/
 - **Sound**:
   - `Sound.Load("path")` / `Sound.Play("name", vol, pitch)` / `Sound.PlayBgm("name", vol, loop)` / `Sound.StopBgm()` / `Sound.StopAll()`
 
-### 4. 서브시스템
+### 4. GPU 쉐이더 (SDL_GPU API)
+엔진에 연동된 SDL3.0 GPU 서브시스템을 통해 커스텀 쉐이더 및 파이프라인을 생성할 수 있습니다.
+* **디바이스 관리**:
+  * `GPU.CreateDevice(formats, debugMode)` -> `device_addr` (uintptr_t)
+  * `GPU.DestroyDevice(device_addr)`
+  * `GPU.ClaimWindow(device_addr)` / `GPU.ReleaseWindow(device_addr)`
+  * `GPU.GetSwapchainFormat(device_addr)` -> `format` (int)
+* **상수 및 포맷**:
+  * `GPUShaderStage.Vertex` / `GPUShaderStage.Fragment`
+  * `GPU_SHADERFORMAT_SPIRV` / `GPU_SHADERFORMAT_DXIL` / `GPU_SHADERFORMAT_MSL`
+* **Shader & GPUPipeline**:
+  * `Shader.new()`: 신규 쉐이더 객체 생성
+    * `Shader:LoadFromFile(device_addr, filepath, entrypoint, stage, numSamplers, numUniformBuffers)` -> `bool`
+    * `Shader:Destroy()`
+  * `GPUPipeline.new()`: 신규 파이프라인 생성
+    * `GPUPipeline:Create(device_addr, vs, fs, renderTargetFormat)` -> `bool`
+    * `GPUPipeline:Destroy()`
+
+### 5. 서브시스템
 - `Movement.Update(id, deltaTime)`: 물리 이동 업데이트 적용
 - `Collision.Update(lhsId, rhsId)` -> `bool`: AABB 박스 충돌 판단 검사
 
-### 5. 게임 개발 코드 예시 (main.lua)
+### 6. 게임 개발 코드 예시 (main.lua)
 ```lua
 local player = nil
 local ground = nil
@@ -155,7 +173,7 @@ function Shutdown()
 end
 ```
 
-### 6. 커스텀 컴포넌트 & 시스템 설계 예시
+### 7. 커스텀 컴포넌트 & 시스템 설계 예시
 ```lua
 -- Lua 커스텀 컴포넌트 테이블
 local HealthComponent = {}

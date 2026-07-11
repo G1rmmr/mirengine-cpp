@@ -11,6 +11,8 @@
 #include "Matrix4.hpp"
 #include "Quaternion.hpp"
 
+#include <cstring>
+
 namespace mir {
     template <typename T>
     struct Point2 {
@@ -270,8 +272,16 @@ namespace mir::math {
     }
 
     ENGINE_INLINE Color Lerp(const Color& start, const Color& end, const float interval) {
-        return {TypeCast<Byte>(Lerp(start.r, end.r, interval)), TypeCast<Byte>(Lerp(start.g, end.g, interval)),
-                TypeCast<Byte>(Lerp(start.b, end.b, interval))};
+        simd::Floats s = simd::Set(static_cast<float>(start.r), static_cast<float>(start.g), static_cast<float>(start.b), static_cast<float>(start.a));
+        simd::Floats e = simd::Set(static_cast<float>(end.r), static_cast<float>(end.g), static_cast<float>(end.b), static_cast<float>(end.a));
+        simd::Floats t = simd::Set(interval);
+        
+        simd::Floats res = simd::Add(s, simd::Mul(t, simd::Sub(e, s)));
+        std::uint32_t packed = simd::PackRGBA(res);
+        
+        Color result;
+        std::memcpy(&result, &packed, sizeof(Color));
+        return result;
     }
 
     ENGINE_INLINE Int GetRandomInt(const Int start, const Int end) {
