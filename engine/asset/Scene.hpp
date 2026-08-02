@@ -7,6 +7,7 @@
 #include <container/Map.hpp>
 
 #include "../util/Debugger.hpp"
+#include "../core/StringHash.hpp"
 
 using namespace zet;
 
@@ -16,15 +17,15 @@ namespace mir::scene {
         inline String<> current = "";
     }
     
-    inline void Register(const String<>& name, std::function<void()> func) {
-        scenes[name] = std::move(func);
+	inline void Register(const String<>& name, std::function<void()> func) {
+		scenes.Insert(name, std::move(func));
     }
 
     inline void Load(const String<>& sceneName) {
         if (current == sceneName) return;
 
-        auto iter = scenes.Find(sceneName);
-        if (iter == scenes.End()) {
+		auto scene = scenes.Find(sceneName);
+		if (scene == nullptr) {
             debug::Log("Attempted to load an unregistered scene: %s", sceneName.CStr());
             return;
         }
@@ -32,6 +33,6 @@ namespace mir::scene {
         debug::Log("Scene Transition: %s -> %s", current.CStr(), sceneName.CStr());
 
         current = sceneName;
-        iter->second();
+		(*scene)();
     }
 }

@@ -354,8 +354,9 @@ namespace mir::window {
         }
     }
 
-    void SetFPS(const std::uint16_t fps) noexcept {
-        sdl::fpsLimit = fps;
+	void SetFPS(const std::uint16_t fps) noexcept {
+		if (fps == 0) return;
+		sdl::fpsLimit = fps;
         sdl::frameDelay = 1000 / fps;
     }
 

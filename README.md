@@ -1,6 +1,6 @@
 # MIR (Modern Interface & Runtime) Engine
 
-A high-performance, ultra-lightweight C++20 and SDL3 2D game engine built around the Entity-Component-System (ECS) architecture and zero-allocation containers.
+A C++20 and SDL3 2D game engine built around a generation-safe Entity-Component-System (ECS) architecture and ZET containers that perform no hidden heap allocation. Lua, SDL, file I/O, and standard-library value types may allocate at runtime.
 
 ---
 

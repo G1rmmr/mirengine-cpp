@@ -9,7 +9,8 @@ namespace mir::movement {
         float velocityX = rigidbody::VelocityX::Get(id);
         float velocityY = rigidbody::VelocityY::Get(id);
 
-        velocityY += rigidbody::OnGround::Get(id) ? 0 : rigidbody::Gravity::Get(id) * deltaTime;
+		velocityY += rigidbody::OnGround::Get(id) ? 0 : rigidbody::Gravity::Get(id) * deltaTime;
+		rigidbody::VelocityY::Set(id, velocityY);
 
         // Pack position and velocity into 128-bit SIMD registers
         simd::Floats pos = simd::Set(transform::PositionX::Get(id), transform::PositionY::Get(id), 0.f, 0.f);

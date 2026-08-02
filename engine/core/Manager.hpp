@@ -32,7 +32,8 @@ namespace mir::core {
 			return availablePool.Create(true);
 		}
 
-		void DeleteEntity(const Id id) noexcept {
+			bool DeleteEntity(const Id id) noexcept {
+				if (!IsValidEntity(id)) return false;
 			struct Payload {
 				Id EntityId;
 			};
@@ -44,7 +45,11 @@ namespace mir::core {
 				Manager::Instance().destroyEntity(p.EntityId);
 			};
 
-			commandBuffer.Push<Payload>(apply, payload);
+				if (!commandBuffer.Push<Payload>(apply, payload)) {
+					++droppedCommands;
+					return false;
+				}
+				return true;
 		}
 
 		bool IsValidEntity(const Id id) const noexcept {
@@ -64,19 +69,30 @@ namespace mir::core {
 			return INVALID_ID;
 		}
 
-		template<typename Payload>
-		void AddComponent(void (*apply)(const void*), const Payload& payload, CleanupFunc cleanup) noexcept {
-			commandBuffer.Push<Payload>(apply, payload);
-
-			for (CleanupFunc exist : cleanupFuncs) {
-				if(exist == cleanup) {
-					return;
+			template<typename Payload>
+			bool AddComponent(void (*apply)(const void*), const Payload& payload, CleanupFunc cleanup) noexcept {
+				bool cleanupKnown = false;
+				for (CleanupFunc exist : cleanupFuncs) {
+					if (exist == cleanup) {
+						cleanupKnown = true;
+						break;
+					}
 				}
-			}
 
-			if (cleanupFuncs.Size() < MAX_COMPONENT) {
-				cleanupFuncs.Push(cleanup);
-			}
+				if (!cleanupKnown && cleanupFuncs.Size() >= MAX_COMPONENT) {
+					++droppedCommands;
+					return false;
+				}
+
+				if (!commandBuffer.Push<Payload>(apply, payload)) {
+					++droppedCommands;
+					return false;
+				}
+
+				if (!cleanupKnown) {
+					cleanupFuncs.Push(cleanup);
+				}
+				return true;
 		}
 
 		void AddSystem(SystemFunc system) noexcept {
@@ -92,6 +108,8 @@ namespace mir::core {
 			commandBuffer.Commit();
 		}
 
+		std::size_t DroppedCommandCount() const noexcept { return droppedCommands; }
+
 	private:
 		#ifdef CONFIG_MAX_COMPONENT
 		static constexpr std::size_t MAX_COMPONENT = CONFIG_MAX_COMPONENT;
@@ -105,7 +123,8 @@ namespace mir::core {
 		static constexpr std::size_t MAX_SYSTEM = 64;
 		#endif
 
-		CommandBuffer<> commandBuffer;
+			CommandBuffer<mir::config::COMMAND_BUFFER_BYTES> commandBuffer;
+			std::size_t droppedCommands = 0;
 
 		Pool<bool, MAX_ID> availablePool;
 

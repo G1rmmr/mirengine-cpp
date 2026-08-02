@@ -1,3 +1,15 @@
+local function add_zet()
+    if MIR_USE_LOCAL_ZET then
+        add_includedirs(
+            path.join(MIR_LOCAL_ZET_DIR, "src"),
+            path.join(MIR_LOCAL_ZET_DIR, "src/container"),
+            path.join(MIR_LOCAL_ZET_DIR, "src/memory"),
+            { public = true })
+    else
+        add_packages("zet")
+    end
+end
+
 target("mirengine-lib")
     set_kind("static")
 
@@ -12,7 +24,8 @@ target("mirengine-lib")
     add_files("**.cpp|main.cpp|test/**.cpp")
 
     -- Link libraries / packages
-    add_packages("zet", "lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
+    add_zet()
+    add_packages("lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
 
     -- Build mode definitions
     add_defines("ZET_NAMESPACE=mir", "zet=mir", { public = true })
@@ -32,23 +45,27 @@ target("mirengine-lib")
                         target:add("defines", "CONFIG_MAX_ENTITY=" .. val, { public = true })
                     elseif key == "MAX_COMPONENT" then
                         target:add("defines", "CONFIG_MAX_COMPONENT=" .. val, { public = true })
-                    elseif key == "MAX_SYSTEM" then
-                        target:add("defines", "CONFIG_MAX_SYSTEM=" .. val, { public = true })
-                    end
+					elseif key == "MAX_SYSTEM" then
+						target:add("defines", "CONFIG_MAX_SYSTEM=" .. val, { public = true })
+					elseif key == "COMMAND_BUFFER_BYTES" then
+						target:add("defines", "CONFIG_COMMAND_BUFFER_BYTES=" .. val, { public = true })
+					end
                 end
             end
         end
     end)
 
 target("mirengine")
-    set_kind("binary")
+	set_kind("binary")
+	set_rundir("$(projectdir)")
 
     set_languages("c++20")
     add_includedirs(".", { public = true })
     add_files("main.cpp")
     
     add_deps("mirengine-lib")
-    add_packages("zet", "lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
+    add_zet()
+    add_packages("lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
     if is_plat("linux") then
         add_syslinks("png", "z")
         add_ldflags("-rdynamic")
@@ -60,15 +77,17 @@ target("mirengine")
     end
 
 target("mirengine-tests")
-    set_kind("binary")
-    set_default(false)
+	set_kind("binary")
+	set_default(false)
+	set_rundir("$(projectdir)")
 
     set_languages("c++20")
     add_includedirs(".", { public = true })
     add_files("test/**.cpp")
     
     add_deps("mirengine-lib")
-    add_packages("zet", "lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
+    add_zet()
+    add_packages("lua", "sol2", "libsdl3", "libsdl3_image", "libsdl3_ttf", "libsdl3_mixer")
     if is_plat("linux") then
         add_syslinks("png", "z")
     end

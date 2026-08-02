@@ -4,20 +4,12 @@
 #include <container/String.hpp>
 #include <container/Map.hpp>
 #include <string_view>
+#include "../core/StringHash.hpp"
 
 using namespace zet;
 
-namespace std {
-    template <std::size_t C>
-    struct hash<mir::String<C>> {
-        std::size_t operator()(const mir::String<C>& str) const noexcept {
-            return std::hash<std::string_view>{}(std::string_view(str));
-        }
-    };
-}
-
 namespace mir::resource {
-    constexpr std::uint16_t MAX_RESOURCE = UINT16_MAX;
+	constexpr std::uint16_t MAX_RESOURCE = 1024;
 
     namespace {
         Map<String<>, String<>, MAX_RESOURCE> dictionary;
@@ -36,7 +28,7 @@ namespace mir::resource {
         // zet::Map does not support deleting a single element
     }
 
-    void Clear() noexcept { 
+	inline void Clear() noexcept {
         dictionary.Clear();
     }
 }

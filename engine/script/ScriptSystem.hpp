@@ -16,7 +16,7 @@ namespace mir::script {
         ScriptSystem(ScriptSystem&&) = delete;
         ScriptSystem& operator=(ScriptSystem&&) = delete;
 
-        void Initialize();
+		bool Initialize();
         void Update(float deltaTime);
         void Shutdown();
 

@@ -3,10 +3,15 @@
 #include "core/Entity.hpp"
 #include "component/Transform.hpp"
 #include "component/Sprite.hpp"
+#include "component/Rigidbody.hpp"
+#include "system/Movement.hpp"
+#include "system/Event.hpp"
+#include "asset/Scene.hpp"
 #include "script/ScriptSystem.hpp"
 #include <iostream>
 #include <cassert>
 #include <exception>
+#include <stdexcept>
 
 using namespace mir;
 
@@ -44,7 +49,21 @@ void TestCore() {
     manager.DeleteEntity(entity);
     manager.UpdateSystem(0.0f); // commit delete
     
-    assert(!manager.IsValidEntity(entity));
+	assert(!manager.IsValidEntity(entity));
+
+	Id replacement = manager.AddEntity();
+	if (replacement.Index != entity.Index || replacement.Generation == entity.Generation) {
+		throw std::runtime_error("Entity slot reuse did not advance generation");
+	}
+	transform::PositionX::Set(replacement, 7.0f);
+	manager.UpdateSystem(0.0f);
+	if (transform::PositionX::IsValidEntity(entity)) {
+		throw std::runtime_error("Stale entity accessed replacement component");
+	}
+	transform::PositionX::Remove(entity);
+	if (!transform::PositionX::IsValidEntity(replacement) || transform::PositionX::Get(replacement) != 7.0f) {
+		throw std::runtime_error("Stale entity removed replacement component");
+	}
     
     std::cout << "Core Tests Passed!" << std::endl;
 }
@@ -52,8 +71,10 @@ void TestCore() {
 void TestScript() {
     std::cout << "Running Script Tests..." << std::endl;
     
-    auto& scriptSys = script::ScriptSystem::Instance();
-    scriptSys.Initialize();
+	auto& scriptSys = script::ScriptSystem::Instance();
+	if (!scriptSys.Initialize()) {
+		throw std::runtime_error("ScriptSystem initialization failed");
+	}
     
     sol::state& lua = scriptSys.GetLuaState();
     
@@ -148,11 +169,37 @@ void TestScript() {
     std::cout << "Script Tests Passed!" << std::endl;
 }
 
+void TestMovement() {
+	std::cout << "Running Movement Tests..." << std::endl;
+	auto& manager = core::Manager::Instance();
+	Id entity = manager.AddEntity();
+	transform::SetPosition(entity, 0.0f, 0.0f);
+	rigidbody::SetVelocity(entity, 0.0f, 0.0f);
+	rigidbody::Gravity::Set(entity, 100.0f);
+	rigidbody::OnGround::Set(entity, false);
+	manager.UpdateSystem(0.0f);
+
+	movement::Update(entity, 0.5f);
+	manager.UpdateSystem(0.0f);
+	if (rigidbody::VelocityY::Get(entity) != 50.0f) {
+		throw std::runtime_error("Gravity velocity was not persisted");
+	}
+
+	movement::Update(entity, 0.5f);
+	manager.UpdateSystem(0.0f);
+	if (rigidbody::VelocityY::Get(entity) != 100.0f) {
+		throw std::runtime_error("Gravity velocity did not accumulate");
+	}
+	std::cout << "Movement Tests Passed!" << std::endl;
+}
+
 void TestShader() {
     std::cout << "Running Shader Bindings Tests..." << std::endl;
     
-    auto& scriptSys = script::ScriptSystem::Instance();
-    scriptSys.Initialize();
+	auto& scriptSys = script::ScriptSystem::Instance();
+	if (!scriptSys.Initialize()) {
+		throw std::runtime_error("ScriptSystem initialization failed");
+	}
     
     sol::state& lua = scriptSys.GetLuaState();
     
@@ -194,7 +241,8 @@ void TestShader() {
 int main() {
     try {
         TestMath();
-        TestCore();
+		TestCore();
+		TestMovement();
         TestScript();
         TestShader();
         std::cout << "All tests passed successfully!" << std::endl;
