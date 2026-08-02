@@ -11,7 +11,12 @@ set_project("mirengine")
 set_version("1.0.0")
 
 MIR_LOCAL_ZET_DIR = path.absolute("../zetcontainer-cpp", os.scriptdir())
-MIR_USE_LOCAL_ZET = os.isdir(path.join(MIR_LOCAL_ZET_DIR, "src"))
+option("local_zet")
+    set_default(os.isdir(path.join(MIR_LOCAL_ZET_DIR, "src")))
+    set_showmenu(true)
+    set_description("Use the sibling zetcontainer-cpp checkout")
+option_end()
+MIR_USE_LOCAL_ZET = has_config("local_zet") and os.isdir(path.join(MIR_LOCAL_ZET_DIR, "src"))
 
 -- Define local zet package
 package("zet")
@@ -19,7 +24,9 @@ package("zet")
     set_description("Zero-allocated Execution Toolkit")
     
     set_urls("https://github.com/G1rmmr/zetcontainer-cpp.git")
-    add_versions("main", "main")
+    -- Pin the allocation-free ZET API used by this engine. Tracking `main`
+    -- allowed CI package caches to resolve the older void Push()/no IsValid API.
+    add_versions("a2e0fd7", "a2e0fd7badf934fd186da1983648937407b2d539")
     
     add_configs("namespace", {description = "Set the library namespace", default = "zet", type = "string"})
     
@@ -76,7 +83,7 @@ package("libsdl3_image")
 package_end()
 
 if not MIR_USE_LOCAL_ZET then
-    add_requires("zet", {configs = {namespace = "mir"}})
+    add_requires("zet a2e0fd7", {configs = {namespace = "mir"}})
 end
 add_requireconfs("lua", {version = "5.4.x", configs = {shared = true}})
 add_requires("lua 5.4.x", {configs = {shared = true}})
