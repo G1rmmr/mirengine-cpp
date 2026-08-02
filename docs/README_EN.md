@@ -1,13 +1,13 @@
 # MIR (Modern Interface & Runtime) Engine - English Documentation
 
-A high-performance, ultra-lightweight 2D game engine built on C++20 and SDL3. It is designed around the `zet` zero-allocated container library and an Entity-Component-System (ECS) pattern.
+A C++20 and SDL3 2D game engine built around ZET containers and a generation-safe Entity-Component-System (ECS). Core ZET-backed storage performs no hidden heap allocation; Lua, SDL resources, file I/O, and some standard-library value types may allocate at runtime.
 
 ---
 
 ## Key Features
 - **Modern C++20 Core:** Utilizes the latest C++ features and custom SIMD-optimized math modules.
 - **SDL3 Runtime Integration:** Employs SDL3 for cross-platform window creation, input polling, 2D graphic rendering, and `SDL3_mixer` for audio.
-- **ECS (Entity-Component-System) Architecture:** Employs cache-efficient `SparseSet` container for components and Command Buffer for deferred deletion and component assignment.
+- **ECS (Entity-Component-System) Architecture:** Uses `SparseSet` storage with generation validation and a fixed-capacity Command Buffer for deferred deletion and component assignment.
 - **Lua Scripting Integration:** Integrates `sol2` library to control game components, inputs, audio, and systems dynamically at runtime.
 - **CI/CD:** Automated builds and unit tests on Windows, Linux, and macOS using Xmake and GitHub Actions.
 
@@ -217,7 +217,7 @@ end
 
 ## Engine Configuration Customization (`config.lua`)
 
-Since MIR Engine utilizes a zero-allocation architecture, performance-critical settings such as entity pools and system array sizes are determined at **compile time**. However, window settings (like title and resolution) can be customized at **runtime** without rebuilding the engine.
+MIR's ECS storage and command buffer use fixed capacities determined at **compile time**. They do not fall back to hidden heap growth when full. Window settings such as title and resolution remain configurable at **runtime**.
 
 You can configure these limits by creating a **`config.lua`** file in the root directory of your game project (e.g., `canvasguard-lua`):
 
@@ -226,6 +226,7 @@ These settings determine the size of static, zero-allocation container sizes. Ch
 * **`MAX_ENTITY`**: Maximum number of entities (Default `4096`)
 * **`MAX_COMPONENT`**: Maximum number of component types (Default `128`)
 * **`MAX_SYSTEM`**: Maximum number of subsystems (Default `64`)
+* **`COMMAND_BUFFER_BYTES`**: Maximum deferred-command payload bytes per frame (Default `1048576`)
 
 ### 2. Runtime Configuration (No Rebuild Needed)
 These settings are loaded dynamically at startup by the prebuilt engine binary (`mirengine`).
@@ -248,6 +249,7 @@ These settings are loaded dynamically at startup by the prebuilt engine binary (
 MAX_ENTITY = 2000
 MAX_COMPONENT = 256
 MAX_SYSTEM = 128
+COMMAND_BUFFER_BYTES = 2097152
 
 -- ==========================================
 -- 2. Runtime Configs (Dynamic loading)

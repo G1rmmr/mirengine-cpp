@@ -6,25 +6,24 @@ if is_plat("windows") then
     add_cxflags("/utf-8", { tools = { "clang_cl", "cl" } })
 end
 
--- Include engine subdirectory build configuration
-includes("engine")
-
 -- Project configuration
 set_project("mirengine")
 set_version("1.0.0")
+
+MIR_LOCAL_ZET_DIR = path.absolute("../zetcontainer-cpp", os.scriptdir())
+MIR_USE_LOCAL_ZET = os.isdir(path.join(MIR_LOCAL_ZET_DIR, "src"))
 
 -- Define local zet package
 package("zet")
     set_homepage("https://github.com/G1rmmr/zetcontainer-cpp")
     set_description("Zero-allocated Execution Toolkit")
     
-    set_urls("/home/g1/source/zetcontainer-cpp/.git", "https://github.com/G1rmmr/zetcontainer-cpp.git")
+    set_urls("https://github.com/G1rmmr/zetcontainer-cpp.git")
     add_versions("main", "main")
     
     add_configs("namespace", {description = "Set the library namespace", default = "zet", type = "string"})
     
     on_install(function (package)
-        io.gsub("src/container/Pool.hpp", "constexpr T& Get%(PoolHandle handle%) {", "constexpr bool IsValid(PoolHandle handle) const noexcept { return handle.Index < C && occupied[handle.Index] && generations[handle.Index] == handle.Generation; }\n\n        constexpr T& Get(PoolHandle handle) {")
         io.writefile("xmake.lua", [[
 add_rules("mode.debug", "mode.release")
 target("zet")
@@ -76,7 +75,9 @@ package("libsdl3_image")
     end)
 package_end()
 
-add_requires("zet", {configs = {namespace = "mir"}})
+if not MIR_USE_LOCAL_ZET then
+    add_requires("zet", {configs = {namespace = "mir"}})
+end
 add_requireconfs("lua", {version = "5.4.x", configs = {shared = true}})
 add_requires("lua 5.4.x", {configs = {shared = true}})
 add_requires("sol2")
@@ -84,3 +85,7 @@ add_requires("libsdl3")
 add_requires("libsdl3_image")
 add_requires("libsdl3_ttf")
 add_requires("libsdl3_mixer")
+
+-- Include targets after dependency selection so engine/xmake.lua can use the
+-- local sibling checkout during development without patching package sources.
+includes("engine")

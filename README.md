@@ -1,6 +1,6 @@
 # MIR (Modern Interface & Runtime) Engine
 
-A high-performance, ultra-lightweight C++20 and SDL3 2D game engine built around the Entity-Component-System (ECS) architecture and zero-allocation containers.
+A C++20 and SDL3 2D game engine built around a generation-safe Entity-Component-System (ECS) architecture and ZET containers that perform no hidden heap allocation. Lua, SDL, file I/O, and standard-library value types may allocate at runtime.
 
 ---
 
@@ -9,7 +9,6 @@ Select your preferred language for detailed setup, features, structure, and exec
 
 - **[한국어 문서 (Korean Docs)](docs/README_KR.md)**
 - **[English Documentation (English Docs)](docs/README_EN.md)**
-- **[SDL_GPU Shader Integration Guide (쉐이더 가이드)](file:///home/g1/.gemini/antigravity-cli/brain/787cde1a-3ac3-4e52-b284-10fc13ab52c9/shader_integration_guide.md)**
 
 ---
 

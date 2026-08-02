@@ -24,7 +24,7 @@
 
 namespace mir::script {
 
-    void ScriptSystem::Initialize() {
+	bool ScriptSystem::Initialize() {
         // Open default libraries
         lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::table, sol::lib::string, sol::lib::math);
 
@@ -433,30 +433,32 @@ namespace mir::script {
 
         // Load entrypoint script
         try {
-            auto result = lua.safe_script_file("main.lua");
+			auto result = lua.safe_script_file("script/main.lua");
             if (!result.valid()) {
                 sol::error err = result;
                 mir::debug::Log("Failed to run main.lua: %s", err.what());
-                return;
+				return false;
             }
         } catch (const std::exception& e) {
             mir::debug::Log("Exception while running main.lua: %s", e.what());
-            return;
+			return false;
         }
 
         // Fetch lifecycle functions
         sol::protected_function luaInit = lua["Init"];
         luaUpdate = lua["Update"];
 
-        if (luaInit.valid()) {
+		if (luaInit.valid()) {
             auto result = luaInit();
-            if (!result.valid()) {
+			if (!result.valid()) {
                 sol::error err = result;
-                mir::debug::Log("Error in Init(): %s", err.what());
+				mir::debug::Log("Error in Init(): %s", err.what());
+				return false;
             }
-        } else {
-            mir::debug::Log("Warning: Init() function not found in script/main.lua");
-        }
+		} else {
+			mir::debug::Log("Warning: Init() function not found in script/main.lua");
+		}
+		return true;
     }
 
     void ScriptSystem::Update(float deltaTime) {

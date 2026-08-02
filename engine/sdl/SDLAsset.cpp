@@ -232,12 +232,12 @@ namespace mir::video {
 }
 
 namespace mir::animation {
-    struct AnimDef {
-        List<Frame> frames;
-    };
-    static Map<String<>, AnimDef, resource::MAX_RESOURCE> anims;
+	struct AnimDef {
+		Frames frames;
+	};
+	static Map<String<>, AnimDef, MAX_ANIMATION> anims;
 
-    void Register(const String<>& name, const List<Frame>& frames) noexcept {
+	void Register(const String<>& name, const Frames& frames) noexcept {
         anims.Insert(name, AnimDef{ frames });
     }
 
