@@ -1,13 +1,5 @@
 local function add_zet()
-    if MIR_USE_LOCAL_ZET then
-        add_includedirs(
-            path.join(MIR_LOCAL_ZET_DIR, "src"),
-            path.join(MIR_LOCAL_ZET_DIR, "src/container"),
-            path.join(MIR_LOCAL_ZET_DIR, "src/memory"),
-            { public = true })
-    else
-        add_packages("zet")
-    end
+    add_packages("zet")
 end
 
 target("mirengine-lib")

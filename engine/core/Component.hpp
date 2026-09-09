@@ -65,7 +65,7 @@ namespace mir {
 
 			static inline SparseSet<Record, MAX_ID> storage;
 
-			static inline void apply(const void* rawPayload) {
+			static inline void apply(const void* rawPayload) noexcept {
 				const Payload& payload = *static_cast<const Payload*>(rawPayload);
 				ApplyCommitted(payload.Id, payload.Data);
 			}
