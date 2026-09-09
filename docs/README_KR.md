@@ -181,27 +181,28 @@ local HealthComponent = {}
 local EnemyAIComponent = {}
 
 function AddHealthComponent(entity, hp)
-    HealthComponent[entity.index] = { hp = hp, maxHp = hp }
+    HealthComponent[entity] = { hp = hp, maxHp = hp }
 end
 
 function AddEnemyAI(entity, targetX)
-    EnemyAIComponent[entity.index] = { state = "Patrol", targetX = targetX }
+    EnemyAIComponent[entity] = { state = "Patrol", targetX = targetX }
 end
 
 -- 루아 커스텀 시스템
 function HealthSystem(deltaTime)
-    for index, health in pairs(HealthComponent) do
-        local entityId = Id(index, 1)
-        if health.hp <= 0 then
+    for entityId, health in pairs(HealthComponent) do
+        if not Manager.Instance():IsValidEntity(entityId) or health.hp <= 0 then
             Manager.Instance():DeleteEntity(entityId)
-            HealthComponent[index] = nil
+            HealthComponent[entityId] = nil
         end
     end
 end
 
 function EnemyAISystem(deltaTime)
-    for index, ai in pairs(EnemyAIComponent) do
-        local entityId = Id(index, 1)
+    for entityId, ai in pairs(EnemyAIComponent) do
+        if not Manager.Instance():IsValidEntity(entityId) then
+            EnemyAIComponent[entityId] = nil
+        else
         local currentX = Transform.GetPositionX(entityId)
         if ai.state == "Patrol" then
             if currentX >= ai.targetX then
@@ -211,6 +212,7 @@ function EnemyAISystem(deltaTime)
                 Rigidbody.SetVelocity(entityId, 50.0, 0.0)
                 ai.targetX = 600.0
             end
+        end
         end
     end
 end

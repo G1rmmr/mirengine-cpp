@@ -29,7 +29,7 @@ namespace mir::core {
 		}
 
 		Id AddEntity() noexcept {
-			return availablePool.Create(true);
+			return Id(availablePool.TryCreate(true));
 		}
 
 			bool DeleteEntity(const Id id) noexcept {
@@ -40,7 +40,7 @@ namespace mir::core {
 
 			Payload payload{ id };
 
-			auto apply = [](const void* rawPayload) {
+			auto apply = [](const void* rawPayload) noexcept {
 				const auto& p = *static_cast<const Payload*>(rawPayload);
 				Manager::Instance().destroyEntity(p.EntityId);
 			};
@@ -63,14 +63,11 @@ namespace mir::core {
 			if (index >= MAX_ID) {
 				return INVALID_ID;
 			}
-			if (availablePool.IsOccupied(index)) {
-				return Id(index, availablePool.GetGeneration(index));
-			}
-			return INVALID_ID;
+			return Id(availablePool.TryHandleAt(index));
 		}
 
 		template<typename Payload>
-		bool AddComponent(void (*apply)(const void*), const Payload& payload, CleanupFunc cleanup) noexcept {
+		bool AddComponent(void (*apply)(const void*) noexcept, const Payload& payload, CleanupFunc cleanup) noexcept {
 			if (!HasCleanup(cleanup) && cleanupFuncs.Size() >= MAX_COMPONENT) {
 				++droppedCommands;
 				return false;
@@ -95,7 +92,7 @@ namespace mir::core {
 		}
 
 		template<typename Payload>
-		[[nodiscard]] bool Enqueue(void (*apply)(const void*), const Payload& payload) noexcept {
+		[[nodiscard]] bool Enqueue(void (*apply)(const void*) noexcept, const Payload& payload) noexcept {
 			if (!commandBuffer.Push<Payload>(apply, payload)) {
 				++droppedCommands;
 				return false;
@@ -107,7 +104,8 @@ namespace mir::core {
 			if (system == nullptr || systemFuncs.Size() >= MAX_SYSTEM) {
 				return false;
 			}
-			return systemFuncs.Push(system);
+			systemFuncs.Push(system);
+			return true;
 		}
 
 		void UpdateSystem(const float deltaTime) noexcept {
