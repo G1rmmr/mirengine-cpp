@@ -4,10 +4,10 @@
 #include <utility>
 
 #include <container/String.hpp>
+#include "../core/StringHash.hpp"
 #include <container/Map.hpp>
 
 #include "../util/Debugger.hpp"
-#include "../core/StringHash.hpp"
 
 using namespace zet;
 

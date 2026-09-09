@@ -1,6 +1,7 @@
 #pragma once
 
 #include <container/String.hpp>
+#include "../core/StringHash.hpp"
 #include <container/Map.hpp>
 #include "../component/Tag.hpp"
 

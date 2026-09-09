@@ -1,23 +1,15 @@
 #include "asset/Animation.hpp"
 #include "component/Sprite.hpp"
 #include "core/Manager.hpp"
+#include "core/StringHash.hpp"
 #include <container/Map.hpp>
 #include <container/SparseSet.hpp>
 #include <cmath>
 
-namespace std {
-    template <std::size_t C>
-    struct hash<mir::String<C>> {
-        std::size_t operator()(const mir::String<C>& str) const noexcept {
-            return std::hash<std::string_view>{}(str.View());
-        }
-    };
-}
-
 namespace mir::animation {
     namespace {
         struct AnimationData {
-            Frames Frames;
+            Frames FrameList;
         };
 
         struct ActiveAnimation {
@@ -67,7 +59,7 @@ namespace mir::animation {
                 }
 
                 const auto* animData = animationRegistry.Find(activeAnim.AnimName);
-                if (animData == nullptr || animData->Frames.Size() == 0) {
+                if (animData == nullptr || animData->FrameList.Size() == 0) {
                     activeAnim.IsPlaying = false;
                     continue;
                 }
@@ -76,7 +68,7 @@ namespace mir::animation {
                 activeAnim.ElapsedTime += deltaTime;
 
                 if (activeAnim.ElapsedTime >= frameDuration) {
-                    const std::size_t totalFrames = animData->Frames.Size();
+                    const std::size_t totalFrames = animData->FrameList.Size();
                     const int framesToAdvance = static_cast<int>(activeAnim.ElapsedTime / frameDuration);
                     activeAnim.ElapsedTime = std::fmod(activeAnim.ElapsedTime, frameDuration);
 
@@ -91,7 +83,7 @@ namespace mir::animation {
                         }
                     }
 
-                    const Frame& frame = animData->Frames[activeAnim.CurrentFrameIndex];
+                    const Frame& frame = animData->FrameList[activeAnim.CurrentFrameIndex];
                     sprite::SetSourceRect(activeAnim.EntityId, frame.X, frame.Y, frame.Width, frame.Height);
                 }
             }
@@ -106,7 +98,7 @@ namespace mir::animation {
 
     void Register(const String<>& name, const Frames& frames) noexcept {
         AnimationData data;
-        data.Frames = frames;
+        data.FrameList = frames;
         animationRegistry.Insert(name, data);
     }
 
@@ -118,7 +110,7 @@ namespace mir::animation {
         EnsureSystemAdded();
 
         const auto* animData = animationRegistry.Find(animName);
-        if (animData == nullptr || animData->Frames.Size() == 0) {
+        if (animData == nullptr || animData->FrameList.Size() == 0) {
             return;
         }
 
@@ -137,7 +129,7 @@ namespace mir::animation {
             return;
         }
 
-        const Frame& frame = animData->Frames[0];
+        const Frame& frame = animData->FrameList[0];
         sprite::SetSourceRect(id, frame.X, frame.Y, frame.Width, frame.Height);
     }
 
