@@ -69,36 +69,45 @@ namespace mir::core {
 			return INVALID_ID;
 		}
 
-			template<typename Payload>
-			bool AddComponent(void (*apply)(const void*), const Payload& payload, CleanupFunc cleanup) noexcept {
-				bool cleanupKnown = false;
-				for (CleanupFunc exist : cleanupFuncs) {
-					if (exist == cleanup) {
-						cleanupKnown = true;
-						break;
-					}
-				}
+		template<typename Payload>
+		bool AddComponent(void (*apply)(const void*), const Payload& payload, CleanupFunc cleanup) noexcept {
+			if (!HasCleanup(cleanup) && cleanupFuncs.Size() >= MAX_COMPONENT) {
+				++droppedCommands;
+				return false;
+			}
 
-				if (!cleanupKnown && cleanupFuncs.Size() >= MAX_COMPONENT) {
-					++droppedCommands;
-					return false;
-				}
+			if (!Enqueue<Payload>(apply, payload)) return false;
 
-				if (!commandBuffer.Push<Payload>(apply, payload)) {
-					++droppedCommands;
-					return false;
-				}
-
-				if (!cleanupKnown) {
-					cleanupFuncs.Push(cleanup);
-				}
-				return true;
+			if (!HasCleanup(cleanup)) {
+				cleanupFuncs.Push(cleanup);
+			}
+			return true;
 		}
 
-		void AddSystem(SystemFunc system) noexcept {
-			if (systemFuncs.Size() < MAX_SYSTEM) {
-				systemFuncs.Push(system);
+		[[nodiscard]] bool RegisterCleanup(CleanupFunc cleanup) noexcept {
+			if (cleanup == nullptr || HasCleanup(cleanup)) return cleanup != nullptr;
+			if (cleanupFuncs.Size() >= MAX_COMPONENT) {
+				++droppedCommands;
+				return false;
 			}
+			cleanupFuncs.Push(cleanup);
+			return true;
+		}
+
+		template<typename Payload>
+		[[nodiscard]] bool Enqueue(void (*apply)(const void*), const Payload& payload) noexcept {
+			if (!commandBuffer.Push<Payload>(apply, payload)) {
+				++droppedCommands;
+				return false;
+			}
+			return true;
+		}
+
+		[[nodiscard]] bool AddSystem(SystemFunc system) noexcept {
+			if (system == nullptr || systemFuncs.Size() >= MAX_SYSTEM) {
+				return false;
+			}
+			return systemFuncs.Push(system);
 		}
 
 		void UpdateSystem(const float deltaTime) noexcept {
@@ -133,6 +142,13 @@ namespace mir::core {
 
 		Manager() noexcept {}
 		~Manager() = default;
+
+		bool HasCleanup(CleanupFunc cleanup) const noexcept {
+			for (CleanupFunc exist : cleanupFuncs) {
+				if (exist == cleanup) return true;
+			}
+			return false;
+		}
 
 		void destroyEntity(Id id) noexcept {
 			if (IsValidEntity(id)) {

@@ -18,9 +18,17 @@ namespace mir {
 				return storage.Get(id.Index).Generation == id.Generation;
 			}
 
+            static const Type* TryGet(const Id id) noexcept {
+                if (!IsValidEntity(id)) {
+                    return nullptr;
+                }
+                return &storage.Get(id.Index).Data;
+            }
+
 			static const Type& Get(const Id id) noexcept {
-				assert(IsValidEntity(id) && "[mir::Component] INVALID OR STALE ENTITY");
-				return storage.Get(id.Index).Data;
+				const Type* data = TryGet(id);
+				assert(data != nullptr && "[mir::Component] INVALID OR STALE ENTITY");
+				return *data;
 			}
 
 			static void Remove(const Id id) noexcept {
@@ -33,6 +41,15 @@ namespace mir {
 				if (!mir::core::Manager::Instance().IsValidEntity(id)) return false;
 				Payload payload{id, data};
 				return mir::core::Manager::Instance().AddComponent<Payload>(&apply, payload, &Remove);
+			}
+
+			// Used by a single command-buffer payload that updates several scalar
+			// components together. It must only be called from that payload's apply
+			// callback, after its entity has been validated.
+			static void ApplyCommitted(const Id id, const Type& data) noexcept {
+				if (mir::core::Manager::Instance().IsValidEntity(id)) {
+					storage.Assign(id.Index, Record{id.Generation, data});
+				}
 			}
 
 	protected:
@@ -50,9 +67,7 @@ namespace mir {
 
 			static inline void apply(const void* rawPayload) {
 				const Payload& payload = *static_cast<const Payload*>(rawPayload);
-				if (mir::core::Manager::Instance().IsValidEntity(payload.Id)) {
-					storage.Assign(payload.Id.Index, Record{payload.Id.Generation, payload.Data});
-				}
+				ApplyCommitted(payload.Id, payload.Data);
 			}
 	};
 }

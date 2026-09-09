@@ -12,6 +12,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_mixer/SDL_mixer.h>
+#include <array>
 #include <cstdio>
 
 namespace mir::sdl {
@@ -141,29 +142,26 @@ namespace mir::button {
 }
 
 namespace mir::window {
-    PointerHandle<void> GetWindow() noexcept {
-        return PointerHandle<void>();
-    }
-
     bool IsOpen() noexcept {
         return sdl::isWindowOpen;
     }
 
-    bool IsOpening() noexcept {
-        return sdl::isWindowOpen;
-    }
-
-    void Init(
+    bool Init(
         const String<>& title,
         Mode mode,
         Resolution res,
         uint32_t width,
         uint32_t height) noexcept {
         
-        if (sdl::isWindowOpen) return;
+        if (sdl::isWindowOpen) return true;
 
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-        TTF_Init();
+        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
+            return false;
+        }
+        if (!TTF_Init()) {
+            SDL_Quit();
+            return false;
+        }
 
         Title = title;
         ScreenWidth = 1920;
@@ -186,14 +184,27 @@ namespace mir::window {
         }
 
         sdl::sdlWindow = SDL_CreateWindow(title.CStr(), ScreenWidth, ScreenHeight, flags);
-        if (sdl::sdlWindow) {
-            sdl::sdlRenderer = SDL_CreateRenderer(sdl::sdlWindow, nullptr);
-            sdl::isWindowOpen = true;
-            sdl::lastFrameTime = SDL_GetTicks();
-
-            MIX_Init();
-            sdl::sdlMixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+        if (!sdl::sdlWindow) {
+            TTF_Quit();
+            SDL_Quit();
+            return false;
         }
+
+        sdl::sdlRenderer = SDL_CreateRenderer(sdl::sdlWindow, nullptr);
+        if (!sdl::sdlRenderer) {
+            SDL_DestroyWindow(sdl::sdlWindow);
+            sdl::sdlWindow = nullptr;
+            TTF_Quit();
+            SDL_Quit();
+            return false;
+        }
+
+        sdl::isWindowOpen = true;
+        sdl::lastFrameTime = SDL_GetTicks();
+
+        MIX_Init();
+        sdl::sdlMixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+        return true;
     }
 
     void ProcessEvents() noexcept {
@@ -253,11 +264,35 @@ namespace mir::window {
     void Render() noexcept {
         if (!sdl::sdlRenderer) return;
 
-        // Draw Sprites
-        for (std::size_t i = 1; i < MAX_ID; ++i) {
+        // Build and sort a fixed-capacity render queue. This preserves the
+        // bounded-memory model while honoring the public Z-index contract.
+        std::array<Id, MAX_ID> renderQueue{};
+        std::size_t renderCount = 0;
+        for (std::size_t i = 0; i < MAX_ID; ++i) {
             Id id = mir::core::Manager::Instance().GetActiveEntityId(i);
             if (id == INVALID_ID) continue;
             if (!mir::sprite::Texture::IsValidEntity(id)) continue;
+            renderQueue[renderCount++] = id;
+        }
+
+        for (std::size_t i = 1; i < renderCount; ++i) {
+            const Id current = renderQueue[i];
+            const std::uint16_t currentZ = mir::sprite::Zindex::IsValidEntity(current)
+                ? mir::sprite::Zindex::Get(current) : 0;
+            std::size_t j = i;
+            while (j > 0) {
+                const Id previous = renderQueue[j - 1];
+                const std::uint16_t previousZ = mir::sprite::Zindex::IsValidEntity(previous)
+                    ? mir::sprite::Zindex::Get(previous) : 0;
+                if (previousZ <= currentZ) break;
+                renderQueue[j] = previous;
+                --j;
+            }
+            renderQueue[j] = current;
+        }
+
+        for (std::size_t i = 0; i < renderCount; ++i) {
+            const Id id = renderQueue[i];
 
             const String<>& textureName = mir::sprite::Texture::Get(id);
             SDL_Texture* tex = sdl::GetLoadedTexture(textureName);
@@ -268,6 +303,8 @@ namespace mir::window {
             float rot = mir::transform::Rotation::IsValidEntity(id) ? mir::transform::Rotation::Get(id) : 0.f;
             float scale = mir::transform::Scale::IsValidEntity(id) ? mir::transform::Scale::Get(id) : 1.f;
 
+            float sx = mir::sprite::SourceX::IsValidEntity(id) ? mir::sprite::SourceX::Get(id) : 0.f;
+            float sy = mir::sprite::SourceY::IsValidEntity(id) ? mir::sprite::SourceY::Get(id) : 0.f;
             float sw = mir::sprite::SourceWidth::IsValidEntity(id) ? mir::sprite::SourceWidth::Get(id) : 0.f;
             float sh = mir::sprite::SourceHeight::IsValidEntity(id) ? mir::sprite::SourceHeight::Get(id) : 0.f;
             float dw = mir::sprite::DestinationWidth::IsValidEntity(id) ? mir::sprite::DestinationWidth::Get(id) : 0.f;
@@ -288,7 +325,7 @@ namespace mir::window {
             dh *= scale;
 
             SDL_FRect dstRect = { px - dw * ax, py - dh * ay, dw, dh };
-            SDL_FRect srcRect = { 0.f, 0.f, sw, sh };
+            SDL_FRect srcRect = { sx, sy, sw, sh };
 
             std::uint8_t alpha = mir::sprite::Alpha::IsValidEntity(id) ? mir::sprite::Alpha::Get(id) : 255;
             std::uint8_t r = mir::sprite::TintRed::IsValidEntity(id) ? mir::sprite::TintRed::Get(id) : 255;
@@ -391,7 +428,4 @@ namespace mir::window {
         SetSize(w, h);
     }
 
-    Point2<float> MapPixelToCoords(const Point2<int>& pixel) noexcept {
-        return Point2<float>(static_cast<float>(pixel.x), static_cast<float>(pixel.y));
-    }
 }

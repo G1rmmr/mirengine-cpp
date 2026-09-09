@@ -68,15 +68,13 @@ RuntimeConfig LoadRuntimeConfig() {
 int main(int argc, char* argv[]) {
     // 1. 윈도우 초기화 (config.lua가 존재하면 설정을 읽어서 적용)
     RuntimeConfig config = LoadRuntimeConfig();
-    window::Init(
+    if (!window::Init(
         String<>(config.title.c_str()),
         config.mode,
         config.resolution,
         config.width,
         config.height
-    );
-    
-    if (!window::IsOpen()) {
+    )) {
         std::cerr << "Failed to initialize game window." << std::endl;
         return -1;
     }
@@ -103,7 +101,7 @@ int main(int argc, char* argv[]) {
 
         // 델타 타임(초 단위) 계산
         std::uint64_t currentTime = SDL_GetTicks();
-        float deltaTime = static_cast<float>(currentTime - lastTime) / 1000.0f;
+        float deltaTime = std::min(static_cast<float>(currentTime - lastTime) / 1000.0f, 0.25f);
         lastTime = currentTime;
 
         // Lua 스크립트 Update(deltaTime) 실행

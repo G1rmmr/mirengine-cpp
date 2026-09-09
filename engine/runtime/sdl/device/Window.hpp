@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <container/String.hpp>
+#include <memory/PointHandle.hpp>
 
 using namespace zet;
 
@@ -25,9 +25,14 @@ namespace mir::window {
     inline std::uint16_t ScreenWidth;
     inline std::uint16_t ScreenHeight;
     
-    bool IsOpen() noexcept;
+    // 윈도우 인스턴스를 가리키는 추상 핸들
+    inline PointHandle<void> WindowInstance = nullptr;
 
-    [[nodiscard]] bool Init(
+    PointHandle<void> GetWindow() noexcept;
+    bool IsOpen() noexcept;
+    bool IsOpening() noexcept;
+
+    void Init(
         const String<>& title,
         Mode mode = Mode::Desktop,
         Resolution res = Resolution::FHD,
@@ -47,4 +52,5 @@ namespace mir::window {
     void SetMode(const Mode mode) noexcept;
     void SetResolution(const Resolution resolution) noexcept;
     
+    Point2<float> MapPixelToCoords(const Point2<int>& pixel) noexcept;
 }

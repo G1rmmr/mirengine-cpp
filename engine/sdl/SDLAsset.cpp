@@ -2,7 +2,6 @@
 #include "asset/Texture.hpp"
 #include "asset/Font.hpp"
 #include "asset/Sound.hpp"
-#include "asset/Video.hpp"
 #include "asset/Animation.hpp"
 #include "asset/Resource.hpp"
 
@@ -71,7 +70,6 @@ namespace mir::sdl {
         SDL_DestroyTexture(tex);
     }
 }
-
 namespace mir::texture {
     bool Load(const String<>& name) noexcept {
         if (sdl::GetLoadedTexture(name)) return true;
@@ -91,7 +89,6 @@ namespace mir::texture {
         return false;
     }
 }
-
 namespace mir::font {
     bool Load(const String<>& name) noexcept {
         String<> path = resource::GetPath(name);
@@ -106,7 +103,6 @@ namespace mir::font {
         return false;
     }
 }
-
 namespace mir::sound {
     bool Load(const String<>& name) noexcept {
         MIX_Audio** audioPtr = sdl::soundCache.Find(name);
@@ -221,26 +217,4 @@ namespace mir::sound {
             MIX_StopAllTracks(sdl::sdlMixer, 0);
         }
     }
-}
-
-namespace mir::video {
-    void Load(const String<>& name) noexcept {}
-    void Play(const String<>& name, float speed) noexcept {}
-    void Stop() noexcept {}
-    void SetVideoTimeline(const float timeStamp) noexcept {}
-    void StopAll() noexcept {}
-}
-
-namespace mir::animation {
-	struct AnimDef {
-		Frames frames;
-	};
-	static Map<String<>, AnimDef, MAX_ANIMATION> anims;
-
-	void Register(const String<>& name, const Frames& frames) noexcept {
-        anims.Insert(name, AnimDef{ frames });
-    }
-
-    void Play(const Id id, const String<>& animName, float speed, bool loop) noexcept {}
-    void Stop(const Id id) noexcept {}
-}
+} // namespace mir::sound

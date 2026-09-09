@@ -12,9 +12,11 @@ set_version("1.0.0")
 
 MIR_LOCAL_ZET_DIR = path.absolute("../zetcontainer-cpp", os.scriptdir())
 option("local_zet")
-    set_default(os.isdir(path.join(MIR_LOCAL_ZET_DIR, "src")))
+    -- The sibling checkout is a development convenience, not a compatibility
+    -- guarantee. Keep the version pinned by this project as the default.
+    set_default(false)
     set_showmenu(true)
-    set_description("Use the sibling zetcontainer-cpp checkout")
+    set_description("Use the sibling zetcontainer-cpp checkout (requires the compatible MIR API revision)")
 option_end()
 MIR_USE_LOCAL_ZET = has_config("local_zet") and os.isdir(path.join(MIR_LOCAL_ZET_DIR, "src"))
 

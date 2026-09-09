@@ -17,9 +17,8 @@ namespace mir::time {
         bool IsLooping;
     };
 
-    namespace {
-        static inline List<TimerTask> TimerTasks;
-    }
+    // Shared across all translation units that include this header.
+    inline List<TimerTask> TimerTasks;
 
     struct Set {
         int Hour;

@@ -139,6 +139,7 @@ namespace mir::script {
             return mir::sprite::Texture::IsValidEntity(id) ? mir::sprite::Texture::Get(id).c_str() : "";
         };
         sprite["SetSourceSize"] = &mir::sprite::SetSourceSize;
+        sprite["SetSourceRect"] = &mir::sprite::SetSourceRect;
         sprite["SetDestinationSize"] = &mir::sprite::SetDestinationSize;
         sprite["SetAnchor"] = &mir::sprite::SetAnchor;
         sprite["SetTint"] = &mir::sprite::SetTint;
@@ -159,6 +160,8 @@ namespace mir::script {
         };
         sprite["Remove"] = [](mir::Id id) {
             mir::sprite::Texture::Remove(id);
+            mir::sprite::SourceX::Remove(id);
+            mir::sprite::SourceY::Remove(id);
             mir::sprite::SourceWidth::Remove(id);
             mir::sprite::SourceHeight::Remove(id);
             mir::sprite::DestinationWidth::Remove(id);
@@ -239,19 +242,20 @@ namespace mir::script {
         };
         lua["Collider"] = col;
 
-        // Bind Tag Component functions (mir::event)
+        // Bind persistent entity tags. One-frame events use mir::event::Emit
+        // on the C++ side and are deliberately separate from this API.
         auto tag = lua.create_table();
         tag["Set"] = [](mir::Id id, const std::string& name) {
-            mir::event::SetTag(id, name.c_str());
+            static_cast<void>(mir::tag::Set(id, name.c_str()));
         };
         tag["Get"] = [](mir::Id id) -> std::string {
-            return mir::event::Tag::IsValidEntity(id) ? mir::event::Tag::Get(id).c_str() : "";
+            return mir::tag::Tag::IsValidEntity(id) ? mir::tag::Tag::Get(id).c_str() : "";
         };
         tag["IsValid"] = [](mir::Id id) -> bool {
-            return mir::event::Tag::IsValidEntity(id);
+            return mir::tag::Tag::IsValidEntity(id);
         };
         tag["Remove"] = [](mir::Id id) {
-            mir::event::Tag::Remove(id);
+            mir::tag::Tag::Remove(id);
         };
         lua["Tag"] = tag;
 

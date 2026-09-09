@@ -52,6 +52,7 @@ mirengine-cpp/
 - **Sprite** (렌더링 리소스):
   - `Sprite.SetTexture(id, "path")` / `Sprite.GetTexture(id)`
   - `Sprite.SetSourceSize(id, w, h)` / `Sprite.SetDestinationSize(id, w, h)`
+  - `Sprite.SetSourceRect(id, x, y, w, h)` (스프라이트 시트 프레임 선택)
   - `Sprite.SetAnchor(id, x, y)` / `Sprite.SetTint(id, r, g, b)`
   - `Sprite.SetZindex(id, z)` / `Sprite.GetZindex(id)`
   - `Sprite.SetAlpha(id, a)` / `Sprite.GetAlpha(id)`
@@ -66,7 +67,7 @@ mirengine-cpp/
   - `Collider.SetOffset(id, x, y)` / `Collider.GetOffsetX(id)` / `Collider.GetOffsetY(id)`
   - `Collider.SetShouldTrigger(id, bool)` / `Collider.GetShouldTrigger(id)`
   - `Collider.IsValid(id)` / `Collider.Remove(id)`
-- **Tag** (이벤트 트리거 태그):
+- **Tag** (엔티티 분류 태그):
   - `Tag.Set(id, "TagName")` / `Tag.Get(id)` / `Tag.IsValid(id)` / `Tag.Remove(id)`
 
 ### 3. 디바이스 입력 및 사운드

@@ -19,9 +19,10 @@ target("mirengine-lib")
     -- Add includes relative to engine directory
     add_includedirs(".", { public = true })
 
-    -- Add source files recursively under engine (excluding main and tests)
+    -- Keep runtime sources explicit. A recursive engine-wide glob used to pick
+    -- up unfinished or unrelated .cpp files merely because they existed.
     add_headerfiles("**.hpp|test/**.hpp")
-    add_files("**.cpp|main.cpp|test/**.cpp")
+    add_files("sdl/*.cpp", "script/*.cpp", "runtime/sdl/**/*.cpp")
 
     -- Link libraries / packages
     add_zet()

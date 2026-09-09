@@ -7,6 +7,8 @@
 #include "system/Movement.hpp"
 #include "system/Event.hpp"
 #include "asset/Scene.hpp"
+#include "asset/Resource.hpp"
+#include "asset/Animation.hpp"
 #include "script/ScriptSystem.hpp"
 #include <iostream>
 #include <cassert>
@@ -14,6 +16,16 @@
 #include <stdexcept>
 
 using namespace mir;
+
+void RegisterResourceFromSeparateTranslationUnit();
+
+namespace {
+    int receivedEventCount = 0;
+
+    void CountEvent(Id) {
+        ++receivedEventCount;
+    }
+}
 
 void TestMath() {
     std::cout << "Running Math Tests..." << std::endl;
@@ -57,6 +69,9 @@ void TestCore() {
 	}
 	transform::PositionX::Set(replacement, 7.0f);
 	manager.UpdateSystem(0.0f);
+	if (transform::PositionX::TryGet(entity) != nullptr) {
+		throw std::runtime_error("TryGet exposed a stale entity");
+	}
 	if (transform::PositionX::IsValidEntity(entity)) {
 		throw std::runtime_error("Stale entity accessed replacement component");
 	}
@@ -66,6 +81,35 @@ void TestCore() {
 	}
     
     std::cout << "Core Tests Passed!" << std::endl;
+}
+
+void TestTagsAndEvents() {
+    std::cout << "Running Tag and Event Tests..." << std::endl;
+    auto& manager = core::Manager::Instance();
+    Id entity = manager.AddEntity();
+
+    if (!tag::Set(entity, "Player")) {
+        throw std::runtime_error("Failed to queue persistent tag");
+    }
+    manager.UpdateSystem(0.0f);
+    assert(tag::Tag::IsValidEntity(entity));
+    assert(tag::Tag::Get(entity) == "Player");
+
+    receivedEventCount = 0;
+    assert(event::On("spawn", &CountEvent));
+    assert(event::Emit(entity, "spawn"));
+    event::Update();
+    assert(receivedEventCount == 1);
+    assert(tag::Tag::IsValidEntity(entity));
+    assert(tag::Tag::Get(entity) == "Player");
+    std::cout << "Tag and Event Tests Passed!" << std::endl;
+}
+
+void TestResourceRegistry() {
+    std::cout << "Running Resource Registry Tests..." << std::endl;
+    RegisterResourceFromSeparateTranslationUnit();
+    assert(resource::GetPath("cross-tu-resource") == "assets/cross-tu-resource.png");
+    std::cout << "Resource Registry Tests Passed!" << std::endl;
 }
 
 void TestScript() {
@@ -193,6 +237,40 @@ void TestMovement() {
 	std::cout << "Movement Tests Passed!" << std::endl;
 }
 
+void TestSpriteSourceRect() {
+    std::cout << "Running Sprite Source Rectangle Tests..." << std::endl;
+    auto& manager = core::Manager::Instance();
+    Id entity = manager.AddEntity();
+    sprite::SetSourceRect(entity, 16.0f, 32.0f, 48.0f, 64.0f);
+    manager.UpdateSystem(0.0f);
+
+    assert(sprite::SourceX::Get(entity) == 16.0f);
+    assert(sprite::SourceY::Get(entity) == 32.0f);
+    assert(sprite::SourceWidth::Get(entity) == 48.0f);
+    assert(sprite::SourceHeight::Get(entity) == 64.0f);
+    std::cout << "Sprite Source Rectangle Tests Passed!" << std::endl;
+}
+
+void TestAnimation() {
+    std::cout << "Running Animation Tests..." << std::endl;
+    auto& manager = core::Manager::Instance();
+    Id entity = manager.AddEntity();
+
+    animation::Frames frames;
+    frames.Push({0.0f, 0.0f, 16.0f, 16.0f});
+    frames.Push({16.0f, 0.0f, 16.0f, 16.0f});
+    animation::Register("test-walk", frames);
+    animation::Play(entity, "test-walk", 1.0f, true);
+    manager.UpdateSystem(0.0f);
+
+    assert(sprite::SourceX::Get(entity) == 0.0f);
+    assert(sprite::SourceY::Get(entity) == 0.0f);
+    manager.UpdateSystem(0.1f);
+    assert(sprite::SourceX::Get(entity) == 16.0f);
+    assert(sprite::SourceY::Get(entity) == 0.0f);
+    std::cout << "Animation Tests Passed!" << std::endl;
+}
+
 void TestShader() {
     std::cout << "Running Shader Bindings Tests..." << std::endl;
     
@@ -242,7 +320,11 @@ int main() {
     try {
         TestMath();
 		TestCore();
+		TestTagsAndEvents();
+		TestResourceRegistry();
 		TestMovement();
+        TestSpriteSourceRect();
+        TestAnimation();
         TestScript();
         TestShader();
         std::cout << "All tests passed successfully!" << std::endl;

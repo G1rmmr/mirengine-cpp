@@ -11,9 +11,9 @@ using namespace zet;
 namespace mir::resource {
 	constexpr std::uint16_t MAX_RESOURCE = 1024;
 
-    namespace {
-        Map<String<>, String<>, MAX_RESOURCE> dictionary;
-    }
+    // An inline variable has one program-wide instance. An unnamed namespace
+    // here would create a separate dictionary for every translation unit.
+    inline Map<String<>, String<>, MAX_RESOURCE> dictionary;
 
     inline void Register(const String<>& name, const String<>& path) noexcept {
         dictionary.Insert(name, path);

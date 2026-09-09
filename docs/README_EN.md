@@ -52,6 +52,7 @@ The engine boots up with `main.lua` as its entrypoint, where you can call the fo
 - **Sprite** (Graphic resources):
   - `Sprite.SetTexture(id, "path")` / `Sprite.GetTexture(id)`
   - `Sprite.SetSourceSize(id, w, h)` / `Sprite.SetDestinationSize(id, w, h)`
+  - `Sprite.SetSourceRect(id, x, y, w, h)` (selects a sprite-sheet frame)
   - `Sprite.SetAnchor(id, x, y)` / `Sprite.SetTint(id, r, g, b)`
   - `Sprite.SetZindex(id, z)` / `Sprite.GetZindex(id)`
   - `Sprite.SetAlpha(id, a)` / `Sprite.GetAlpha(id)`
@@ -66,7 +67,7 @@ The engine boots up with `main.lua` as its entrypoint, where you can call the fo
   - `Collider.SetOffset(id, x, y)` / `Collider.GetOffsetX(id)` / `Collider.GetOffsetY(id)`
   - `Collider.SetShouldTrigger(id, bool)` / `Collider.GetShouldTrigger(id)`
   - `Collider.IsValid(id)` / `Collider.Remove(id)`
-- **Tag** (Event tagging):
+- **Tag** (Persistent entity classification):
   - `Tag.Set(id, "TagName")` / `Tag.Get(id)` / `Tag.IsValid(id)` / `Tag.Remove(id)`
 
 ### 3. Device Inputs & Audio
