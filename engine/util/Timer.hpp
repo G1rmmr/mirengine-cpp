@@ -58,7 +58,7 @@ namespace mir::time {
     }
 
     inline void Register(const float seconds, std::function<void()> callback, bool isLooping = false) noexcept {
-        TimerTasks.Push({std::move(callback), seconds, seconds, isLooping});
+        TimerTasks.Push(TimerTask{std::move(callback), seconds, seconds, isLooping});
     }
 
     inline void Update(const float deltaTime) noexcept {

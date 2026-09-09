@@ -8,9 +8,8 @@ using namespace zet;
 
 namespace mir {
     struct Id : public PoolHandle {
-        constexpr Id() noexcept : PoolHandle{static_cast<std::size_t>(-1), 0} {}
+        constexpr Id() noexcept : PoolHandle{} {}
         constexpr Id(const PoolHandle& handle) noexcept : PoolHandle(handle) {}
-        constexpr Id(const std::size_t idx, const std::size_t gen) noexcept : PoolHandle{idx, gen} {}
 
         constexpr operator std::size_t() const noexcept {
             return Index;

@@ -43,7 +43,7 @@ namespace mir::script {
 
         // Bind Id type
         lua.new_usertype<mir::Id>("Id",
-            sol::constructors<mir::Id(), mir::Id(const std::size_t, const std::size_t)>(),
+            sol::no_constructor,
             sol::meta_function::to_string, [](const mir::Id& id) {
                 return "EntityId(" + std::to_string(static_cast<std::size_t>(id)) + ")";
             },

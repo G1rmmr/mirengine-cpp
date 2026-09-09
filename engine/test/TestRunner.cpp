@@ -257,8 +257,8 @@ void TestAnimation() {
     Id entity = manager.AddEntity();
 
     animation::Frames frames;
-    frames.Push({0.0f, 0.0f, 16.0f, 16.0f});
-    frames.Push({16.0f, 0.0f, 16.0f, 16.0f});
+    frames.Push(animation::Frame{0.0f, 0.0f, 16.0f, 16.0f});
+    frames.Push(animation::Frame{16.0f, 0.0f, 16.0f, 16.0f});
     animation::Register("test-walk", frames);
     animation::Play(entity, "test-walk", 1.0f, true);
     manager.UpdateSystem(0.0f);
