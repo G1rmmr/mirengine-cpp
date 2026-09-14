@@ -135,7 +135,26 @@ namespace simd {
     template <std::uint8_t MASK>
     ENGINE_INLINE Floats ENGINE_VECTORCALL HorizonSum(const Floats lhs, const Floats rhs) noexcept {
 #ifdef ENGINE_SIMD_SSE
-        return _mm_dp_ps(lhs, rhs, MASK);
+        // _mm_dp_ps is SSE4.1-only. x86_64 guarantees SSE2, but Linux CI and
+        // downstream builds are not required to enable SSE4.1. Reproduce the
+        // DPPS mask contract using SSE/SSE2 operations: the high nibble selects
+        // product lanes and the low nibble selects result lanes.
+        Floats products = _mm_mul_ps(lhs, rhs);
+        const Int32x4 productMask = _mm_set_epi32(
+            (MASK & 0x80u) ? -1 : 0,
+            (MASK & 0x40u) ? -1 : 0,
+            (MASK & 0x20u) ? -1 : 0,
+            (MASK & 0x10u) ? -1 : 0);
+        products = _mm_and_ps(products, _mm_castsi128_ps(productMask));
+
+        const Floats pairs = _mm_add_ps(products, _mm_movehl_ps(products, products));
+        const Floats sum = _mm_add_ss(pairs, _mm_shuffle_ps(pairs, pairs, SIMD_MASK(1, 1, 1, 1)));
+        const Int32x4 resultMask = _mm_set_epi32(
+            (MASK & 0x08u) ? -1 : 0,
+            (MASK & 0x04u) ? -1 : 0,
+            (MASK & 0x02u) ? -1 : 0,
+            (MASK & 0x01u) ? -1 : 0);
+        return _mm_and_ps(_mm_shuffle_ps(sum, sum, SIMD_MASK(0, 0, 0, 0)), _mm_castsi128_ps(resultMask));
 #elif defined(ENGINE_SIMD_NEON)
         Floats m = vmulq_f32(lhs, rhs);
         static const std::uint32_t maskArr[4] = {
@@ -149,7 +168,14 @@ namespace simd {
         m = vreinterpretq_f32_u32(vandq_u32(vreinterpretq_u32_f32(m), bitMask));
 
         const float sum = vaddvq_f32(m);
-        return vdupq_n_f32(sum);
+        static const std::uint32_t resultMaskArr[4] = {
+            (MASK & 0x01) ? 0xFFFFFFFF : 0, // X (bit 0)
+            (MASK & 0x02) ? 0xFFFFFFFF : 0, // Y (bit 1)
+            (MASK & 0x04) ? 0xFFFFFFFF : 0, // Z (bit 2)
+            (MASK & 0x08) ? 0xFFFFFFFF : 0  // W (bit 3)
+        };
+        return vreinterpretq_f32_u32(vandq_u32(
+            vreinterpretq_u32_f32(vdupq_n_f32(sum)), vld1q_u32(resultMaskArr)));
 #endif
     }
 

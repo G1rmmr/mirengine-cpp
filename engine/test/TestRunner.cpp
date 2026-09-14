@@ -68,6 +68,14 @@ void TestMath() {
     // Lerp test
     float l = math::Lerp(0.f, 10.f, 0.5f);
     assert(l == 5.0f);
+
+    // HorizonSum must not depend on SSE4.1 (_mm_dp_ps). Verify both input and
+    // output masks so the portable SSE2 fallback keeps DPPS semantics.
+    alignas(16) float sumLanes[4]{};
+    simd::Store(sumLanes, simd::HorizonSum<0xF5>(simd::Set(1.f, 2.f, 3.f, 4.f), simd::Set(1.f)));
+    assert(sumLanes[0] == 10.f && sumLanes[1] == 0.f && sumLanes[2] == 10.f && sumLanes[3] == 0.f);
+    assert(math::Vector2(1.f, 2.f).Dot(math::Vector2(3.f, 4.f)) == 11.f);
+    assert(math::Vector3(1.f, 2.f, 3.f).Dot(math::Vector3(4.f, 5.f, 6.f)) == 32.f);
     
     std::cout << "Math Tests Passed!" << std::endl;
 }
