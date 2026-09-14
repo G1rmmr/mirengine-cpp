@@ -32,4 +32,12 @@ namespace mir::rigidbody {
         return manager.Enqueue<detail::VelocityPayload>(
             &detail::ApplyVelocity, detail::VelocityPayload{id, x, y});
     }
+
+	[[nodiscard]] inline bool SetGravity(const Id id, const float gravity) noexcept {
+		return Gravity::Set(id, gravity);
+	}
+
+	[[nodiscard]] inline bool SetOnGround(const Id id, const bool onGround) noexcept {
+		return OnGround::Set(id, onGround);
+	}
 }

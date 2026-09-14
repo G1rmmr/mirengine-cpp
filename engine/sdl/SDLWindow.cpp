@@ -8,6 +8,7 @@
 #include "view/Label.hpp"
 #include "view/Border.hpp"
 #include "view/Button.hpp"
+#include "view/Camera.hpp"
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -298,10 +299,23 @@ namespace mir::window {
             SDL_Texture* tex = sdl::GetLoadedTexture(textureName);
             if (!tex) continue;
 
-            float px = mir::transform::PositionX::IsValidEntity(id) ? mir::transform::PositionX::Get(id) : 0.f;
-            float py = mir::transform::PositionY::IsValidEntity(id) ? mir::transform::PositionY::Get(id) : 0.f;
-            float rot = mir::transform::Rotation::IsValidEntity(id) ? mir::transform::Rotation::Get(id) : 0.f;
-            float scale = mir::transform::Scale::IsValidEntity(id) ? mir::transform::Scale::Get(id) : 1.f;
+            // Hierarchical entities render from their derived world transform;
+            // flat ECS entities retain the existing local-transform behavior.
+            float px = mir::transform::WorldPositionX::IsValidEntity(id)
+                ? mir::transform::WorldPositionX::Get(id)
+                : (mir::transform::PositionX::IsValidEntity(id) ? mir::transform::PositionX::Get(id) : 0.f);
+            float py = mir::transform::WorldPositionY::IsValidEntity(id)
+                ? mir::transform::WorldPositionY::Get(id)
+                : (mir::transform::PositionY::IsValidEntity(id) ? mir::transform::PositionY::Get(id) : 0.f);
+            float rot = mir::transform::WorldRotation::IsValidEntity(id)
+                ? mir::transform::WorldRotation::Get(id)
+                : (mir::transform::Rotation::IsValidEntity(id) ? mir::transform::Rotation::Get(id) : 0.f);
+            float scale = mir::transform::WorldScale::IsValidEntity(id)
+                ? mir::transform::WorldScale::Get(id)
+                : (mir::transform::Scale::IsValidEntity(id) ? mir::transform::Scale::Get(id) : 1.f);
+			const float cameraZoom = mir::camera::GetZoom();
+			px = (px - mir::camera::GetX() + mir::camera::GetShakeOffsetX()) * cameraZoom;
+			py = (py - mir::camera::GetY() + mir::camera::GetShakeOffsetY()) * cameraZoom;
 
             float sx = mir::sprite::SourceX::IsValidEntity(id) ? mir::sprite::SourceX::Get(id) : 0.f;
             float sy = mir::sprite::SourceY::IsValidEntity(id) ? mir::sprite::SourceY::Get(id) : 0.f;
@@ -321,8 +335,8 @@ namespace mir::window {
             if (dw <= 0.f) dw = sw;
             if (dh <= 0.f) dh = sh;
 
-            dw *= scale;
-            dh *= scale;
+            dw *= scale * cameraZoom;
+            dh *= scale * cameraZoom;
 
             SDL_FRect dstRect = { px - dw * ax, py - dh * ay, dw, dh };
             SDL_FRect srcRect = { sx, sy, sw, sh };

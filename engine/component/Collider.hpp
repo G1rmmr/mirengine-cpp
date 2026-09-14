@@ -50,4 +50,8 @@ namespace mir::collider {
         return manager.Enqueue<detail::PairPayload>(
             &detail::ApplyOffset, detail::PairPayload{id, x, y});
     }
+
+	[[nodiscard]] inline bool SetShouldTrigger(const Id id, const bool shouldTrigger) noexcept {
+		return ShouldTrigger::Set(id, shouldTrigger);
+	}
 }

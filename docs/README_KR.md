@@ -9,6 +9,8 @@ C++20 및 SDL3를 기반으로 작성된 2D 게임 엔진입니다. 내부 저�
 - **SDL3 런타임 연동:** 크로스 플랫폼 창 생성, 입력 폴링, 2D 그래픽 렌더링, `SDL3_mixer` 오디오 탑재
 - **ECS (Entity-Component-System) 패턴:** `SparseSet` 기반 컴포넌트 저장소, 세대 검증 및 Command Buffer 기반 지연 처리 구조
 - **Lua 스크립팅 통합:** `sol2` 라이브러리를 활용하여 런타임에 게임의 컴포넌트 제어, 사운드, 입력, 물리, 충돌을 제어 가능
+- **공통 개발 표면:** `MIR.hpp`를 통해 C++와 Lua가 동일한 세대 안전 ECS·자산·시스템 기능을 사용하며, Lua에는 내부 컨테이너 핸들과 SDL 포인터를 노출하지 않음
+- **최신 ZET 연동:** Xmake가 빌드 시 `zetcontainer-cpp`의 GitHub `main` 브랜치를 받아 현재 컨테이너 API로 빌드
 - **빌드 자동화 및 CI:** Xmake 및 GitHub Actions를 통해 Windows, Linux, macOS에 대한 빌드 및 테스트 자동화
 
 ---
@@ -42,12 +44,14 @@ mirengine-cpp/
 - `Manager.Instance():AddEntity()` -> `Id`: 신규 엔티티 ID 생성
 - `Manager.Instance():DeleteEntity(id)`: 엔티티 삭제
 - `Manager.Instance():IsValidEntity(id)` -> `bool`: 엔티티가 살아있는지 검사
+- `Manager.Instance():ForEachEntity(function(id) ... end)` -> `bool`: 내부 저장소 핸들을 노출하지 않고 유효 엔티티 순회
 
 ### 2. 컴포넌트 API
 - **Transform** (위치 및 크기):
   - `Transform.SetPosition(id, x, y)` / `Transform.GetPositionX(id)` / `Transform.GetPositionY(id)`
   - `Transform.SetRotation(id, r)` / `Transform.GetRotation(id)`
   - `Transform.SetScale(id, s)` / `Transform.GetScale(id)`
+  - `Transform.GetWorldPositionX(id)` / `Transform.GetWorldPositionY(id)` / `Transform.GetWorldRotation(id)` / `Transform.GetWorldScale(id)`
   - `Transform.IsValid(id)` / `Transform.Remove(id)`
 - **Sprite** (렌더링 리소스):
   - `Sprite.SetTexture(id, "path")` / `Sprite.GetTexture(id)`
@@ -69,10 +73,15 @@ mirengine-cpp/
   - `Collider.IsValid(id)` / `Collider.Remove(id)`
 - **Tag** (엔티티 분류 태그):
   - `Tag.Set(id, "TagName")` / `Tag.Get(id)` / `Tag.IsValid(id)` / `Tag.Remove(id)`
+- **Hierarchy** (ECS 부모-자식 관계):
+  - `Hierarchy.SetParent(child, parent)` / `Hierarchy.ClearParent(child)`
+  - `Hierarchy.GetParent(id)` / `Hierarchy.GetFirstChild(id)` / `Hierarchy.GetNextSibling(id)`
+  - 관계 변경은 Command Buffer를 통해 반영되며, 부모 삭제 시 자식은 월드 루트로 분리됩니다.
 
 ### 3. 디바이스 입력 및 사운드
 - **Input & Key**:
   - `Input.IsPressed(Key.W)` / `Input.IsJustPressed(Key.Space)` / `Input.IsJustReleased(Key.Enter)`
+  - `Key.F1`~`Key.F12`, `Input.IsMousePressed(MouseButton.Left)`, `Input.IsMouseJustPressed(...)`, `Input.IsMouseJustReleased(...)`
   - `Input.GetMouseX()` / `Input.GetMouseY()`
 - **Sound**:
   - `Sound.Load("path")` / `Sound.Play("name", vol, pitch)` / `Sound.PlayBgm("name", vol, loop)` / `Sound.StopBgm()` / `Sound.StopAll()`
@@ -80,26 +89,59 @@ mirengine-cpp/
 ### 4. GPU 쉐이더 (SDL_GPU API)
 엔진에 연동된 SDL3.0 GPU 서브시스템을 통해 커스텀 쉐이더 및 파이프라인을 생성할 수 있습니다.
 * **디바이스 관리**:
-  * `GPU.CreateDevice(formats, debugMode)` -> `device_addr` (uintptr_t)
-  * `GPU.DestroyDevice(device_addr)`
-  * `GPU.ClaimWindow(device_addr)` / `GPU.ReleaseWindow(device_addr)`
-  * `GPU.GetSwapchainFormat(device_addr)` -> `format` (int)
+  * `GPU.CreateDevice(formats, debugMode)` -> `GPUDevice`
+  * `device:Destroy()` / `device:ClaimWindow()` / `device:ReleaseWindow()` / `device:GetSwapchainFormat()`
+  * Lua에는 SDL 포인터 주소를 노출하지 않습니다.
 * **상수 및 포맷**:
   * `GPUShaderStage.Vertex` / `GPUShaderStage.Fragment`
   * `GPU_SHADERFORMAT_SPIRV` / `GPU_SHADERFORMAT_DXIL` / `GPU_SHADERFORMAT_MSL`
 * **Shader & GPUPipeline**:
   * `Shader.new()`: 신규 쉐이더 객체 생성
-    * `Shader:LoadFromFile(device_addr, filepath, entrypoint, stage, numSamplers, numUniformBuffers)` -> `bool`
+    * `Shader:LoadFromFile(device, filepath, entrypoint, stage, numSamplers, numUniformBuffers)` -> `bool`
     * `Shader:Destroy()`
   * `GPUPipeline.new()`: 신규 파이프라인 생성
-    * `GPUPipeline:Create(device_addr, vs, fs, renderTargetFormat)` -> `bool`
+    * `GPUPipeline:Create(device, vs, fs, renderTargetFormat)` -> `bool`
     * `GPUPipeline:Destroy()`
 
 ### 5. 서브시스템
 - `Movement.Update(id, deltaTime)`: 물리 이동 업데이트 적용
 - `Collision.Update(lhsId, rhsId)` -> `bool`: AABB 박스 충돌 판단 검사
+- `Animation.Register(name, { AnimationFrame.new(x, y, width, height), ... })` / `Animation.Play(id, name, speed, loop)` / `Animation.Stop(id)`
+- `Resource.Register(name, path)` / `Resource.GetPath(name)` / `Resource.Unregister(name)`
+- `Scene.Register(name, callback)` / `Scene.Load(name)`
+- `Event.On(name, callback)` / `Event.Emit(id, name)`: Simulation 단계에서 자동 전달
+- `Timer.After(seconds, callback)` / `Timer.Every(seconds, callback)` / `Timer.Cancel(handle)`
+- `System.Register(callback, SystemPhase.Simulation|PostCommit)` / `System.AddDependency(before, after)`: 고정 용량 Lua 시스템 순서 그래프
+- `Profiler`, `Debug`, `Border`, `Label`, `Button`, `Camera`(위치·추적·줌·흔들기), 런타임 안전 `Window` 설정도 Lua에서 사용 가능합니다.
 
-### 6. 게임 개발 코드 예시 (main.lua)
+### 6. C++ 개발 API
+
+`engine/MIR.hpp`를 포함하면 Lua와 같은 세대 안전 API를 C++에서도 사용할 수 있습니다. C++ 시스템은 `core::Manager::RegisterSystem`으로, Lua 시스템은 별도의 고정 용량 dispatcher로 등록하므로 서로의 내부 핸들을 만들거나 해석할 수 없습니다.
+
+```cpp
+#include "MIR.hpp"
+
+auto& manager = mir::core::Manager::Instance();
+const mir::Id player = manager.AddEntity();
+if (!mir::transform::SetPosition(player, 100.f, 80.f)) {
+    // 명령 버퍼가 가득 찼거나 엔티티가 유효하지 않습니다.
+}
+mir::event::On("spawn", [](mir::Id id) { /* ... */ });
+mir::event::Emit(player, "spawn");
+```
+
+구조 변경 setter는 모두 `bool`을 반환합니다. `true`는 명령이 큐에 들어갔다는 뜻이며, 값은 다음 `Manager::UpdateSystem()` commit 이후 관찰됩니다.
+
+### 7. 실행 모델과 API 경계
+
+- `Manager::RegisterSystem(fn, SystemPhase::Simulation|PostCommit)`은 C++ 시스템을 등록하고, `AddSystemDependency(before, after)`로 같은 단계 안의 실행 순서를 고정합니다. 단계 사이에는 commit 장벽이 있으므로 교차 단계 의존성은 허용되지 않습니다.
+- `Event.Emit`과 `Timer.After`/`Timer.Every`는 각각 Simulation 시스템에 자동 연결됩니다. 매 프레임 수동으로 `Event.Update`나 `Timer.Update`를 호출하지 마십시오.
+- `Resource`와 `Scene`은 고정 용량 레지스트리입니다. `Register`/`Load`의 `false`는 이름 오류·용량 초과·등록되지 않은 항목을 뜻합니다. `Resource.Clear`, `Scene.Clear`, `Timer.Clear`는 게임 종료나 명시적 재시작 경계에서 사용합니다.
+- `GPUDevice`는 이동 전용 SDL GPU 디바이스 소유자입니다. C++ 저수준 통합에서만 `Raw()`를 사용하며, Lua는 소유형 userdata만 전달합니다.
+- `Window.Init`, 렌더 시작/표시, 이벤트 펌프, 종료는 `main.cpp`의 루프가 소유합니다. Lua에는 창 제목·크기·모드·해상도·FPS·닫기처럼 프레임 안전한 제어만 노출됩니다.
+- 비디오 재생은 아직 기능이 아닙니다. `runtime/sdl/asset/Video.hpp`는 디코더 백엔드가 없는 레거시 선언이며, FFmpeg 등의 디코더와 배포 라이선스를 선택하기 전까지 C++/Lua 공개 API로 지원하지 않습니다.
+
+### 8. 게임 개발 코드 예시 (main.lua)
 ```lua
 local player = nil
 local ground = nil
@@ -174,7 +216,7 @@ function Shutdown()
 end
 ```
 
-### 7. 커스텀 컴포넌트 & 시스템 설계 예시
+### 9. 커스텀 컴포넌트 & 시스템 설계 예시
 ```lua
 -- Lua 커스텀 컴포넌트 테이블
 local HealthComponent = {}
@@ -229,6 +271,7 @@ Zero-allocation 자료구조 크기에 영향을 주는 설정들입니다. 변�
 * **`MAX_ENTITY`**: 최대 엔티티 및 컴포넌트 인덱스 범위 (기본값 `4096`)
 * **`MAX_COMPONENT`**: 최대 컴포넌트 종류 개수 (기본값 `128`)
 * **`MAX_SYSTEM`**: 최대 시스템 개수 (기본값 `64`)
+* **`MAX_SYSTEM_DEPENDENCIES`**: 시스템 실행 그래프의 최대 의존성 간선 수 (기본값 `MAX_SYSTEM * 4`)
 * **`COMMAND_BUFFER_BYTES`**: 한 프레임에 예약 가능한 지연 명령 payload 크기 (기본값 `1048576`)
 
 ### 2. 런타임 설정 (엔진 재빌드 불필요)
@@ -252,6 +295,7 @@ Zero-allocation 자료구조 크기에 영향을 주는 설정들입니다. 변�
 MAX_ENTITY = 2000
 MAX_COMPONENT = 256
 MAX_SYSTEM = 128
+MAX_SYSTEM_DEPENDENCIES = 512
 COMMAND_BUFFER_BYTES = 2097152
 
 -- ==========================================
@@ -271,6 +315,7 @@ WINDOW_HEIGHT = 900
 ## 의존성 및 패키지
 엔진은 빌드 시 Xmake 패키지 관리자를 통해 다음 의존성을 자동으로 내려받고 링크합니다:
 - **`zet`**: Zero-allocated Execution Toolkit (컨테이너 라이브러리)
+  - 루트 `xmake.lua`는 GitHub `main`을 추적합니다. 재현 가능한 릴리스가 필요하면 검증한 커밋 SHA 또는 태그로 고정하십시오.
 - **`lua 5.4.x` / `sol2`**: 스크립팅 바인딩
 - **`libsdl3` / `libsdl3_image` / `libsdl3_ttf` / `libsdl3_mixer`**: 창 제어, 이미지, 폰트, 오디오 시스템
 

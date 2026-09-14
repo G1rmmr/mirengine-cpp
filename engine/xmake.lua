@@ -40,6 +40,8 @@ target("mirengine-lib")
                         target:add("defines", "CONFIG_MAX_COMPONENT=" .. val, { public = true })
 					elseif key == "MAX_SYSTEM" then
 						target:add("defines", "CONFIG_MAX_SYSTEM=" .. val, { public = true })
+					elseif key == "MAX_SYSTEM_DEPENDENCIES" then
+						target:add("defines", "CONFIG_MAX_SYSTEM_DEPENDENCIES=" .. val, { public = true })
 					elseif key == "COMMAND_BUFFER_BYTES" then
 						target:add("defines", "CONFIG_COMMAND_BUFFER_BYTES=" .. val, { public = true })
 					end

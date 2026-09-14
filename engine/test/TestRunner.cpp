@@ -1,3 +1,4 @@
+#include "MIR.hpp"
 #include "math/Math.hpp"
 #include "core/Manager.hpp"
 #include "core/Entity.hpp"
@@ -6,12 +7,15 @@
 #include "component/Rigidbody.hpp"
 #include "system/Movement.hpp"
 #include "system/Event.hpp"
+#include "system/Hierarchy.hpp"
 #include "asset/Scene.hpp"
 #include "asset/Resource.hpp"
 #include "asset/Animation.hpp"
 #include "script/ScriptSystem.hpp"
+#include "util/Timer.hpp"
 #include <iostream>
 #include <cassert>
+#include <cmath>
 #include <exception>
 #include <stdexcept>
 
@@ -21,10 +25,35 @@ void RegisterResourceFromSeparateTranslationUnit();
 
 namespace {
     int receivedEventCount = 0;
+	bool captureSystemOrder = false;
+	int systemOrder[3]{};
+	std::size_t systemOrderCount = 0;
+	int postCommitCount = 0;
+	int timerCallbackCount = 0;
 
     void CountEvent(Id) {
         ++receivedEventCount;
     }
+
+	void SystemA(float) {
+		if (captureSystemOrder) systemOrder[systemOrderCount++] = 1;
+	}
+
+	void SystemB(float) {
+		if (captureSystemOrder) systemOrder[systemOrderCount++] = 2;
+	}
+
+	void SystemC(float) {
+		if (captureSystemOrder) systemOrder[systemOrderCount++] = 3;
+	}
+
+	void PostCommitSystem(float) {
+		++postCommitCount;
+	}
+
+	void Require(const bool condition, const char* const message) {
+		if (!condition) throw std::runtime_error(message);
+	}
 }
 
 void TestMath() {
@@ -83,6 +112,103 @@ void TestCore() {
     std::cout << "Core Tests Passed!" << std::endl;
 }
 
+void TestSystemGraph() {
+	std::cout << "Running System Graph Tests..." << std::endl;
+	auto& manager = core::Manager::Instance();
+
+	// Register in reverse dependency order. The graph, not registration order,
+	// must determine A -> B -> C execution.
+	const core::SystemId systemC = manager.RegisterSystem(&SystemC);
+	const core::SystemId systemA = manager.RegisterSystem(&SystemA);
+	const core::SystemId systemB = manager.RegisterSystem(&SystemB);
+	const core::SystemId postCommit = manager.RegisterSystem(&PostCommitSystem, core::SystemPhase::PostCommit);
+	Require(manager.IsValidSystem(systemA), "Failed to register system A");
+	Require(manager.IsValidSystem(systemB), "Failed to register system B");
+	Require(manager.IsValidSystem(systemC), "Failed to register system C");
+	Require(manager.IsValidSystem(postCommit), "Failed to register post-commit system");
+	Require(manager.AddSystemDependency(systemA, systemB), "Failed to add A -> B dependency");
+	Require(manager.AddSystemDependency(systemB, systemC), "Failed to add B -> C dependency");
+	Require(!manager.AddSystemDependency(systemC, systemA), "System dependency cycle was accepted");
+
+	systemOrderCount = 0;
+	postCommitCount = 0;
+	captureSystemOrder = true;
+	manager.UpdateSystem(0.0f);
+	captureSystemOrder = false;
+	Require(systemOrderCount == 3, "Unexpected simulation system count");
+	Require(systemOrder[0] == 1 && systemOrder[1] == 2 && systemOrder[2] == 3, "System graph order is not A -> B -> C");
+	Require(postCommitCount == 1, "Post-commit system did not run");
+	std::cout << "System Graph Tests Passed!" << std::endl;
+}
+
+void TestHierarchy() {
+	std::cout << "Running Hierarchy Tests..." << std::endl;
+	auto& manager = core::Manager::Instance();
+	const Id parent = manager.AddEntity();
+	const Id child = manager.AddEntity();
+	const Id grandchild = manager.AddEntity();
+
+	Require(transform::SetPosition(parent, 10.0f, 20.0f), "Failed to set parent local position");
+	Require(transform::Rotation::Set(parent, 90.0f), "Failed to set parent local rotation");
+	Require(transform::Scale::Set(parent, 2.0f), "Failed to set parent local scale");
+	Require(transform::SetPosition(child, 5.0f, 0.0f), "Failed to set child local position");
+	Require(transform::SetPosition(grandchild, 1.0f, 0.0f), "Failed to set grandchild local position");
+	Require(hierarchy::SetParent(child, parent), "Failed to assign parent relation");
+	Require(hierarchy::SetParent(grandchild, child), "Failed to assign grandchild relation");
+	manager.UpdateSystem(0.0f);
+
+	Require(hierarchy::ParentOf(child) == parent, "Child parent relation was not committed");
+	Require(hierarchy::ParentOf(grandchild) == child, "Grandchild parent relation was not committed");
+	Require(hierarchy::FirstChildOf(parent) == child, "Child traversal index was not built");
+	Require(!hierarchy::SetParent(parent, grandchild), "Hierarchy cycle was accepted");
+
+	if (transform::WorldPositionX::TryGet(child) == nullptr) {
+		throw std::runtime_error("Hierarchy post-commit transform system did not populate child world data");
+	}
+	Require(std::abs(transform::WorldPositionX::Get(child) - 10.0f) < 0.001f, "Incorrect child world X");
+	Require(std::abs(transform::WorldPositionY::Get(child) - 30.0f) < 0.001f, "Incorrect child world Y");
+	Require(std::abs(transform::WorldRotation::Get(child) - 90.0f) < 0.001f, "Incorrect child world rotation");
+	Require(std::abs(transform::WorldScale::Get(child) - 2.0f) < 0.001f, "Incorrect child world scale");
+	Require(std::abs(transform::WorldPositionX::Get(grandchild) - 10.0f) < 0.001f, "Incorrect grandchild world X");
+	Require(std::abs(transform::WorldPositionY::Get(grandchild) - 32.0f) < 0.001f, "Incorrect grandchild world Y");
+
+	const Id detachedLeaf = manager.AddEntity();
+	Require(transform::SetPosition(detachedLeaf, 2.0f, 0.0f), "Failed to set detached leaf local position");
+	Require(hierarchy::SetParent(detachedLeaf, parent), "Failed to parent detached leaf");
+	manager.UpdateSystem(0.0f);
+	Require(std::abs(transform::WorldPositionX::Get(detachedLeaf) - 10.0f) < 0.001f, "Incorrect attached leaf world X");
+	Require(std::abs(transform::WorldPositionY::Get(detachedLeaf) - 24.0f) < 0.001f, "Incorrect attached leaf world Y");
+	Require(hierarchy::ClearParent(detachedLeaf), "Failed to clear detached leaf parent");
+	manager.UpdateSystem(0.0f);
+	Require(std::abs(transform::WorldPositionX::Get(detachedLeaf) - 2.0f) < 0.001f, "Detached leaf retained a stale world X");
+	Require(std::abs(transform::WorldPositionY::Get(detachedLeaf) - 0.0f) < 0.001f, "Detached leaf retained a stale world Y");
+
+	// Relation changes rebuild the ZET traversal index from ECS relation data,
+	// so clear/reparent remains safe even with several siblings.
+	Require(hierarchy::ClearParent(child), "Failed to clear parent relation");
+	manager.UpdateSystem(0.0f);
+	Require(hierarchy::ParentOf(child) == INVALID_ID, "Cleared parent relation still exists");
+	Require(hierarchy::ParentOf(grandchild) == child, "Clearing parent detached the grandchild");
+	Require(std::abs(transform::WorldPositionX::Get(child) - 5.0f) < 0.001f, "Incorrect detached child world X");
+	Require(std::abs(transform::WorldPositionY::Get(child) - 0.0f) < 0.001f, "Incorrect detached child world Y");
+	Require(hierarchy::SetParent(child, parent), "Failed to reparent child");
+	manager.UpdateSystem(0.0f);
+	Require(hierarchy::ParentOf(child) == parent, "Reparent relation was not committed");
+	Require(std::abs(transform::WorldPositionX::Get(child) - 10.0f) < 0.001f, "Incorrect reparented child world X");
+	Require(std::abs(transform::WorldPositionY::Get(child) - 30.0f) < 0.001f, "Incorrect reparented child world Y");
+
+	// Deleting a parent never destroys unrelated ECS state: children are
+	// detached to the internal world root and render from their local values.
+	Require(manager.DeleteEntity(parent), "Failed to queue parent deletion");
+	manager.UpdateSystem(0.0f);
+	Require(!manager.IsValidEntity(parent), "Parent was not deleted");
+	Require(manager.IsValidEntity(child), "Parent deletion cascaded unexpectedly");
+	Require(hierarchy::ParentOf(child) == INVALID_ID, "Child was not orphaned after parent deletion");
+	Require(std::abs(transform::WorldPositionX::Get(child) - 5.0f) < 0.001f, "Incorrect orphaned child world X");
+	Require(std::abs(transform::WorldPositionY::Get(child) - 0.0f) < 0.001f, "Incorrect orphaned child world Y");
+	std::cout << "Hierarchy Tests Passed!" << std::endl;
+}
+
 void TestTagsAndEvents() {
     std::cout << "Running Tag and Event Tests..." << std::endl;
     auto& manager = core::Manager::Instance();
@@ -98,7 +224,7 @@ void TestTagsAndEvents() {
     receivedEventCount = 0;
     assert(event::On("spawn", &CountEvent));
     assert(event::Emit(entity, "spawn"));
-    event::Update();
+	manager.UpdateSystem(0.0f);
     assert(receivedEventCount == 1);
     assert(tag::Tag::IsValidEntity(entity));
     assert(tag::Tag::Get(entity) == "Player");
@@ -109,7 +235,27 @@ void TestResourceRegistry() {
     std::cout << "Running Resource Registry Tests..." << std::endl;
     RegisterResourceFromSeparateTranslationUnit();
     assert(resource::GetPath("cross-tu-resource") == "assets/cross-tu-resource.png");
+	Require(resource::Register("temporary", "assets/temporary.png"), "Failed to register resource");
+	Require(resource::Unregister("temporary"), "Failed to unregister resource");
+	Require(resource::GetPath("temporary").Empty(), "Removed resource is still available");
     std::cout << "Resource Registry Tests Passed!" << std::endl;
+}
+
+void TestTimerAndScene() {
+	std::cout << "Running Timer and Scene Tests..." << std::endl;
+	auto& manager = core::Manager::Instance();
+	timerCallbackCount = 0;
+	const time::TimerHandle handle = time::Register(0.05f, []() { ++timerCallbackCount; });
+	Require(time::IsValid(handle), "Failed to register fixed-capacity timer");
+	manager.UpdateSystem(0.05f);
+	Require(timerCallbackCount == 1 && !time::IsValid(handle), "One-shot timer did not fire exactly once");
+
+	int sceneCallbackCount = 0;
+	Require(scene::Register("test-scene", [&sceneCallbackCount]() { ++sceneCallbackCount; }), "Failed to register scene");
+	Require(scene::Load("test-scene"), "Failed to load registered scene");
+	Require(sceneCallbackCount == 1, "Scene callback did not run");
+	Require(scene::Unregister("test-scene"), "Failed to unregister scene");
+	std::cout << "Timer and Scene Tests Passed!" << std::endl;
 }
 
 void TestScript() {
@@ -139,6 +285,24 @@ void TestScript() {
     assert(transform::PositionX::Get(entity) == 100.0f);
     assert(transform::PositionY::Get(entity) == 200.0f);
     assert(sprite::Texture::Get(entity) == "assets/hero.png");
+
+	// Hierarchy is intentionally script-facing through entity Ids only.
+	auto hierarchyResult = lua.safe_script(R"(
+		local manager = Manager.Instance()
+		local parent = manager:AddEntity()
+		local child = manager:AddEntity()
+		Transform.SetPosition(parent, 4.0, 0.0)
+		Transform.SetPosition(child, 3.0, 0.0)
+		assert(Hierarchy.SetParent(child, parent))
+		return { parent, child }
+	)");
+	Require(hierarchyResult.valid(), "Lua hierarchy setup failed");
+	sol::table hierarchyEntities = hierarchyResult;
+	const mir::Id hierarchyParent = hierarchyEntities[1];
+	const mir::Id hierarchyChild = hierarchyEntities[2];
+	core::Manager::Instance().UpdateSystem(0.0f);
+	Require(hierarchy::ParentOf(hierarchyChild) == hierarchyParent, "Lua hierarchy relation was not committed");
+	Require(std::abs(transform::WorldPositionX::Get(hierarchyChild) - 7.0f) < 0.001f, "Lua hierarchy world transform is incorrect");
     
     // Test 1: Texture.Load failure returns false
     auto result2 = lua.safe_script(R"(
@@ -208,6 +372,76 @@ void TestScript() {
     assert(func6.valid());
     auto result6 = func6(e1, e2);
     assert(result6.valid() && result6.get<bool>() == false);
+
+	// Newly exposed runtime APIs must execute through the same command and
+	// system barriers that C++ callers use.
+	auto extendedBindings = lua.safe_script(R"(
+		assert(Key.F12 ~= nil)
+		assert(MouseButton.Left ~= nil)
+		assert(type(Input.IsMousePressed) == "function")
+		assert(type(Window.SetTitle) == "function")
+		assert(type(Border.SetSize) == "function")
+		assert(type(Label.SetText) == "function")
+		assert(type(Button.SetText) == "function")
+		Camera.SetPosition(12.0, 34.0)
+		assert(Camera.GetX() == 12.0 and Camera.GetY() == 34.0)
+		local vec = Vector2.new(3.0, 4.0)
+		assert(vec:Length() == 5.0)
+		assert(Math.ToDegree(Math.ToRadian(90.0)) > 89.9)
+		local matrix = Math.CreateTranslation2D(vec)
+		assert(matrix:Get(2, 0) == 3.0)
+		local queried = 0
+		assert(Manager.Instance():ForEachEntity(function(id)
+			assert(Manager.Instance():IsValidEntity(id))
+			queried = queried + 1
+		end))
+		assert(queried > 0)
+
+		assert(Resource.Register("lua-resource", "assets/lua-resource.png"))
+		assert(Resource.GetPath("lua-resource") == "assets/lua-resource.png")
+		assert(Resource.Unregister("lua-resource"))
+
+		local sceneRuns = 0
+		assert(Scene.Register("lua-scene", function() sceneRuns = sceneRuns + 1 end))
+		assert(Scene.Load("lua-scene"))
+		assert(sceneRuns == 1)
+
+		local animationEntity = Manager.Instance():AddEntity()
+		assert(Animation.Register("lua-animation", {
+			AnimationFrame.new(0.0, 0.0, 8.0, 8.0),
+			{8.0, 0.0, 8.0, 8.0}
+		}))
+		assert(Animation.Play(animationEntity, "lua-animation", 1.0, true))
+
+		luaEventCount = 0
+		assert(Event.On("lua-event", function(id)
+			assert(Manager.Instance():IsValidEntity(id))
+			luaEventCount = luaEventCount + 1
+		end))
+		assert(Event.Emit(animationEntity, "lua-event"))
+
+		luaTimerCount = 0
+		local timer = Timer.After(0.01, function() luaTimerCount = luaTimerCount + 1 end)
+		assert(timer:is_valid())
+
+		luaSystemOrder = {}
+		local second = System.Register(function() table.insert(luaSystemOrder, 2) end)
+		local first = System.Register(function() table.insert(luaSystemOrder, 1) end)
+		assert(second:is_valid() and first:is_valid())
+		assert(System.AddDependency(first, second))
+		return animationEntity
+	)");
+	Require(extendedBindings.valid(), "Extended Lua bindings failed to register");
+	const Id animationEntity = extendedBindings;
+	core::Manager::Instance().UpdateSystem(0.01f);
+	Require(sprite::SourceX::IsValidEntity(animationEntity), "Lua animation did not create a source rectangle");
+	auto extendedResult = lua.safe_script(R"(
+		assert(luaEventCount == 1)
+		assert(luaTimerCount == 1)
+		assert(#luaSystemOrder == 2 and luaSystemOrder[1] == 1 and luaSystemOrder[2] == 2)
+		return true
+	)");
+	Require(extendedResult.valid() && extendedResult.get<bool>(), "Extended Lua callbacks did not run correctly");
     
     scriptSys.Shutdown();
     std::cout << "Script Tests Passed!" << std::endl;
@@ -259,8 +493,8 @@ void TestAnimation() {
     animation::Frames frames;
     frames.Push(animation::Frame{0.0f, 0.0f, 16.0f, 16.0f});
     frames.Push(animation::Frame{16.0f, 0.0f, 16.0f, 16.0f});
-    animation::Register("test-walk", frames);
-    animation::Play(entity, "test-walk", 1.0f, true);
+	Require(animation::Register("test-walk", frames), "Failed to register animation");
+	Require(animation::Play(entity, "test-walk", 1.0f, true), "Failed to play animation");
     manager.UpdateSystem(0.0f);
 
     assert(sprite::SourceX::Get(entity) == 0.0f);
@@ -285,6 +519,7 @@ void TestShader() {
     auto result1 = lua.safe_script(R"(
         assert(GPU ~= nil)
         assert(type(GPU.CreateDevice) == "function")
+		assert(GPUDevice ~= nil)
         assert(GPUShaderStage ~= nil)
         assert(GPUShaderStage.Vertex ~= nil)
         assert(GPU_SHADERFORMAT_SPIRV ~= nil)
@@ -320,8 +555,11 @@ int main() {
     try {
         TestMath();
 		TestCore();
+		TestSystemGraph();
+		TestHierarchy();
 		TestTagsAndEvents();
 		TestResourceRegistry();
+		TestTimerAndScene();
 		TestMovement();
         TestSpriteSourceRect();
         TestAnimation();

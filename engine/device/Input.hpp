@@ -3,6 +3,14 @@
 #include "Key.hpp"
 #include <array>
 
+namespace mir {
+	enum class MouseButton : std::size_t {
+		Left = 0,
+		Middle = 1,
+		Right = 2
+	};
+}
+
 namespace mir::input {
     constexpr std::size_t KEY_COUNT = static_cast<std::size_t>(Key::COUNT);
 
@@ -38,9 +46,25 @@ namespace mir::input {
         return button < 3 && CurrentMouseStates[button];
     }
 
+	inline bool IsMousePressed(const MouseButton button) {
+		return IsMousePressed(static_cast<std::size_t>(button));
+	}
+
     inline bool IsMouseJustPressed(const std::size_t button) {
         return button < 3 && CurrentMouseStates[button] && !PreviousMouseStates[button];
     }
+
+	inline bool IsMouseJustPressed(const MouseButton button) {
+		return IsMouseJustPressed(static_cast<std::size_t>(button));
+	}
+
+    inline bool IsMouseJustReleased(const std::size_t button) {
+        return button < 3 && !CurrentMouseStates[button] && PreviousMouseStates[button];
+    }
+
+	inline bool IsMouseJustReleased(const MouseButton button) {
+		return IsMouseJustReleased(static_cast<std::size_t>(button));
+	}
 
     inline float GetMouseX() {
         return MouseX;

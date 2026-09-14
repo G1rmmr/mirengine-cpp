@@ -3,7 +3,7 @@ add_rules("mode.debug", "mode.release")
 add_rules("plugin.compile_commands.autoupdate", { outputdir = "." })
 
 if is_plat("windows") then
-    add_cxflags("/utf-8", { tools = { "clang_cl", "cl" } })
+    add_cxflags("/utf-8", "/bigobj", { tools = { "clang_cl", "cl" } })
 end
 
 -- Project configuration

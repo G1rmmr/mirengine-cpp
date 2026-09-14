@@ -22,7 +22,7 @@ namespace mir::animation {
             bool IsPlaying = false;
         };
 
-        inline Map<String<>, AnimationData, 1024> animationRegistry;
+        inline Map<String<>, AnimationData, MAX_ANIMATION> animationRegistry;
         inline SparseSet<ActiveAnimation, MAX_ID> activeAnimations;
         bool isSystemAdded = false;
 
@@ -89,29 +89,33 @@ namespace mir::animation {
             }
         }
 
-        void EnsureSystemAdded() noexcept {
+        [[nodiscard]] bool EnsureSystemAdded() noexcept {
             if (!isSystemAdded) {
                 isSystemAdded = mir::core::Manager::Instance().AddSystem(UpdateSystem);
             }
+            return isSystemAdded;
         }
     }
 
-    void Register(const String<>& name, const Frames& frames) noexcept {
+	bool Register(const String<>& name, const Frames& frames) noexcept {
+		if (name.Empty() || frames.Size() == 0) return false;
+		if (animationRegistry.Find(name) == nullptr && animationRegistry.Size() >= MAX_ANIMATION) return false;
         AnimationData data;
         data.FrameList = frames;
         animationRegistry.Insert(name, data);
+		return true;
     }
 
-    void Play(const Id id, const String<>& animName, float speed, bool loop) noexcept {
+	bool Play(const Id id, const String<>& animName, float speed, bool loop) noexcept {
         if (!mir::core::Manager::Instance().IsValidEntity(id)) {
-            return;
+            return false;
         }
 
-        EnsureSystemAdded();
+		if (speed <= 0.f || !EnsureSystemAdded()) return false;
 
         const auto* animData = animationRegistry.Find(animName);
         if (animData == nullptr || animData->FrameList.Size() == 0) {
-            return;
+            return false;
         }
 
         ActiveAnimation activeAnim{
@@ -126,16 +130,16 @@ namespace mir::animation {
 
         if (!isSystemAdded || !mir::core::Manager::Instance().AddComponent<PlayPayload>(
                 &ApplyPlay, PlayPayload{activeAnim}, &RemoveActiveAnimation)) {
-            return;
+			return false;
         }
 
         const Frame& frame = animData->FrameList[0];
-        sprite::SetSourceRect(id, frame.X, frame.Y, frame.Width, frame.Height);
+		return sprite::SetSourceRect(id, frame.X, frame.Y, frame.Width, frame.Height);
     }
 
-    void Stop(const Id id) noexcept {
-        if (activeAnimations.Contains(id)) {
-            activeAnimations.Remove(id);
-        }
+	bool Stop(const Id id) noexcept {
+		if (!mir::core::Manager::Instance().IsValidEntity(id) || !activeAnimations.Contains(id.Index)) return false;
+		activeAnimations.Remove(id.Index);
+		return true;
     }
 }

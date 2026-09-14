@@ -9,6 +9,8 @@ A C++20 and SDL3 2D game engine built around ZET containers and a generation-saf
 - **SDL3 Runtime Integration:** Employs SDL3 for cross-platform window creation, input polling, 2D graphic rendering, and `SDL3_mixer` for audio.
 - **ECS (Entity-Component-System) Architecture:** Uses `SparseSet` storage with generation validation and a fixed-capacity Command Buffer for deferred deletion and component assignment.
 - **Lua Scripting Integration:** Integrates `sol2` library to control game components, inputs, audio, and systems dynamically at runtime.
+- **Shared Development Surface:** `MIR.hpp` gives C++ and Lua access to the same generation-safe ECS, asset, and system capabilities without exposing container handles or SDL pointers to Lua.
+- **Current ZET Integration:** Xmake fetches the `main` branch of `zetcontainer-cpp` from GitHub at build time, so the project builds against the current container API.
 - **CI/CD:** Automated builds and unit tests on Windows, Linux, and macOS using Xmake and GitHub Actions.
 
 ---
@@ -42,12 +44,14 @@ The engine boots up with `main.lua` as its entrypoint, where you can call the fo
 - `Manager.Instance():AddEntity()` -> `Id`: Generates a new Entity ID
 - `Manager.Instance():DeleteEntity(id)`: Deletes the entity
 - `Manager.Instance():IsValidEntity(id)` -> `bool`: Returns true if the entity is valid
+- `Manager.Instance():ForEachEntity(function(id) ... end)` -> `bool`: Iterates valid entities without exposing storage handles
 
 ### 2. Component APIs
 - **Transform** (Position & scale):
   - `Transform.SetPosition(id, x, y)` / `Transform.GetPositionX(id)` / `Transform.GetPositionY(id)`
   - `Transform.SetRotation(id, r)` / `Transform.GetRotation(id)`
   - `Transform.SetScale(id, s)` / `Transform.GetScale(id)`
+  - `Transform.GetWorldPositionX(id)` / `Transform.GetWorldPositionY(id)` / `Transform.GetWorldRotation(id)` / `Transform.GetWorldScale(id)`
   - `Transform.IsValid(id)` / `Transform.Remove(id)`
 - **Sprite** (Graphic resources):
   - `Sprite.SetTexture(id, "path")` / `Sprite.GetTexture(id)`
@@ -69,10 +73,15 @@ The engine boots up with `main.lua` as its entrypoint, where you can call the fo
   - `Collider.IsValid(id)` / `Collider.Remove(id)`
 - **Tag** (Persistent entity classification):
   - `Tag.Set(id, "TagName")` / `Tag.Get(id)` / `Tag.IsValid(id)` / `Tag.Remove(id)`
+- **Hierarchy** (ECS parent-child relations):
+  - `Hierarchy.SetParent(child, parent)` / `Hierarchy.ClearParent(child)`
+  - `Hierarchy.GetParent(id)` / `Hierarchy.GetFirstChild(id)` / `Hierarchy.GetNextSibling(id)`
+  - Relation changes commit through the Command Buffer; deleting a parent detaches its children to the world root.
 
 ### 3. Device Inputs & Audio
 - **Input & Key**:
   - `Input.IsPressed(Key.W)` / `Input.IsJustPressed(Key.Space)` / `Input.IsJustReleased(Key.Enter)`
+  - `Key.F1` through `Key.F12`, plus `Input.IsMousePressed(MouseButton.Left)`, `Input.IsMouseJustPressed(...)`, and `Input.IsMouseJustReleased(...)`
   - `Input.GetMouseX()` / `Input.GetMouseY()`
 - **Sound**:
   - `Sound.Load("path")` / `Sound.Play("name", vol, pitch)` / `Sound.PlayBgm("name", vol, loop)` / `Sound.StopBgm()` / `Sound.StopAll()`
@@ -80,26 +89,58 @@ The engine boots up with `main.lua` as its entrypoint, where you can call the fo
 ### 4. GPU Shaders (SDL_GPU API)
 Allows managing custom shaders and pipelines using the integrated SDL3.0 GPU subsystem.
 * **Device Management**:
-  * `GPU.CreateDevice(formats, debugMode)` -> `device_addr` (uintptr_t)
-  * `GPU.DestroyDevice(device_addr)`
-  * `GPU.ClaimWindow(device_addr)` / `GPU.ReleaseWindow(device_addr)`
-  * `GPU.GetSwapchainFormat(device_addr)` -> `format` (int)
+  * `GPU.CreateDevice(formats, debugMode)` -> `GPUDevice`
+  * `device:Destroy()` / `device:ClaimWindow()` / `device:ReleaseWindow()` / `device:GetSwapchainFormat()`
+  * Raw SDL pointer addresses are deliberately not exposed to Lua.
 * **Constants & Formats**:
   * `GPUShaderStage.Vertex` / `GPUShaderStage.Fragment`
   * `GPU_SHADERFORMAT_SPIRV` / `GPU_SHADERFORMAT_DXIL` / `GPU_SHADERFORMAT_MSL`
 * **Shader & GPUPipeline**:
   * `Shader.new()`: Instantiates a new shader object
-    * `Shader:LoadFromFile(device_addr, filepath, entrypoint, stage, numSamplers, numUniformBuffers)` -> `bool`
+    * `Shader:LoadFromFile(device, filepath, entrypoint, stage, numSamplers, numUniformBuffers)` -> `bool`
     * `Shader:Destroy()`
   * `GPUPipeline.new()`: Instantiates a new graphics pipeline
-    * `GPUPipeline:Create(device_addr, vs, fs, renderTargetFormat)` -> `bool`
+    * `GPUPipeline:Create(device, vs, fs, renderTargetFormat)` -> `bool`
     * `GPUPipeline:Destroy()`
 
 ### 5. Subsystems
 - `Movement.Update(id, deltaTime)`: Runs the movement update logic
 - `Collision.Update(lhsId, rhsId)` -> `bool`: Runs AABB collision intersection check
+- `Animation.Register(name, { AnimationFrame.new(x, y, width, height), ... })` / `Animation.Play(id, name, speed, loop)` / `Animation.Stop(id)`
+- `Resource.Register(name, path)` / `Resource.GetPath(name)` / `Resource.Unregister(name)`
+- `Scene.Register(name, callback)` / `Scene.Load(name)`
+- `Event.On(name, callback)` / `Event.Emit(id, name)`: dispatched automatically during the simulation phase
+- `Timer.After(seconds, callback)` / `Timer.Every(seconds, callback)` / `Timer.Cancel(handle)`
+- `System.Register(callback, SystemPhase.Simulation|PostCommit)` / `System.AddDependency(before, after)`: bounded Lua-only ordering graph
+- `Profiler`, `Debug`, `Border`, `Label`, `Button`, `Camera` (position, follow, zoom, shake), and runtime-safe `Window` setters are also script-facing.
 
-### 6. Game Code Example (main.lua)
+### 6. C++ Development API
+Include `engine/MIR.hpp` to use the same public, generation-safe APIs as Lua. C++ systems are registered through `core::Manager::RegisterSystem`; Lua systems use a separate bounded dispatcher so neither side can forge the other's handles.
+
+```cpp
+#include "MIR.hpp"
+
+auto& manager = mir::core::Manager::Instance();
+const mir::Id player = manager.AddEntity();
+if (!mir::transform::SetPosition(player, 100.f, 80.f)) {
+    // The command buffer is full or the entity is invalid.
+}
+mir::event::On("spawn", [](mir::Id id) { /* ... */ });
+mir::event::Emit(player, "spawn");
+```
+
+All structural setters return `bool`: `true` means the command was queued. The new value becomes observable after the next `Manager::UpdateSystem()` commit barrier.
+
+### 7. Runtime Model and API Boundaries
+
+- `Manager::RegisterSystem(fn, SystemPhase::Simulation|PostCommit)` registers C++ systems; `AddSystemDependency(before, after)` defines a stable order within one phase. A commit barrier separates phases, so cross-phase dependencies are rejected.
+- `Event.Emit` and `Timer.After`/`Timer.Every` attach to the simulation phase automatically. Do not manually call `Event.Update` or `Timer.Update` every frame.
+- `Resource` and `Scene` are fixed-capacity registries. `false` from `Register` or `Load` means an invalid name, exhausted capacity, or an unregistered item. Use `Resource.Clear`, `Scene.Clear`, and `Timer.Clear` at shutdown or an explicit restart boundary.
+- `GPUDevice` is a move-only owner of an SDL GPU device. Use `Raw()` only for lower-level C++ SDL integration; Lua receives and passes an owning userdata rather than a pointer value.
+- The loop in `main.cpp` owns `Window.Init`, event polling, rendering, presentation, and shutdown. Lua is deliberately limited to frame-safe settings such as title, size, mode, resolution, FPS, and closing the window.
+- Video playback is not yet an engine feature. `runtime/sdl/asset/Video.hpp` is a legacy declaration without a decoder backend, and is not published to C++ or Lua until a decoder and distribution license (for example FFmpeg) are selected.
+
+### 8. Game Code Example (main.lua)
 ```lua
 local player = nil
 local ground = nil
@@ -174,7 +215,7 @@ function Shutdown()
 end
 ```
 
-### 7. Custom Component & System Example
+### 9. Custom Component & System Example
 ```lua
 -- Lua Custom Components
 local HealthComponent = {}
@@ -229,6 +270,7 @@ These settings determine the size of static, zero-allocation container sizes. Ch
 * **`MAX_ENTITY`**: Maximum number of entities (Default `4096`)
 * **`MAX_COMPONENT`**: Maximum number of component types (Default `128`)
 * **`MAX_SYSTEM`**: Maximum number of subsystems (Default `64`)
+* **`MAX_SYSTEM_DEPENDENCIES`**: Maximum dependency edges in the system execution graph (Default `MAX_SYSTEM * 4`)
 * **`COMMAND_BUFFER_BYTES`**: Maximum deferred-command payload bytes per frame (Default `1048576`)
 
 ### 2. Runtime Configuration (No Rebuild Needed)
@@ -252,6 +294,7 @@ These settings are loaded dynamically at startup by the prebuilt engine binary (
 MAX_ENTITY = 2000
 MAX_COMPONENT = 256
 MAX_SYSTEM = 128
+MAX_SYSTEM_DEPENDENCIES = 512
 COMMAND_BUFFER_BYTES = 2097152
 
 -- ==========================================
@@ -271,6 +314,7 @@ WINDOW_HEIGHT = 900
 ## Dependencies & Packages
 The engine automatically downloads and links the following dependencies via Xmake:
 - **`zet`**: Zero-allocated Execution Toolkit (Container Library)
+  - The root `xmake.lua` follows GitHub `main`. Pin a reviewed commit SHA or tag before creating a reproducible release.
 - **`lua 5.4.x` / `sol2`**: Scripting bindings
 - **`libsdl3` / `libsdl3_image` / `libsdl3_ttf` / `libsdl3_mixer`**: Windowing, image, font, and audio rendering systems
 

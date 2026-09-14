@@ -7,6 +7,7 @@
 
 namespace mir::event {
 	using CallbackFuncPtr = void(*)(Id);
+	using ScriptDispatchFunc = void(*)(Id, const String<>&) noexcept;
 	inline constexpr std::size_t MAX_EVENTS = 1024;
 	inline constexpr std::size_t MAX_EVENT_TYPES = 256;
 	inline constexpr std::size_t MAX_CALLBACKS_PER_EVENT = 16;
@@ -18,9 +19,28 @@ namespace mir::event {
 
 	inline Map<String<>, List<CallbackFuncPtr, MAX_CALLBACKS_PER_EVENT>, MAX_EVENT_TYPES> callbacks;
 	inline List<Record, MAX_EVENTS> pending;
+	inline ScriptDispatchFunc scriptDispatch = nullptr;
+	inline core::SystemId eventSystem{};
+
+	inline void Update() noexcept;
+
+	inline void UpdateSystem(const float) noexcept {
+		Update();
+	}
+
+	[[nodiscard]] inline bool EnsureSystem() noexcept {
+		auto& manager = core::Manager::Instance();
+		if (manager.IsValidSystem(eventSystem)) return true;
+		eventSystem = manager.RegisterSystem(&UpdateSystem, core::SystemPhase::Simulation);
+		return manager.IsValidSystem(eventSystem);
+	}
+
+	inline void SetScriptDispatch(const ScriptDispatchFunc dispatch) noexcept {
+		scriptDispatch = dispatch;
+	}
 
 	[[nodiscard]] inline bool Emit(const Id id, const String<>& name) noexcept {
-		if (!mir::core::Manager::Instance().IsValidEntity(id) || pending.Size() >= MAX_EVENTS) {
+		if (!EnsureSystem() || !mir::core::Manager::Instance().IsValidEntity(id) || pending.Size() >= MAX_EVENTS) {
 			return false;
 		}
 		pending.Push(Record{id, name});
@@ -35,12 +55,13 @@ namespace mir::event {
 			if (registered != nullptr) {
 				for (const auto& callback : *registered) { callback(record.EntityId); }
             }
+			if (scriptDispatch != nullptr) scriptDispatch(record.EntityId, record.Name);
         }
 		pending.Clear();
     }
 
 	[[nodiscard]] inline bool On(const String<>& name, CallbackFuncPtr callback) noexcept {
-		if (callback == nullptr) return false;
+		if (callback == nullptr || !EnsureSystem()) return false;
 		auto registered = callbacks.Find(name);
 		if (registered == nullptr) {
 			if (callbacks.Size() >= MAX_EVENT_TYPES) return false;

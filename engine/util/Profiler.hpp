@@ -39,6 +39,10 @@ namespace mir::profile {
 
     inline void ToggleProfile() { IsEnable = !IsEnable; }
 
+    inline void SetEnabled(const bool enabled) noexcept { IsEnable = enabled; }
+    [[nodiscard]] inline bool IsEnabled() noexcept { return IsEnable; }
+    [[nodiscard]] inline float GetCurrentFPS() noexcept { return CurrentFPS; }
+
     inline void Update(const float deltaTime) {
         if (IsEnable) CurrentFPS = 1.f / deltaTime;
     }

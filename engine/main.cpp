@@ -1,6 +1,7 @@
 #include "device/Window.hpp"
 #include "script/ScriptSystem.hpp"
 #include "core/Manager.hpp"
+#include "util/Profiler.hpp"
 #include <SDL3/SDL.h>
 #include <iostream>
 #include <fstream>
@@ -103,6 +104,7 @@ int main(int argc, char* argv[]) {
         std::uint64_t currentTime = SDL_GetTicks();
         float deltaTime = std::min(static_cast<float>(currentTime - lastTime) / 1000.0f, 0.25f);
         lastTime = currentTime;
+		profile::Update(deltaTime);
 
         // Lua 스크립트 Update(deltaTime) 실행
         scriptSys.Update(deltaTime);

@@ -19,11 +19,6 @@ namespace mir::sprite {
     struct TintGreen : public Component<TintGreen, std::uint8_t> {};
     struct TintBlue : public Component<TintBlue, std::uint8_t> {};
 
-	inline void SetSourceSize(const Id id, const float width, const float height) noexcept {
-        SourceWidth::Set(id, width);
-        SourceHeight::Set(id, height);
-    }
-
     namespace detail {
         struct SourceRectPayload {
             Id EntityId;
@@ -40,7 +35,56 @@ namespace mir::sprite {
             SourceWidth::ApplyCommitted(payload.EntityId, payload.Width);
             SourceHeight::ApplyCommitted(payload.EntityId, payload.Height);
         }
+
+		struct PairPayload {
+			Id EntityId;
+			float First;
+			float Second;
+		};
+
+		struct TintPayload {
+			Id EntityId;
+			std::uint8_t Red;
+			std::uint8_t Green;
+			std::uint8_t Blue;
+		};
+
+		inline void ApplySourceSize(const void* rawPayload) noexcept {
+			const auto& payload = *static_cast<const PairPayload*>(rawPayload);
+			SourceWidth::ApplyCommitted(payload.EntityId, payload.First);
+			SourceHeight::ApplyCommitted(payload.EntityId, payload.Second);
+		}
+
+		inline void ApplyDestinationSize(const void* rawPayload) noexcept {
+			const auto& payload = *static_cast<const PairPayload*>(rawPayload);
+			DestinationWidth::ApplyCommitted(payload.EntityId, payload.First);
+			DestinationHeight::ApplyCommitted(payload.EntityId, payload.Second);
+		}
+
+		inline void ApplyAnchor(const void* rawPayload) noexcept {
+			const auto& payload = *static_cast<const PairPayload*>(rawPayload);
+			AnchorX::ApplyCommitted(payload.EntityId, payload.First);
+			AnchorY::ApplyCommitted(payload.EntityId, payload.Second);
+		}
+
+		inline void ApplyTint(const void* rawPayload) noexcept {
+			const auto& payload = *static_cast<const TintPayload*>(rawPayload);
+			TintRed::ApplyCommitted(payload.EntityId, payload.Red);
+			TintGreen::ApplyCommitted(payload.EntityId, payload.Green);
+			TintBlue::ApplyCommitted(payload.EntityId, payload.Blue);
+		}
     }
+
+	[[nodiscard]] inline bool SetTexture(const Id id, const String<>& texture) noexcept {
+		return Texture::Set(id, texture);
+	}
+
+	[[nodiscard]] inline bool SetSourceSize(const Id id, const float width, const float height) noexcept {
+		auto& manager = core::Manager::Instance();
+		if (!manager.IsValidEntity(id) || !manager.RegisterCleanup(&SourceWidth::Remove) ||
+			!manager.RegisterCleanup(&SourceHeight::Remove)) return false;
+		return manager.Enqueue<detail::PairPayload>(&detail::ApplySourceSize, detail::PairPayload{id, width, height});
+	}
 
     // The source rectangle is intentionally stored as ECS data rather than as
     // renderer state, so sprites remain serializable and backend-independent.
@@ -63,23 +107,36 @@ namespace mir::sprite {
             &detail::ApplySourceRect, detail::SourceRectPayload{id, x, y, width, height});
     }
 
-	inline void SetDestinationSize(const Id id, const float width, const float height) noexcept {
-        DestinationWidth::Set(id, width);
-        DestinationHeight::Set(id, height);
+	[[nodiscard]] inline bool SetDestinationSize(const Id id, const float width, const float height) noexcept {
+		auto& manager = core::Manager::Instance();
+		if (!manager.IsValidEntity(id) || !manager.RegisterCleanup(&DestinationWidth::Remove) ||
+			!manager.RegisterCleanup(&DestinationHeight::Remove)) return false;
+		return manager.Enqueue<detail::PairPayload>(&detail::ApplyDestinationSize, detail::PairPayload{id, width, height});
     }
 
-	inline void SetAnchor(const Id id, const float x, const float y) noexcept {
-        AnchorX::Set(id, x);
-        AnchorY::Set(id, y);
+	[[nodiscard]] inline bool SetAnchor(const Id id, const float x, const float y) noexcept {
+		auto& manager = core::Manager::Instance();
+		if (!manager.IsValidEntity(id) || !manager.RegisterCleanup(&AnchorX::Remove) ||
+			!manager.RegisterCleanup(&AnchorY::Remove)) return false;
+		return manager.Enqueue<detail::PairPayload>(&detail::ApplyAnchor, detail::PairPayload{id, x, y});
     }
 
-	inline void SetTint(
+	[[nodiscard]] inline bool SetTint(
         const Id id, 
         const std::uint8_t red, 
         const std::uint8_t green, 
         const std::uint8_t blue) noexcept {
-        TintRed::Set(id, red);
-        TintGreen::Set(id, green);
-        TintBlue::Set(id, blue);
+		auto& manager = core::Manager::Instance();
+		if (!manager.IsValidEntity(id) || !manager.RegisterCleanup(&TintRed::Remove) ||
+			!manager.RegisterCleanup(&TintGreen::Remove) || !manager.RegisterCleanup(&TintBlue::Remove)) return false;
+		return manager.Enqueue<detail::TintPayload>(&detail::ApplyTint, detail::TintPayload{id, red, green, blue});
     }
+
+	[[nodiscard]] inline bool SetZindex(const Id id, const std::uint16_t zindex) noexcept {
+		return Zindex::Set(id, zindex);
+	}
+
+	[[nodiscard]] inline bool SetAlpha(const Id id, const std::uint8_t alpha) noexcept {
+		return Alpha::Set(id, alpha);
+	}
 }
